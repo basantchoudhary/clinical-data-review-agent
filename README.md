@@ -14,7 +14,7 @@ Agent Master List id: **AG-102**.
 ## Start here
 
 1. [Lesson 1: how trial data gets clean, and where an agent fits](docs/learn/01-trial-data-and-agents.html)
-2. Lesson 2: the architecture decisions (next)
+2. [Architecture decisions](docs/DECISIONS.md): D1–D3 decided, D4–D8 open
 3. Lesson 3: the frameworks that check the architecture (AHC, AAC, AgentTwin)
 
 ## Get the data
