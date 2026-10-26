@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 1: Trial Data</title>
+<style>
+:root{--bg:#ffffff;--card:#fff;--ink:#1d1d1f;--muted:#5f6368;--line:#e3e3df;--accent:#0f6cbd;--soft:#f4f7fb;
+--ok:#1a7f37;--ok-bg:#e8f5ec;--warn:#b26a00;--warn-bg:#fff4e0;--bad:#c62828;--bad-bg:#fdecea;--code:#f3f3ef}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+main{max-width:920px;margin:0 auto;padding:28px 16px 90px}
+h1{font-size:30px;margin:0 0 6px;line-height:1.2}
+h2{font-size:22px;margin:42px 0 10px;padding-top:12px;border-top:1px solid var(--line)}
+h3{font-size:17px;margin:22px 0 6px}
+p{margin:8px 0} .muted{color:var(--muted)} small{font-size:13px}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:14px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0;background:var(--card)}
+.soft{background:var(--soft);border-color:#dbe5f1}
+.qs li{margin:4px 0}
+.tbl{overflow-x:auto} table{border-collapse:collapse;width:100%;font-size:15px;margin:8px 0}
+th,td{text-align:left;vertical-align:top;padding:8px 9px;border-bottom:1px solid var(--line)}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 9px;border-radius:999px;white-space:nowrap}
+.ok{color:var(--ok);background:var(--ok-bg)} .warn{color:var(--warn);background:var(--warn-bg)} .bad{color:var(--bad);background:var(--bad-bg)}
+.step{display:grid;grid-template-columns:34px 1fr;gap:10px;margin:12px 0}
+.step .n{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+.step p{margin:2px 0}
+details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0}
+summary{cursor:pointer;font-weight:600}
+svg text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.figure{overflow-x:auto;margin:10px 0}
+.query{border-left:4px solid var(--accent);background:var(--soft);padding:10px 14px;border-radius:0 10px 10px 0;margin:10px 0;font-size:15px}
+</style>
+</head>
+<body>
+<main>
+
+<p class="muted"><small>Clinical data review agent · Lesson 1 of 3 · written 26 Oct 2026 for Shalini</small></p>
+<h1>How trial data gets clean, and where an agent fits</h1>
+<p class="muted">You already know what an agent is. This lesson is about the domain: how a clinical trial's data is collected and cleaned, which parts of that work are rules, and which part is judgement. By the end you should be able to say, in your own words, why this project needs an agent and why most of it still should not be one.</p>
+
+<div class="card soft">
+<b>The questions this lesson answers</b>
+<ol class="qs">
+<li>How does a patient's visit become rows in a database?</li>
+<li>Who cleans trial data today, and what do they actually do all day?</li>
+<li>Which checks are simple rules, and which need someone to think?</li>
+<li>What does that thinking look like on one real patient record?</li>
+<li>So where exactly does an agent belong, and where must it not go?</li>
+</ol>
+</div>
+
+<h2>1. A trial in one picture</h2>
+<p>A trial runs at many hospitals, called <b>sites</b>. Each patient comes to the site for a series of <b>visits</b>: screening, week 2, week 4 and so on. At each visit, site staff fill in electronic forms called <b>eCRFs</b> (case report forms) in an <b>EDC</b> system, the trial's data-entry database. Our EDC is OpenClinica.</p>
+
+<div class="figure">
+<svg viewBox="0 0 880 250" width="100%" role="img" aria-label="Flow of trial data from the patient visit to the regulator">
+  <defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#5f6368"/></marker></defs>
+  <g font-size="13">
+    <rect x="10" y="30" width="120" height="62" rx="10" fill="#f4f7fb" stroke="#dbe5f1"/>
+    <text x="70" y="56" text-anchor="middle" font-weight="600">Patient visit</text><text x="70" y="76" text-anchor="middle" fill="#5f6368">at the site</text>
+    <rect x="170" y="30" width="130" height="62" rx="10" fill="#f4f7fb" stroke="#dbe5f1"/>
+    <text x="235" y="56" text-anchor="middle" font-weight="600">Site enters eCRFs</text><text x="235" y="76" text-anchor="middle" fill="#5f6368">in the EDC</text>
+    <rect x="340" y="30" width="140" height="62" rx="10" fill="#e8f5ec" stroke="#b9dfc4"/>
+    <text x="410" y="56" text-anchor="middle" font-weight="600">Edit checks fire</text><text x="410" y="76" text-anchor="middle" fill="#1a7f37">rules, instant</text>
+    <rect x="520" y="30" width="150" height="62" rx="10" fill="#fff4e0" stroke="#f0d3a0"/>
+    <text x="595" y="56" text-anchor="middle" font-weight="600">Data review</text><text x="595" y="76" text-anchor="middle" fill="#b26a00">people, judgement</text>
+    <rect x="710" y="30" width="160" height="62" rx="10" fill="#f4f7fb" stroke="#dbe5f1"/>
+    <text x="790" y="56" text-anchor="middle" font-weight="600">Database lock</text><text x="790" y="76" text-anchor="middle" fill="#5f6368">then SDTM to the regulator</text>
+    <line x1="130" y1="61" x2="166" y2="61" stroke="#5f6368" marker-end="url(#a)"/>
+    <line x1="300" y1="61" x2="336" y2="61" stroke="#5f6368" marker-end="url(#a)"/>
+    <line x1="480" y1="61" x2="516" y2="61" stroke="#5f6368" marker-end="url(#a)"/>
+    <line x1="670" y1="61" x2="706" y2="61" stroke="#5f6368" marker-end="url(#a)"/>
+    <path d="M595,92 C595,175 235,175 235,96" fill="none" stroke="#0f6cbd" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#a)"/>
+    <rect x="330" y="150" width="190" height="44" rx="8" fill="#fff" stroke="#0f6cbd"/>
+    <text x="425" y="168" text-anchor="middle" fill="#0f6cbd" font-weight="600">Query to the site</text>
+    <text x="425" y="186" text-anchor="middle" fill="#0f6cbd">"please check or explain"</text>
+    <text x="595" y="230" text-anchor="middle" fill="#b26a00" font-weight="600">Our agent helps here, and only here</text>
+  </g>
+</svg>
+</div>
+
+<p>The loop in blue is the heart of data cleaning. Someone at the sponsor or CRO notices something odd and raises a <b>query</b>: a short, polite question on a specific field. In OpenClinica a query is called a <b>discrepancy note</b>. The site checks the patient's source notes and either corrects the data or explains it. Only when every query is closed is the database <b>locked</b>, then converted to <b>SDTM</b>, the standard layout regulators expect.</p>
+
+<p>The data you have is already SDTM. That is fine: SDTM keeps the same facts, arranged as one table per topic (a <b>domain</b>). We will load it back into OpenClinica as forms, so the agent works against a real EDC the way it would at a sponsor.</p>
+
+<div class="tbl"><table>
+<tr><th>Domain</th><th>What it holds</th><th>In your pilot data</th></tr>
+<tr><td><code>DM</code> demographics</td><td>One row per patient: age, sex, site, treatment arm, consent and study dates</td><td>306 patients at 17 sites; 3 arms (placebo, low dose, high dose) plus 52 screen failures</td></tr>
+<tr><td><code>SV</code> subject visits</td><td>Which visits happened, and when</td><td>About 12 visits per patient</td></tr>
+<tr><td><code>AE</code> adverse events</td><td>Anything medically bad that happened, with severity, seriousness and the investigator's view of whether the drug caused it</td><td>1,191 events; the most common are itching and redness where the patch was applied</td></tr>
+<tr><td><code>LB</code> labs</td><td>Every lab result with its normal range</td><td>59,580 results across 43 tests</td></tr>
+<tr><td><code>CM</code> concomitant medications</td><td>Other medicines the patient took</td><td>7,510 rows</td></tr>
+<tr><td><code>DS</code> disposition</td><td>How the patient left the study and why</td><td>110 completed; 92 left because of an adverse event</td></tr>
+</table></div>
+<p class="muted"><small>The pilot study is a public test dataset from CDISC and PHUSE (an Alzheimer's trial of xanomeline, given as a skin patch). Treat it as realistic, not as real people.</small></p>
+
+<h2>2. Who cleans the data, and how</h2>
+<p>Two kinds of checking happen, and the difference between them is the whole design of this project.</p>
+<div class="tbl"><table>
+<tr><th></th><th>Edit checks</th><th>Data review</th></tr>
+<tr><td><b>Who</b></td><td>The EDC itself, built by a study programmer</td><td>Data managers and a medical monitor (a doctor at the sponsor)</td></tr>
+<tr><td><b>Looks at</b></td><td>One field or one form</td><td>The whole patient, across forms and visits</td></tr>
+<tr><td><b>Example</b></td><td>"Age must be between 50 and 95." "Visit date cannot be before consent." "ALT is above the normal range, so flag it."</td><td>"ALT is three times normal and bilirubin is rising, yet no liver event is recorded. Has the investigator assessed this?"</td></tr>
+<tr><td><b>Nature</b></td><td><span class="pill ok">Deterministic</span> same input, same answer, written in advance</td><td><span class="pill warn">Judgement</span> what to look at next depends on what you just found</td></tr>
+<tr><td><b>Right tool</b></td><td>Code. In our build, data-quality rules in your Databricks pipeline.</td><td>This is the only place an agent belongs.</td></tr>
+</table></div>
+<p>Data review is slow, repetitive and expensive. A reviewer opens a patient, reads across six or seven domains, and decides what is worth asking. Most patients are fine. Finding the few that are not, and asking the right question, is the skill.</p>
+
+<h2>3. One real patient: 01-705-1186</h2>
+<p>This is a patient from your pilot data. Read it the way a reviewer would. Notice that each step decides what you look at next.</p>
+
+<div class="figure">
+<svg viewBox="0 0 880 300" width="100%" role="img" aria-label="Liver lab values of patient 01-705-1186 over five weeks, relative to the upper limit of normal">
+  <g font-size="12">
+    <text x="20" y="18" font-weight="600" font-size="13">Liver labs as multiples of the upper limit of normal (ULN), patient 01-705-1186</text>
+    <line x1="60" y1="260" x2="860" y2="260" stroke="#c9c9c4"/>
+    <line x1="60" y1="40" x2="60" y2="260" stroke="#c9c9c4"/>
+    <!-- y scale: 0..6 x ULN -> 260..44 (36 px per unit) -->
+    <line x1="60" y1="224" x2="860" y2="224" stroke="#1a7f37" stroke-dasharray="3 4"/><text x="56" y="228" text-anchor="end" fill="#1a7f37">1×</text>
+    <line x1="60" y1="152" x2="860" y2="152" stroke="#c62828" stroke-dasharray="3 4"/><text x="56" y="156" text-anchor="end" fill="#c62828">3×</text>
+    <line x1="60" y1="188" x2="860" y2="188" stroke="#e3e3df"/><text x="56" y="192" text-anchor="end" fill="#5f6368">2×</text>
+    <line x1="60" y1="116" x2="860" y2="116" stroke="#e3e3df"/><text x="56" y="120" text-anchor="end" fill="#5f6368">4×</text>
+    <line x1="60" y1="80" x2="860" y2="80" stroke="#e3e3df"/><text x="56" y="84" text-anchor="end" fill="#5f6368">5×</text>
+    <line x1="60" y1="44" x2="860" y2="44" stroke="#e3e3df"/><text x="56" y="48" text-anchor="end" fill="#5f6368">6×</text>
+    <!-- x: dates 3 Jan .. 7 Feb ; positions -->
+    <g fill="#5f6368" text-anchor="middle">
+      <text x="100" y="278">Screening</text><text x="100" y="292">3 Jan</text>
+      <text x="420" y="278">Week 2</text><text x="420" y="292">23 Jan</text>
+      <text x="500" y="278">Unsch.</text><text x="500" y="292">26 Jan</text>
+      <text x="580" y="278">Week 4</text><text x="580" y="292">29 Jan</text>
+      <text x="650" y="278">Unsch.</text><text x="650" y="292">1 Feb</text>
+      <text x="800" y="278">Unsch.</text><text x="800" y="292">7 Feb</text>
+    </g>
+    <!-- bilirubin x ULN: 1.22, 5.54, 5.94, 5.94, 4.72, 3.42 -->
+    <polyline fill="none" stroke="#b26a00" stroke-width="2.5" points="100,216 420,61 500,46 580,46 650,90 800,137"/>
+    <!-- ALT: 1.56, 3.25, 2.97, 3.34, 2.88, 2.28 -->
+    <polyline fill="none" stroke="#0f6cbd" stroke-width="2.5" points="100,204 420,143 500,153 580,140 650,156 800,178"/>
+    <!-- ALP: 4.91, 5.84, 5.23, 5.71, 5.66, 5.97 -->
+    <polyline fill="none" stroke="#8250df" stroke-width="2.5" stroke-dasharray="7 4" points="100,83 420,50 500,72 580,55 650,57 800,45"/>
+    <g font-weight="600"><text x="820" y="141" fill="#b26a00">Bilirubin</text><text x="820" y="182" fill="#0f6cbd">ALT</text><text x="820" y="40" fill="#8250df">ALP</text></g>
+    <!-- events -->
+    <line x1="500" y1="40" x2="500" y2="260" stroke="#b26a00" stroke-width="1" stroke-dasharray="2 3"/>
+    <text x="504" y="258" fill="#b26a00">AE recorded: hyperbilirubinaemia</text>
+    <line x1="800" y1="40" x2="800" y2="260" stroke="#c62828" stroke-width="1" stroke-dasharray="2 3"/>
+    <text x="796" y="244" fill="#c62828" text-anchor="end">Withdrawn: "physician decision"</text>
+  </g>
+</svg>
+</div>
+
+<div class="step"><div class="n">1</div><div><p><b>The edit check fires.</b> ALT at week 2 is 104 against an upper limit of 32: about 3.3 times normal. A rule can see this. It always will. <span class="pill ok">rule</span></p></div></div>
+<div class="step"><div class="n">2</div><div><p><b>So the reviewer opens the adverse events.</b> There is one: <i>hyperbilirubinaemia</i>, moderate, not serious, "remote" relation to the drug, starting 26 Jan. Nothing about ALT or AST. Is a transaminase rise this large an event the investigator should assess? <span class="pill warn">judgement</span></p></div></div>
+<div class="step"><div class="n">3</div><div><p><b>That sends them to bilirubin.</b> It jumped to about 5.5 times normal on 23 Jan, three days <i>before</i> the recorded start of the event. Is the onset date right? <span class="pill warn">judgement</span></p></div></div>
+<div class="step"><div class="n">4</div><div><p><b>ALT above 3× with bilirubin above 2× rings a bell:</b> it is the pattern regulators watch for as possible drug-induced liver injury (often called <b>Hy's law</b>). But a careful reviewer checks one more thing: ALP was already about 5 times normal at <i>screening</i>, which points to a blocked bile duct pattern rather than the classic drug-injury pattern. So the right move is to ask the investigator, not to declare anything. <span class="pill warn">judgement</span></p></div></div>
+<div class="step"><div class="n">5</div><div><p><b>The screening values raise their own question.</b> Liver labs were already high before the patient started. Did the protocol's entry criteria allow that? The reviewer opens the protocol's eligibility list. <span class="pill warn">judgement, a different source</span></p></div></div>
+<div class="step"><div class="n">6</div><div><p><b>Finally, disposition.</b> The patient left on 7 Feb. The reason is recorded as <i>physician decision</i>, with the text "hyperbilirubinemia". If an adverse event was the reason, should the reason say adverse event? <span class="pill warn">judgement</span></p></div></div>
+
+<p>Here is what that review could produce: drafts only, for a data manager to approve and send.</p>
+<div class="query"><b>Query 1 · AE form.</b> ALT and AST were above 3× the upper limit of normal from 23 Jan (ALT 104 U/L, ULN 32). No adverse event for raised transaminases is recorded. Please confirm whether the investigator assessed this as an adverse event, and if so add it.</div>
+<div class="query"><b>Query 2 · AE form, hyperbilirubinaemia.</b> Total bilirubin was above 5× ULN on 23 Jan; the event's start date is 26 Jan. Please confirm the onset date.</div>
+<div class="query"><b>Query 3 · Disposition form.</b> The reason for discontinuation is "physician decision" with the term "hyperbilirubinemia". Please confirm whether the reason should be recorded as adverse event.</div>
+<div class="query"><b>Query 4 · Eligibility.</b> ALT, AST, ALP and bilirubin were above the normal range at screening (ALP 565 U/L, ULN 115). Please confirm the patient met the protocol's laboratory entry criteria.</div>
+
+<p>Notice what the agent is <b>not</b> doing. It does not decide whether this is liver injury. It does not change any data. It does not send anything. It finds, cites the exact records, and asks. The investigator, a doctor, answers.</p>
+
+<h2>4. So, is this agentic?</h2>
+<p>Use the same four tests on any idea. All four must hold before an agent earns its place.</p>
+<div class="tbl"><table>
+<tr><th>Test</th><th>Patient 01-705-1186</th><th>Result</th></tr>
+<tr><td>Is the path unknown in advance?</td><td>Lab, then adverse events, then the onset date, then the liver-injury pattern, then screening and the protocol, then disposition. Another patient would take a different path.</td><td><span class="pill ok">yes</span></td></tr>
+<tr><td>Does it need several sources?</td><td>Five domains plus the protocol document</td><td><span class="pill ok">yes</span></td></tr>
+<tr><td>Is judgement the hard part?</td><td>Step 4 is the clearest case: knowing when the pattern applies and when ALP changes the picture</td><td><span class="pill ok">yes</span></td></tr>
+<tr><td>Can mistakes be caught?</td><td>A data manager approves every query before it goes to the site</td><td><span class="pill ok">yes</span></td></tr>
+</table></div>
+
+<p>Now the important part for an architect: <b>most of the system is still not an agent.</b></p>
+<div class="tbl"><table>
+<tr><th>Piece</th><th>What it is</th><th>Why</th></tr>
+<tr><td>Loading the data and building SDTM-aligned layers</td><td><span class="pill ok">Pipeline</span> your Databricks code</td><td>Same every time; must be reproducible and auditable</td></tr>
+<tr><td>Edit checks (out of range, missing, impossible dates)</td><td><span class="pill ok">Rules</span> data-quality expectations</td><td>Cheaper, exact, explainable to an auditor</td></tr>
+<tr><td>Choosing which patients to review first</td><td><span class="pill ok">Rules</span> a score from the rule hits</td><td>No judgement needed to rank</td></tr>
+<tr><td>Reviewing one patient across forms and drafting queries</td><td><span class="pill warn">Agent</span> Claude with narrow, read-only tools</td><td>Passes all four tests</td></tr>
+<tr><td>Approving and sending a query</td><td><span class="pill bad">Person</span></td><td>Accountability stays with a human</td></tr>
+</table></div>
+<p>This split, rules first and the agent only where rules cannot reach, is the first architecture decision you will make. Being able to explain it is worth more in an interview than the agent itself.</p>
+
+<h2>5. Check your understanding</h2>
+<p class="muted">Try to answer before opening each one. Bring anything that feels unclear to the chat.</p>
+<details><summary>Why can't an edit check write Query 1?</summary><p>An edit check can see that ALT is high. It cannot know whether the investigator already judged it not clinically significant, whether another event covers it, or whether this patient's history explains it. Deciding that a question is <i>worth asking</i> needs the whole record.</p></details>
+<details><summary>Why does the agent ask instead of saying "this is drug-induced liver injury"?</summary><p>Because it is not its decision, and here it would probably be wrong: ALP was high from screening, which points elsewhere. Clinical judgement belongs to the investigator. The agent's job is to find and ask, with the evidence attached.</p></details>
+<details><summary>This patient was on placebo. Does that make the queries pointless?</summary><p>No. The trial is blinded: neither the site nor the reviewer knows the arm while it runs. Every patient is reviewed the same way. And the data must be right regardless of arm.</p></details>
+<details><summary>Name one thing in this project that should never become agentic.</summary><p>Any of: loading and transforming the data, the edit checks, ranking patients, or sending a query. The first three are deterministic; the last is accountability.</p></details>
+
+<h2>6. Words used in this lesson</h2>
+<div class="tbl"><table>
+<tr><th>Word</th><th>Meaning</th></tr>
+<tr><td>Site</td><td>A hospital or clinic running the trial</td></tr>
+<tr><td>EDC</td><td>Electronic data capture: the database where sites enter trial data (here, OpenClinica)</td></tr>
+<tr><td>eCRF</td><td>Electronic case report form: one form in the EDC, for example the adverse event form</td></tr>
+<tr><td>Edit check</td><td>A rule in the EDC that flags a bad value as it is entered</td></tr>
+<tr><td>Query, discrepancy note</td><td>A question raised on a specific field for the site to answer</td></tr>
+<tr><td>Data manager</td><td>The person who reviews data and manages queries</td></tr>
+<tr><td>Medical monitor</td><td>A doctor at the sponsor who reviews safety data</td></tr>
+<tr><td>Investigator</td><td>The doctor at the site responsible for the patient; makes the clinical calls</td></tr>
+<tr><td>SDTM</td><td>The standard table layout for submitting trial data to regulators; one table per domain</td></tr>
+<tr><td>ULN</td><td>Upper limit of normal for a lab test</td></tr>
+<tr><td>Hy's law</td><td>A warning pattern for possible drug-induced liver injury: ALT or AST above 3× ULN with bilirubin above 2× ULN, without a cholestatic pattern (high ALP) or another cause</td></tr>
+<tr><td>Database lock</td><td>The point where all queries are closed and the data is frozen for analysis</td></tr>
+</table></div>
+
+<h2>Next</h2>
+<p><b>Lesson 2: the architecture decisions.</b> About eight choices, each with options, a recommendation and the trade-off. You decide. For example: which Claude surface and why; which tools the agent gets and which it is refused; where the rules run; how a query reaches OpenClinica; how we prove it works before anyone trusts it.</p>
+<p><b>Lesson 3: the frameworks that check your architecture.</b> How AHC, AAC and AgentTwin turn "I think it's complete" into something measured.</p>
+
+</main>
+</body>
+</html>
