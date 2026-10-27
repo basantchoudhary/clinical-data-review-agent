@@ -15,6 +15,7 @@ replaces it, never by editing the old one.
 | D6 | Our own loop on the Anthropic SDK; Databricks Model Serving as the target, Foundry as fallback; Opus 5.5 first | Decided 27 Oct 2026 |
 | D7 | What the model may see: minimised, PII-scanned, free text marked untrusted, the structure contains the damage | Decided 27 Oct 2026 |
 | D8 | How we prove it works before anyone trusts it | Open |
+| D9 | Code structure: ports and adapters like the reference agents; the harness installed by version | Decided 27 Oct 2026 |
 
 ---
 
@@ -232,6 +233,51 @@ Moving between routes changes the address and the credential only, not the code.
 - Provider terms: under Anthropic's commercial API terms, inputs are not used for training, and enterprises can arrange zero data retention. A sponsor confirms current terms in its governance review; on Databricks Model Serving the Databricks agreement applies.
 
 **Obligations satisfied.** AAC-0006, AAC-0058, AAC-0106.
+
+**In Shalini's words:** *(to write)*
+
+---
+
+## D9. Code structure: ports and adapters, like the reference agents
+
+**Decided:** 27 Oct 2026.
+
+**Decision.** The agent repository is a thin package holding only what is this domain's, on top of the installed `agent_harness` library, the same as the clothing (AG-001) and motor claims (AG-002) agents. Every outside system sits behind a port; YAML picks the adapter per environment.
+
+```
+spec/clinical-review.aoas.yaml   the contract: tools, rules, limits
+harness-profile.yaml             AHC: what fills each of the 16 layers
+aac.config.yaml                  AAC: which obligations apply, how each is checked
+gates.yaml                       the four gates
+config/local.yaml, test.yaml, databricks.yaml   port-to-adapter bindings
+pipeline/                        Databricks bundle: layers, edit checks, ranking, snapshots, lineage
+src/clinical_review/             the tools, the query schema, blinding and PII rules, the one-patient run
+src/edc_writer/                  the only code that writes to OpenClinica; the agent may not import it
+src/review_app/                  the approval screen (Databricks App)
+worlds/                          AgentTwin: the simulated trial with planted problems
+evals/                           Eval Harness checks
+tests/                           contract tests per port, and scenarios
+```
+
+**Ports this agent binds.**
+
+| Port | Adapters |
+|---|---|
+| Trial data | local parquet (development, tests); Databricks curated tables |
+| EDC | fake (tests); OpenClinica (the writer only) |
+| Model (`llm`) | Anthropic API; Databricks Model Serving; scripted (tests) |
+| PII scanner | Presidio; pass-through (tests on synthetic data) |
+| Drafts and approvals | local store (tests); Databricks tables plus the review app |
+
+The same contract tests run against every adapter of a port, so a drift between the Databricks tables and what the tools expect fails a test instead of misleading the agent.
+
+**Installed by version.** `agent_harness`, `agenttwin` and `evalharness` are pinned to tagged versions from GitHub, not local paths, per the one-repository-per-agent decision of 26 Oct 2026.
+
+**What this agent tests in the harness.**
+1. **The first Anthropic adapter for the `llm` port** (the planned Claude-family cycle). The harness owns retries, so the adapter sets the Anthropic SDK's `max_retries=0`. The SDK otherwise retries twice on its own, and one patient could quietly cost three calls.
+2. **The first agent that is a job, not a conversation.** Parts built for customer chat (channel, portal, escalation) may not apply. Anything that does not fit is reported back to the harness as a finding.
+
+**Cost.** We must tag and publish versions of the three libraries before this agent can pin them, and the Anthropic adapter is new code with its own contract tests.
 
 **In Shalini's words:** *(to write)*
 
