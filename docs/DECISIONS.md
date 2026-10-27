@@ -10,7 +10,7 @@ replaces it, never by editing the old one.
 | D1 | The boundary: rules first, the agent only for cross-form review | Decided 27 Oct 2026 |
 | D2 | The unit of work: one patient per agent run | Decided 27 Oct 2026 |
 | D3 | Where the agent reads from: lakehouse snapshot, re-checked in OpenClinica at write time | Decided 27 Oct 2026 |
-| D4 | The agent's tools: narrow named tools, or SQL | Open |
+| D4 | The agent's tools: a patient summary up front plus narrow read-only tools; no SQL | Decided 27 Oct 2026 |
 | D5 | How a query leaves: draft, approval, a separate writer | Open |
 | D6 | Which Claude surface, and where the model runs | Open |
 | D7 | What the model may see: minimisation, free text as untrusted | Open |
@@ -99,5 +99,36 @@ Only data review passes all four tests for an agent:
 - Reviews run on data that may be hours old.
 
 We accept these because they are what makes the design production-grade rather than a demo.
+
+**In Shalini's words:** *(to write)*
+
+---
+
+## D4. The agent's tools: a summary up front, then narrow read-only tools
+
+**Decided:** 27 Oct 2026.
+
+**Options.**
+
+| Option | Verdict | Reason |
+|---|---|---|
+| A. Narrow named tools only | Good | Least privilege, clear audit, testable; a missing tool means a missing check |
+| B. One SQL tool over the lakehouse | Dropped | Can read other patients or the treatment arm; confident wrong answers from bad SQL; the audit shows SQL, not intent |
+| C. The whole record in the prompt, no tools | Partly | Simple and fits in context, but not agentic, cannot reach the protocol or earlier queries, and pays full cost for clean patients |
+| **D. A one-page summary up front, plus narrow tools to drill down** | **Chosen** | Most patients need a couple of calls; the agentic effort goes where it pays, such as the protocol check |
+
+**The tools.**
+- **Read:** `patient_summary`, `lab_trend`, `adverse_events`, `medications`, `vital_signs`, `disposition`, `rule_hits`, `prior_queries`, `protocol_section`.
+- **Draft:** `propose_query`. It writes to the drafts table only.
+
+**Four rules the tools follow.**
+1. **The patient is fixed by the run.** No tool takes a patient ID; the harness binds the patient when the run starts. The agent cannot read anyone else, whatever the prompt says.
+2. **The agent stays blinded.** The treatment arm never appears in any tool output, as for any reviewer in a blinded trial.
+3. **Code does the arithmetic, the model does the judgement.** Multiples of the normal limit, days between dates and screening flags are computed in the tools and handed over as facts.
+4. **Every fact carries its source IDs.** Tool results include the lineage IDs from D3, so each piece of query evidence points at an exact OpenClinica field.
+
+**Cost.**
+- Tools must be designed, tested and versioned.
+- A check the tools do not support cannot be done until a tool is added. A run that hits such a gap must say "could not check" rather than guess.
 
 **In Shalini's words:** *(to write)*
