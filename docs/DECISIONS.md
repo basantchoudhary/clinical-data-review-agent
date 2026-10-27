@@ -14,7 +14,7 @@ replaces it, never by editing the old one.
 | D5 | How a query leaves: agent drafts, a person approves, a separate writer posts | Decided 27 Oct 2026 |
 | D6 | Our own loop on the Anthropic SDK; Databricks Model Serving as the target, Foundry as fallback; Opus 5.5 first | Decided 27 Oct 2026 |
 | D7 | What the model may see: minimised, PII-scanned, free text marked untrusted, the structure contains the damage | Decided 27 Oct 2026 |
-| D8 | How we prove it works before anyone trusts it | Open |
+| D8 | Proof: planted problems, a labelled real sample, cheapest checks first, release gates, then shadow mode | Decided 27 Oct 2026 |
 | D9 | Code structure: ports and adapters like the reference agents; the harness installed by version | Decided 27 Oct 2026 |
 
 ---
@@ -238,6 +238,46 @@ Moving between routes changes the address and the credential only, not the code.
 
 ---
 
+## D8. How we prove it works before anyone trusts it
+
+**Decided:** 27 Oct 2026.
+
+**Options.**
+
+| Option | Verdict | Reason |
+|---|---|---|
+| A. Look at some outputs by eye | Dropped | A number never measured cannot be defended |
+| B. Planted problems only | Not enough | Measures finding, not whether the queries are worth sending |
+| **C. Planted problems, a labelled real sample, checks cheapest first, release gates, then shadow mode** | **Chosen** | Measures finding, usefulness, safety and cost |
+
+**Decision.**
+
+1. **Planted problems (AgentTwin).** A copy of the pilot trial with about 30 known inconsistencies of different kinds, plus clean patients that should get no query. This gives:
+   - recall: how many planted problems were found;
+   - false alarms: queries raised on clean patients.
+2. **A labelled real sample.** About 20 real pilot patients. Every draft is labelled *worth sending* or *not*, with a reason. **Shalini labels them.** The first is 01-705-1186.
+3. **Checks, cheapest first.**
+   - **Deterministic, every run, must be 100%:** every evidence ID exists in the snapshot; the draft matches the schema; no treatment arm and no personal data. A failure blocks release.
+   - **Claude as judge** of "worth sending": advisory until its verdicts agree with Shalini's labels on the real sample, then counted.
+   - **Repeat runs:** each test patient runs 3 times, to measure consistency (AAC-0010).
+4. **Release gates, set in advance.** A version ships only if all of these hold:
+   - at least 80% of planted problems found;
+   - at least 70% of drafts judged worth sending;
+   - zero blinding or privacy failures;
+   - at most $0.30 per patient;
+   - no worse than the previous version.
+5. **Shadow mode at a real sponsor.** The agent first drafts alongside human reviewers, sending nothing, until agreement is measured. It never earns sending without approval without measured evidence for that decision (AAC-0118).
+
+**Budget.** About 40 patients × 3 runs × about $0.25 is roughly $30 of the API credit.
+
+**Cost.** Building the planted world and labelling the real sample takes real time, including Shalini's labelling hours.
+
+**Obligations addressed.** AAC-0001, AAC-0010, AAC-0013, AAC-0014, AAC-0118.
+
+**In Shalini's words:** *(to write)*
+
+---
+
 ## D9. Code structure: ports and adapters, like the reference agents
 
 **Decided:** 27 Oct 2026.
@@ -300,10 +340,10 @@ Checked against **AHC's 16 layers** (what must exist) and the **65 AAC obligatio
 | L9 Determinism and replay | D3 | Partly. Missing: recorded model responses, pinned model, prompt and tool versions (AAC-0012, AAC-0059) |
 | L10 Failure handling | D3, D5 | Partly. Missing: a run that dies halfway (AAC-0046) |
 | L11 Observability | — | **Gap** (AAC-0011, AAC-0060) |
-| L12 Eval harness | D8 (open) | **Gap** |
-| L13 Cost accounting | — | **Gap** (AAC-0008, AAC-0093) |
+| L12 Eval harness | D8 | Covered (design); to be built |
+| L13 Cost accounting | D8 | Partly. Cost per patient is a release gate; missing: a hard per-run spend ceiling (AAC-0093) |
 | L14 Human in the loop | D5 | Covered. Autonomy widens only on measured agreement (AAC-0118) |
-| L15 Release and configuration | — | **Gap** (AAC-0013, AAC-0107) |
+| L15 Release and configuration | D8 | Partly. Regression gate set; missing: version pinning and the evaluated-equals-served check (AAC-0012, AAC-0107) |
 | L16 Identity and authorization | D4, D5 | Covered. Add: who may approve |
 
 **Obligations already satisfied by decisions:**
