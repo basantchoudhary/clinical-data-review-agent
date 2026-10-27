@@ -13,7 +13,7 @@ replaces it, never by editing the old one.
 | D4 | The agent's tools: a patient summary up front plus narrow read-only tools; no SQL | Decided 27 Oct 2026 |
 | D5 | How a query leaves: agent drafts, a person approves, a separate writer posts | Decided 27 Oct 2026 |
 | D6 | Our own loop on the Anthropic SDK; Databricks Model Serving as the target, Foundry as fallback; Opus 5.5 first | Decided 27 Oct 2026 |
-| D7 | What the model may see: minimisation, free text as untrusted | Open |
+| D7 | What the model may see: minimised, PII-scanned, free text marked untrusted, the structure contains the damage | Decided 27 Oct 2026 |
 | D8 | How we prove it works before anyone trusts it | Open |
 
 ---
@@ -206,3 +206,69 @@ Moving between routes changes the address and the credential only, not the code.
 **The first question at a real company:** "Which route is already approved and enabled?" The architecture is the same either way.
 
 **In Shalini's words:** *(to write)*
+
+---
+
+## D7. What the model may see
+
+**Decided:** 27 Oct 2026.
+
+**Options.**
+
+| Option | Verdict | Reason |
+|---|---|---|
+| A. Whatever the tools return | Dropped | Free text can hold names typed by site staff, and any text can carry instructions |
+| C. No free text at all | Dropped | Free text matters, for example a verbatim term that does not match its coded term |
+| **B. Minimise, scan, mark untrusted** | **Chosen** | Four rules, below |
+
+**Four rules.**
+1. **Minimise by design.** Tools return a subject ID, never a name; an age, never a birth date; never the treatment arm (D4).
+2. **Scan free text before the model sees it.** A PII detector (Presidio, through the Eval Harness) masks names, phone numbers and emails, and logs each masking.
+3. **Free text is data, never instructions.** Site-entered text is wrapped in marked untrusted blocks, and the system prompt treats it as evidence only.
+4. **The structure contains the damage.** Even a successful injection can read only one patient (D4) and produce only a draft a person approves (D5). Rules 1 to 3 are a second line of defence; safety does not rest on the prompt.
+
+**Recorded, not solved here.**
+- Logged model requests and responses contain trial data. They get the same access controls and retention as the trial data.
+- Provider terms: under Anthropic's commercial API terms, inputs are not used for training, and enterprises can arrange zero data retention. A sponsor confirms current terms in its governance review; on Databricks Model Serving the Databricks agreement applies.
+
+**Obligations satisfied.** AAC-0006, AAC-0058, AAC-0106.
+
+**In Shalini's words:** *(to write)*
+
+---
+
+# Coverage against the catalogs (27 Oct 2026)
+
+Checked against **AHC's 16 layers** (what must exist) and the **65 AAC obligations** that apply to a tool-using agent (what must be true). Updated as decisions close gaps.
+
+| AHC layer | Covered by | Status |
+|---|---|---|
+| L1 Context assembly | D4, D7 | Partly. Missing: a size cap on tool results (AAC-0105), prompt versioning |
+| L2 Model invocation | D6 | Partly. Missing: timeouts, retry policy, refusal handling, provider-failure fallback (AAC-0009) |
+| L3 Tool layer | D4 | Covered. Still: tool errors and empty results (AAC-0053) |
+| L4 Control loop | D6 | Partly. Missing: hard termination (AAC-0055), loop detection (AAC-0109), a "could not check" ending |
+| L5 State and memory | D2, D4 | Partly. Stateless across runs by choice; to be recorded |
+| L6 I/O contracts | D4 | Partly. Missing: a strict `propose_query` schema with required evidence (AAC-0002) |
+| L7 Policy enforcement | D4, D5, D7 | Covered. Add: guardrails fail closed (AAC-0091) |
+| L8 Concurrency and flow control | — | **Gap** |
+| L9 Determinism and replay | D3 | Partly. Missing: recorded model responses, pinned model, prompt and tool versions (AAC-0012, AAC-0059) |
+| L10 Failure handling | D3, D5 | Partly. Missing: a run that dies halfway (AAC-0046) |
+| L11 Observability | — | **Gap** (AAC-0011, AAC-0060) |
+| L12 Eval harness | D8 (open) | **Gap** |
+| L13 Cost accounting | — | **Gap** (AAC-0008, AAC-0093) |
+| L14 Human in the loop | D5 | Covered. Autonomy widens only on measured agreement (AAC-0118) |
+| L15 Release and configuration | — | **Gap** (AAC-0013, AAC-0107) |
+| L16 Identity and authorization | D4, D5 | Covered. Add: who may approve |
+
+**Obligations already satisfied by decisions:**
+
+| Obligation | Satisfied by |
+|---|---|
+| AAC-0113 Action on a stale read | D3 |
+| AAC-0057 Least privilege is enforced server-side | D4 |
+| AAC-0029 Every claim is supported by retrieved context | D4 |
+| AAC-0056 Destructive actions are gated | D5 |
+| AAC-0047 Retried steps are idempotent | D5 |
+| AAC-0006 No leakage of PII, secrets or credentials | D7 |
+| AAC-0058 Injection arriving through tool output | D7 |
+| AAC-0106 The system prompt is not a security boundary | D7 |
