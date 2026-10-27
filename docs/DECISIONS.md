@@ -11,7 +11,7 @@ replaces it, never by editing the old one.
 | D2 | The unit of work: one patient per agent run | Decided 27 Oct 2026 |
 | D3 | Where the agent reads from: lakehouse snapshot, re-checked in OpenClinica at write time | Decided 27 Oct 2026 |
 | D4 | The agent's tools: a patient summary up front plus narrow read-only tools; no SQL | Decided 27 Oct 2026 |
-| D5 | How a query leaves: draft, approval, a separate writer | Open |
+| D5 | How a query leaves: agent drafts, a person approves, a separate writer posts | Decided 27 Oct 2026 |
 | D6 | Which Claude surface, and where the model runs | Open |
 | D7 | What the model may see: minimisation, free text as untrusted | Open |
 | D8 | How we prove it works before anyone trusts it | Open |
@@ -130,5 +130,37 @@ We accept these because they are what makes the design production-grade rather t
 **Cost.**
 - Tools must be designed, tested and versioned.
 - A check the tools do not support cannot be done until a tool is added. A run that hits such a gap must say "could not check" rather than guess.
+
+**In Shalini's words:** *(to write)*
+
+---
+
+## D5. How a query leaves: the agent drafts, a person approves, a separate writer posts
+
+**Decided:** 27 Oct 2026.
+
+**Options.**
+
+| Option | Verdict | Reason |
+|---|---|---|
+| A. The agent posts directly to OpenClinica | Dropped | No human check; the agent would need write access to a clinical system |
+| B. The agent drafts, a person approves, the agent posts | Dropped | The agent still holds write credentials; a bug or a prompt injection could post anyway |
+| **C. The agent drafts, a person approves, a separate writer posts** | **Chosen** | Three parts, each with only the access it needs |
+
+**Decision.**
+1. **The agent** writes drafts to a table. It holds no OpenClinica credentials.
+2. **A data manager** reviews each draft on a review screen, with its evidence rows beside it. They approve it, edit and approve it, or reject it with a reason. The screen is a small Databricks App.
+3. **The writer** is a plain program whose only OpenClinica permission is to create a discrepancy note. It re-checks the field (D3), posts the note, and stores OpenClinica's note ID on the draft.
+4. **Each draft has a unique key**, so a retry never posts the same query twice.
+
+**Why.**
+- Nothing reaches a site without a named person approving it.
+- The one component that can write to OpenClinica contains no model.
+
+**Side benefit.** Two things become measures of the agent's quality for D8, at no extra effort:
+- the difference between what the agent drafted and what was sent;
+- the reason given for every rejection.
+
+**Cost.** Three components to build instead of one: the review screen, the writer, and the approver rules.
 
 **In Shalini's words:** *(to write)*
