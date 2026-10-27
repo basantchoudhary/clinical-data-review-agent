@@ -15,6 +15,7 @@ replaces it, never by editing the old one.
 | D6 | Our own loop on the Anthropic SDK; Databricks Model Serving as the target, Foundry as fallback; Opus 5.5 first | Decided 27 Oct 2026 |
 | D7 | What the model may see: minimised, PII-scanned, free text marked untrusted, the structure contains the damage | Decided 27 Oct 2026 |
 | D8 | Proof: planted problems, a labelled real sample, cheapest checks first, release gates, then shadow mode | Decided 27 Oct 2026 |
+| D10 | Operating defaults: hard stops, spend ceilings, concurrency, tracing, versions, approvers | Decided 27 Oct 2026 |
 | D9 | Code structure: ports and adapters like the reference agents; the harness installed by version | Decided 27 Oct 2026 |
 
 ---
@@ -323,28 +324,49 @@ The same contract tests run against every adapter of a port, so a drift between 
 
 ---
 
+## D10. Operating defaults for the layers still open
+
+**Decided:** 27 Oct 2026. Proposed by Claude as standard choices; approved as a set.
+
+| # | Layer | Default | Why |
+|---|---|---|---|
+| G1 | Hard stop (L4) | A run ends at 12 model turns, 3 minutes or $0.50, whichever comes first, and ends as "could not complete" with what it found | AAC-0055 |
+| G2 | Loop detection (L4) | The same tool with the same arguments twice in a row ends the run | AAC-0109 |
+| G3 | Spend ceiling (L13) | $0.50 per patient, $20 per day for the job; at the ceiling, new runs wait | AAC-0093 |
+| G4 | Concurrency (L8) | 4 patients at a time, backing off when the API asks | Within rate limits |
+| G5 | Model call safety (L2) | 60-second timeout; the harness retries once, the adapter never retries; a refusal ends the run as "refused" and is logged | AAC-0009 |
+| G6 | Tool results (L1, L3) | Each result capped at about 4,000 tokens, summarised with source IDs above that; a tool error reaches the agent as an error, never as empty data | AAC-0105, AAC-0053 |
+| G7 | Observability (L11) | One OpenTelemetry trace per patient run: every model and tool call, snapshot ID, versions, tokens, cost. A local file in development; MLflow tracing on Databricks. | AAC-0011, AAC-0060 |
+| G8 | Versions (L9, L15) | Every run records model ID, prompt version and tool version; a release pins all three; a changed prompt is a new release through the D8 gates | AAC-0012, AAC-0107 |
+| G9 | Memory (L5) | None between runs; earlier queries only through `prior_queries` | D2 stays reproducible |
+| G10 | Who may approve (L16) | Only the data-manager group; nobody approves a query on a site they enter data for | Separation of duties |
+
+---
+
 # Coverage against the catalogs (27 Oct 2026)
+
+**Design coverage after D10: all 16 layers decided.** L6 (strict query schema), L7 (fail closed), L9 (recorded model responses) and L10 (a run that dies halfway) are designed but carry named items to build.
 
 Checked against **AHC's 16 layers** (what must exist) and the **65 AAC obligations** that apply to a tool-using agent (what must be true). Updated as decisions close gaps.
 
 | AHC layer | Covered by | Status |
 |---|---|---|
-| L1 Context assembly | D4, D7 | Partly. Missing: a size cap on tool results (AAC-0105), prompt versioning |
-| L2 Model invocation | D6 | Partly. Missing: timeouts, retry policy, refusal handling, provider-failure fallback (AAC-0009) |
-| L3 Tool layer | D4 | Covered. Still: tool errors and empty results (AAC-0053) |
-| L4 Control loop | D6 | Partly. Missing: hard termination (AAC-0055), loop detection (AAC-0109), a "could not check" ending |
-| L5 State and memory | D2, D4 | Partly. Stateless across runs by choice; to be recorded |
+| L1 Context assembly | D4, D7, D10 (G6, G8) | Covered |
+| L2 Model invocation | D6, D10 (G5) | Covered |
+| L3 Tool layer | D4, D10 (G6) | Covered |
+| L4 Control loop | D6, D10 (G1, G2) | Covered |
+| L5 State and memory | D2, D4, D10 (G9) | Covered |
 | L6 I/O contracts | D4 | Partly. Missing: a strict `propose_query` schema with required evidence (AAC-0002) |
 | L7 Policy enforcement | D4, D5, D7 | Covered. Add: guardrails fail closed (AAC-0091) |
-| L8 Concurrency and flow control | — | **Gap** |
+| L8 Concurrency and flow control | D10 (G4) | Covered |
 | L9 Determinism and replay | D3 | Partly. Missing: recorded model responses, pinned model, prompt and tool versions (AAC-0012, AAC-0059) |
 | L10 Failure handling | D3, D5 | Partly. Missing: a run that dies halfway (AAC-0046) |
-| L11 Observability | — | **Gap** (AAC-0011, AAC-0060) |
+| L11 Observability | D10 (G7) | Covered |
 | L12 Eval harness | D8 | Covered (design); to be built |
-| L13 Cost accounting | D8 | Partly. Cost per patient is a release gate; missing: a hard per-run spend ceiling (AAC-0093) |
+| L13 Cost accounting | D8, D10 (G3) | Covered |
 | L14 Human in the loop | D5 | Covered. Autonomy widens only on measured agreement (AAC-0118) |
-| L15 Release and configuration | D8 | Partly. Regression gate set; missing: version pinning and the evaluated-equals-served check (AAC-0012, AAC-0107) |
-| L16 Identity and authorization | D4, D5 | Covered. Add: who may approve |
+| L15 Release and configuration | D8, D10 (G8) | Covered |
+| L16 Identity and authorization | D4, D5, D10 (G10) | Covered |
 
 **Obligations already satisfied by decisions:**
 
