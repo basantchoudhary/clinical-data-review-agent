@@ -12,7 +12,7 @@ replaces it, never by editing the old one.
 | D3 | Where the agent reads from: lakehouse snapshot, re-checked in OpenClinica at write time | Decided 27 Oct 2026 |
 | D4 | The agent's tools: a patient summary up front plus narrow read-only tools; no SQL | Decided 27 Oct 2026 |
 | D5 | How a query leaves: agent drafts, a person approves, a separate writer posts | Decided 27 Oct 2026 |
-| D6 | Which Claude surface, and where the model runs | Open |
+| D6 | Our own loop on the Anthropic SDK; Databricks Model Serving as the target, Foundry as fallback; Opus 5.5 first | Decided 27 Oct 2026 |
 | D7 | What the model may see: minimisation, free text as untrusted | Open |
 | D8 | How we prove it works before anyone trusts it | Open |
 
@@ -162,5 +162,47 @@ We accept these because they are what makes the design production-grade rather t
 - the reason given for every rejection.
 
 **Cost.** Three components to build instead of one: the review screen, the writer, and the approver rules.
+
+**In Shalini's words:** *(to write)*
+
+---
+
+## D6. Which Claude, called how, and where the model runs
+
+**Decided:** 27 Oct 2026.
+
+**6a. How we call Claude: our own loop on the Anthropic Python SDK (Messages API with tool use).**
+
+| Option | Verdict | Reason |
+|---|---|---|
+| **Our own loop on the Anthropic SDK** | **Chosen** | About 100 lines; every step visible and logged; the D4 tool rules are enforced in our code |
+| The SDK's Tool Runner | Possible | Same API, less code, but hides the mechanism we want to own and explain |
+| Claude Agent SDK | Dropped | Built for coding agents; its built-in bash and file tools are the wrong shape next to trial data |
+| Claude Managed Agents | Dropped | Trial data would leave the platform for an Anthropic-hosted sandbox |
+
+**6b. Where the model runs: behind one swap point.**
+
+| Stage | Route |
+|---|---|
+| While building | Anthropic's API directly |
+| **Target at a sponsor on Azure Databricks** | **Databricks Model Serving** |
+| Fallback | Claude in Microsoft Foundry, if the company's AI governance requires it (for example a central Azure API Management gateway for all AI traffic), or if Claude is approved there but not enabled in the Databricks workspace |
+
+Moving between routes changes the address and the credential only, not the code.
+
+**Why Model Serving is the target.** Everything else the agent touches already lives in Databricks: the curated tables and snapshots (D3), the read-only identity (D4), and the drafts table and review app (D5). With Model Serving the agent has:
+- one platform and one identity model, using a service principal instead of a separate API key;
+- one audit trail, with model requests and responses logged to lakehouse tables beside the data;
+- cost per patient in one place;
+- no new vendor onboarding, since it is covered by the existing Databricks agreement.
+
+**6c. Which model.** Claude Opus 5.5 first, because judgement is the hard part. Sonnet 5.5 and Haiku 5.5 are measured on the same test patients once the D8 evals exist, and the choice is made on that evidence.
+
+**Cost.**
+- Model Serving can lag Anthropic's API on new features and models, and its pricing and rate limits follow Databricks' terms.
+- Availability depends on cloud and region. It was not confirmed on Free Edition, which is why the build uses the direct API.
+- First estimate: about $0.15 to $0.30 per patient with prompt caching. To be measured on the first few patients before a larger run.
+
+**The first question at a real company:** "Which route is already approved and enabled?" The architecture is the same either way.
 
 **In Shalini's words:** *(to write)*
