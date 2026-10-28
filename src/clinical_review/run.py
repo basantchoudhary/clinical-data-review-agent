@@ -44,7 +44,7 @@ RUNS = ROOT / "runs"
 
 MODEL = "claude-opus-5-5"
 PROMPT_VERSION = "review-v1"
-TOOLS_VERSION = "tools-v1"
+TOOLS_VERSION = "tools-v2"  # v2: seriousness criteria in adverse_events
 PRICES = {MODEL: Price(Decimal("4.00"), Decimal("20.00"), Decimal("0.20"))}
 """The agent's own price table (the library keeps provider prices out). List
 prices recorded 2026-10-27; cache writes are priced as input."""

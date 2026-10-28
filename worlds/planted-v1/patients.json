@@ -1,0 +1,165 @@
+{
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "patients": [
+    {
+      "usubjid": "01-703-1295",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-717-1109",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-709-1168",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-704-1010",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-716-1103",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-716-1447",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-704-1074",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-710-1006",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-708-1216",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-717-1174",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-710-1249",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-716-1157",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-716-1189",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-701-1148",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-715-1321",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-716-1044",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-715-1207",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-704-1093",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-709-1339",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-710-1315",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-704-1445",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-714-1375",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-703-1086",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-701-1360",
+      "kind": "planted"
+    },
+    {
+      "usubjid": "01-701-1180",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-718-1250",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-716-1418",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-714-1195",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-704-1351",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-718-1101",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-715-1319",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-718-1427",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-713-1269",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-710-1137",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-713-1073",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-701-1211",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-705-1281",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-701-1383",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-708-1428",
+      "kind": "clean"
+    },
+    {
+      "usubjid": "01-716-1441",
+      "kind": "clean"
+    }
+  ]
+}

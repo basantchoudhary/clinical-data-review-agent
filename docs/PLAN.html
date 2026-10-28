@@ -108,7 +108,7 @@ const PHASES = [
   {n:"Phase 2", title:"Prove it, while the Claude credit lasts", when:"28–31 Oct", status:"doing", tasks:[
     ["A labelling page: each draft with its evidence, 'worth sending' or not, and a reason","C","done","python -m clinical_review.labeling"],
     ["Label the first five drafts (patient 01-705-1186)","S","done","5 of 5 worth sending as written"],
-    ["Planted-problem trial in AgentTwin: about 30 known defects, plus clean patients","C","open","Tue 28 – Wed 29"],
+    ["Planted-problem trial, AgentTwin-style in this repo: 24 known problems of 12 kinds (one a hidden instruction), plus 16 clean patients","C","done","worlds/planted-v1 · moving it into AgentTwin is a suite task"],
     ["Eval checks, cheapest first: evidence, schema, blinding, privacy; Claude as judge (advisory)","C","open","Wed 29"],
     ["Run about 40 patients × 3 repeats; measure the first five before the rest","C","open","Thu 30 · ≤$30"],
     ["Label the drafts of about 20 real patients","S","open","Thu 30 · ~2 h"],
@@ -160,7 +160,7 @@ const SUITE = [
   ["Agent Harness","Already broken on main: two import contracts, type errors in order_system, three unformatted files (F-10)","open","to report"],
   ["AAC","A new obligation: concealed fields such as treatment assignment are never exposed (F-6)","open","to propose"],
   ["AHC","Determinism comes from replay, not temperature (F-4); append-only history as a capability (F-2); verify-at-write as a way to meet AHC-0107 (D3)","open","to propose"],
-  ["AgentTwin","Its first tabular world with planted defects, scored as found versus planted plus false alarms","open","Phase 2"],
+  ["AgentTwin","Its first tabular world with planted defects, scored as found versus planted plus false alarms","doing","built AgentTwin-style in this repo (worlds/planted-v1); upstreaming to AgentTwin to do"],
   ["Eval Harness","Claude as a judge, calibrated against human labels before it counts","open","Phase 2"],
 ];
 
@@ -174,6 +174,7 @@ const RISKS = [
 ];
 
 const LOG = [
+  ["28 Oct 2026","Task 2.3 done: planted trial built (24 problems, 12 kinds, 16 clean patients, seeded). Found on the way: 30 real adverse events in the pilot are 'hospitalised' but 'not serious'; the AE tool now shows seriousness criteria (tools-v2)."],
   ["28 Oct 2026","Overview opens with the story in one hand-drawn picture: hospital, form book, nightly copy, agent, checker, writer, nine numbered steps."],
   ["28 Oct 2026","Shalini labelled the first five drafts: all worth sending as written, none edited."],
   ["28 Oct 2026","Overview extended: where the agent sits in Clinical Data Management (lifecycle diagram) and a user-and-system swimlane flow; architecture diagram cleaned up."],

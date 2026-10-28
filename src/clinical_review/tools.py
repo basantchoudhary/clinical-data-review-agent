@@ -45,6 +45,8 @@ def _records(df: pd.DataFrame, columns: dict[str, str]) -> list[dict[str, Any]]:
     for _, row in df.iterrows():
         rec: dict[str, Any] = {}
         for src, name in columns.items():
+            if src not in row.index:  # a column this study does not collect
+                continue
             v = row[src]
             if isinstance(v, float) and pd.isna(v):
                 v = None
@@ -132,7 +134,11 @@ class PatientTools:
         ae = self.data.patient_rows("ae", self.usubjid).sort_values("AESTDTC")
         cols = {"AETERM": "verbatim_term", "AEDECOD": "coded_term", "AESOC": "body_system", "AESTDTC": "start",
                 "AEENDTC": "end", "AESEV": "severity", "AESER": "serious", "AEREL": "relationship",
-                "AEOUT": "outcome", "AEACN": "action_taken"}
+                "AEOUT": "outcome", "AEACN": "action_taken",
+                # Seriousness criteria: why an event is serious. 'Y' on any of these
+                # with serious = 'N' is itself an inconsistency (tools-v2).
+                "AESHOSP": "hospitalisation", "AESLIFE": "life_threatening", "AESDTH": "death",
+                "AESDISAB": "disability", "AESCONG": "congenital_anomaly", "AESMIE": "other_medically_important"}
         return {"adverse_events": _records(ae, cols)}
 
     def medications(self) -> dict[str, Any]:

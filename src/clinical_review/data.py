@@ -75,3 +75,7 @@ class ParquetTrialData:
     def study_wide_dm(self) -> pd.DataFrame:
         """Demographics for every patient, for study-level checks only. Never handed to the agent."""
         return self._table("dm").copy()
+
+    def study_wide(self, domain: str) -> pd.DataFrame:
+        """A whole table, for building test worlds and study-level checks. Never handed to the agent."""
+        return self._table(domain).copy()
