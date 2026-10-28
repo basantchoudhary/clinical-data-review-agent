@@ -1,0 +1,144 @@
+{
+  "run_id": "run_e4b2b8a976c64ecf",
+  "patient": "01-705-1186",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b",
+  "started_at": "2026-10-28T04:32:29.685124+00:00",
+  "seconds": 41.4,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v1",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I found five issues in patient 01-705-1186's record and saved a draft query for each. Nothing has been sent; a data manager needs to review them first.\n\n**What I checked:** the patient summary, the edit-check hits, ALT, AST and bilirubin over time, adverse events, disposition, concomitant medications (none recorded), medical history, the protocol's liver and lab entry criteria, and prior queries (none). I didn't raise the missing consent date, because the study notes say it isn't recorded anywhere in this study.\n\n**Draft queries:**\n1. **Adverse Events, onset date (drf-095a490126178906):** the hyperbilirubinaemia event starts on 2014-01-26, but bilirubin was already 116.28 umol/L (5.54\u00d7 the upper limit of normal) on 2014-01-23. The query asks the site to check the onset date.\n2. **Adverse Events, possible missing event (drf-7db8eb15e9e4a40d):** ALT and AST rose to about 3\u20134\u00d7 the upper limit (peak AST 135 U/L on 2014-01-29) while bilirubin was above 2\u00d7 the limit, but no event covers the liver enzyme rise. It asks the investigator whether a separate event should be reported and whether seriousness has been reviewed.\n3. **Eligibility (drf-eea7e2014552d910):** at screening, ALT (50), AST (54) and bilirubin (25.65) were all above the lab's normal range. Exclusion criterion EXCL27 rules out values above the sponsor's age-specific \"Lilly Reference Range III\", so the query asks whether these values met it or an exception was documented.\n4. **Laboratory, visit date (drf-505d1aa3aa30481b):** labs labelled Week 4 are dated 2014-01-29, but the Week 4 visit is recorded as 2014-02-07, with an unscheduled visit on 2014-02-01 in between. It asks the site to check the visit label and date.\n5. **Adverse Events and Disposition (drf-59dd6b14ad6d4df7):** the event's \"action taken\" field is blank, even though the last dose was on the event's start date and the patient was withdrawn by physician decision for hyperbilirubinemia. It asks the site to complete the field and say whether the withdrawal reason should be \"adverse event\".\n\nThe patient has a history of Paget's disease of bone (coded as osteitis deformans), which may explain her raised ALP. I didn't look at the ALP results or raise a query about them.",
+    "termination": "goal_reached"
+  },
+  "steps": 5,
+  "tool_calls": [
+    "patient_summary",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "adverse_events",
+    "prior_queries",
+    "protocol_section",
+    "disposition",
+    "medications",
+    "medical_history",
+    "rule_hits",
+    "propose_query",
+    "propose_query",
+    "propose_query",
+    "propose_query",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 27356,
+    "output_tokens": 4027,
+    "cached_input_tokens": 8008
+  },
+  "cost_usd": 0.1916,
+  "drafts": [
+    {
+      "key": "drf-095a490126178906",
+      "run_id": "run_e4b2b8a976c64ecf",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b",
+      "usubjid": "01-705-1186",
+      "form": "Adverse Events",
+      "category": "date_inconsistency",
+      "issue": "Hyperbilirubinaemia AE onset is recorded as 2014-01-26, but total bilirubin was already 116.28 umol/L (5.54x ULN) on 2014-01-23 at Week 2.",
+      "query_text": "The adverse event HYPERBILIRUBINAEMIA has an onset date of 2014-01-26. Total bilirubin was already 116.28 umol/L (range 3\u201321 umol/L) at the Week 2 visit on 2014-01-23. At screening on 2014-01-03 it was 25.65 umol/L. Please check the AE onset date and correct it if needed. If 2014-01-26 is correct, please tell us how the onset date was decided.",
+      "evidence": [
+        "AE:01-705-1186:1",
+        "LB:01-705-1186:43",
+        "LB:01-705-1186:79",
+        "LB:01-705-1186:6"
+      ],
+      "created_at": "2026-10-28T04:33:01.984349+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-7db8eb15e9e4a40d",
+      "run_id": "run_e4b2b8a976c64ecf",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b",
+      "usubjid": "01-705-1186",
+      "form": "Adverse Events",
+      "category": "missing_event",
+      "issue": "ALT and AST reached about 3\u20134x ULN after dosing (peaking 2014-01-29), but no AE for transaminase elevation is recorded; the only AE is hyperbilirubinaemia.",
+      "query_text": "After dosing, ALT and AST went up from screening values (ALT 50 U/L, AST 54 U/L on 2014-01-03). On 2014-01-23 they were ALT 104 U/L (3.25x ULN) and AST 118 U/L (3.47x ULN). On 2014-01-29 they were ALT 107 U/L (3.34x ULN) and AST 135 U/L (3.97x ULN). AST was still 114 U/L (3.35x ULN) on 2014-02-01. Total bilirubin was above 2x ULN at the same time points. The only adverse event recorded is HYPERBILIRUBINAEMIA. Please tell us whether, in the investigator's judgement, the transaminase increases are clinically significant and should be reported as a separate AE, or whether they are covered by the existing event. Please also confirm that the seriousness assessment for the hepatic findings has been reviewed.",
+      "evidence": [
+        "LB:01-705-1186:3",
+        "LB:01-705-1186:4",
+        "LB:01-705-1186:40",
+        "LB:01-705-1186:41",
+        "LB:01-705-1186:127",
+        "LB:01-705-1186:128",
+        "LB:01-705-1186:113",
+        "LB:01-705-1186:43",
+        "LB:01-705-1186:130",
+        "AE:01-705-1186:1"
+      ],
+      "created_at": "2026-10-28T04:33:01.987599+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-eea7e2014552d910",
+      "run_id": "run_e4b2b8a976c64ecf",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b",
+      "usubjid": "01-705-1186",
+      "form": "Eligibility",
+      "category": "eligibility",
+      "issue": "Screening ALT, AST and total bilirubin were above the reference range, and exclusion criterion EXCL27 excludes values above Lilly Reference Range III for these analytes.",
+      "query_text": "At Screening 1 (2014-01-03), these results were above the laboratory reference range: ALT 50 U/L (range 6\u201332), AST 54 U/L (range 9\u201334) and total bilirubin 25.65 umol/L (range 3\u201321). Exclusion criterion EXCL27 excludes patients whose creatinine, total bilirubin, SGOT or SGPT exceed Lilly Reference Range III for their age. Please confirm whether these screening values were within Reference Range III for this 84-year-old patient. If they were not, please tell us whether an eligibility exception or a repeat test was documented before first dose on 2014-01-08.",
+      "evidence": [
+        "LB:01-705-1186:3",
+        "LB:01-705-1186:4",
+        "LB:01-705-1186:6",
+        "TI:EXCL27"
+      ],
+      "created_at": "2026-10-28T04:33:01.987905+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-505d1aa3aa30481b",
+      "run_id": "run_e4b2b8a976c64ecf",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b",
+      "usubjid": "01-705-1186",
+      "form": "Laboratory",
+      "category": "date_inconsistency",
+      "issue": "Labs labelled WEEK 4 are dated 2014-01-29, but the Week 4 visit is recorded on 2014-02-07 and the unscheduled 4.2 visit falls between them on 2014-02-01.",
+      "query_text": "Laboratory results with visit WEEK 4 have a collection date of 2014-01-29T09:10 (for example ALT 107 U/L, AST 135 U/L, total bilirubin 124.83 umol/L). The Week 4 visit is recorded as 2014-02-07, and Unscheduled 4.2 is dated 2014-02-01. Please check the visit label and collection date for the 2014-01-29 samples and correct them if needed. For example, should these be an unscheduled visit?",
+      "evidence": [
+        "LB:01-705-1186:127",
+        "LB:01-705-1186:128",
+        "LB:01-705-1186:130",
+        "SV:01-705-1186:5",
+        "SV:01-705-1186:4.2"
+      ],
+      "created_at": "2026-10-28T04:33:01.988141+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-59dd6b14ad6d4df7",
+      "run_id": "run_e4b2b8a976c64ecf",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b",
+      "usubjid": "01-705-1186",
+      "form": "Adverse Events",
+      "category": "disposition",
+      "issue": "The hyperbilirubinaemia AE has a blank action taken, yet last dose was on the AE onset date (2014-01-26) and the patient was discontinued by physician decision for hyperbilirubinemia.",
+      "query_text": "For the adverse event HYPERBILIRUBINAEMIA (onset 2014-01-26), the 'action taken with study drug' field is blank. Last dose of study drug was on 2014-01-26. The Disposition form gives the reason for discontinuation as PHYSICIAN DECISION, with the term HYPERBILIRUBINEMIA, on 2014-02-07. Please complete the action taken for this event. Please also confirm whether this AE led to stopping study drug, and whether the discontinuation reason on the Disposition form should be adverse event rather than physician decision.",
+      "evidence": [
+        "AE:01-705-1186:1",
+        "DS:01-705-1186:1"
+      ],
+      "created_at": "2026-10-28T04:33:01.988590+00:00",
+      "status": "pending_review"
+    }
+  ]
+}
