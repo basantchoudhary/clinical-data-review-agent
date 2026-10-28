@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clinical Data Review Agent</title>
+<style>
+:root{--bg:#ffffff;--ink:#1d1d1f;--muted:#5f6368;--line:#e3e3df;--accent:#0f6cbd;--soft:#f4f7fb;--softline:#dbe5f1;--code:#f3f3ef;
+--ok:#1a7f37;--ok-bg:#e8f5ec;--warn:#b26a00;--warn-bg:#fff4e0;--bad:#c62828;--bad-bg:#fdecea}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:30px 16px 90px}
+h1{font-size:32px;line-height:1.2;margin:0 0 8px}
+h2{font-size:23px;margin:46px 0 10px;padding-top:12px;border-top:1px solid var(--line)}
+h3{font-size:17px;margin:22px 0 6px}
+p{margin:8px 0} .muted{color:var(--muted)} small{font-size:13px}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:14px}
+.lead{font-size:18px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
+.soft{background:var(--soft);border-color:var(--softline)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.tile{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tile b{display:block;margin-bottom:4px}
+.stat b{font-size:24px}
+.tbl{overflow-x:auto} table{border-collapse:collapse;width:100%;font-size:15px;margin:8px 0}
+th,td{text-align:left;vertical-align:top;padding:8px 9px;border-bottom:1px solid var(--line)}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 9px;border-radius:999px;white-space:nowrap}
+.ok{color:var(--ok);background:var(--ok-bg)} .warn{color:var(--warn);background:var(--warn-bg)} .bad{color:var(--bad);background:var(--bad-bg)}
+.figure{overflow-x:auto;margin:12px 0}
+svg text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.query{border-left:4px solid var(--accent);background:var(--soft);padding:9px 14px;border-radius:0 10px 10px 0;margin:8px 0;font-size:15px}
+nav a{color:var(--accent);text-decoration:none;margin-right:14px;font-size:14px;white-space:nowrap}
+</style>
+</head>
+<body>
+<main>
+
+<p class="muted"><small>AG-102 · Shalini (architecture and data layer), with Claude · overview written 28 Oct 2026</small></p>
+<h1>Clinical Data Review Agent</h1>
+<p class="lead">An AI agent that reviews one clinical-trial patient's record across forms and visits, finds the inconsistencies that simple field checks cannot judge, and drafts precise queries for a data manager to approve. It never changes trial data and never sends anything itself.</p>
+<nav><a href="#problem">The problem</a><a href="#benefit">Business benefit</a><a href="#users">Who it helps</a><a href="#agentic">Why agentic</a><a href="#arch">Architecture</a><a href="#design">Design</a><a href="#proof">Proof</a><a href="#result">First result</a></nav>
+
+<h2 id="problem">1. The problem it solves</h2>
+<p>A clinical trial's data has to be clean before the database can be <b>locked</b> and analysed. Data is entered by hospital staff (sites) into an <b>EDC</b> system, one form at a time. Two kinds of checking clean it:</p>
+<div class="tbl"><table>
+<tr><th></th><th>Edit checks</th><th>Data review</th></tr>
+<tr><td><b>Done by</b></td><td>The EDC, automatically</td><td>Data managers and a medical monitor, by hand</td></tr>
+<tr><td><b>Looks at</b></td><td>One field or one form</td><td>The whole patient, across forms and visits</td></tr>
+<tr><td><b>Catches</b></td><td>"ALT is above range"</td><td>"ALT is three times normal and bilirubin is rising, yet no liver event is recorded"</td></tr>
+<tr><td><b>Cost</b></td><td>Nearly free</td><td>Slow, repetitive, expensive expert time</td></tr>
+</table></div>
+<p>Data review is where the work and the risk sit. A reviewer opens a patient, reads across six or seven tables, and decides what is worth asking the site. Most patients are fine; finding the few that are not, and asking the right question, is the skill. Under time pressure, reviews get shallower, cross-form problems are missed, and vague queries go back and forth with sites, which delays database lock.</p>
+
+<h2 id="benefit">2. Business benefit</h2>
+<div class="grid">
+<div class="tile"><b>Every patient gets a full first pass</b><small>The same depth for patient 1 and patient 300, at any hour. Reviewers start from a prepared case instead of a blank screen.</small></div>
+<div class="tile"><b>Expert time moves to judgement</b><small>Reading, cross-referencing and drafting are done; the data manager decides, edits and approves. Fewer hours per patient on the mechanical part.</small></div>
+<div class="tile"><b>Better queries, fewer round trips</b><small>Each draft cites exact values, dates and records, asks rather than tells, and targets the right form. A specific query is answered once.</small></div>
+<div class="tile"><b>Problems found earlier</b><small>Cross-form issues such as a missing adverse event, a wrong onset date or an eligibility question surface during the study, not at lock.</small></div>
+<div class="tile"><b>Audit-ready by design</b><small>Every run records the data snapshot it read, the model and prompt versions, each tool call, cost, and who approved what. That is the trail an inspector asks for.</small></div>
+<div class="tile"><b>Cheap to run, measured</b><small>The first real review cost $0.19 and took 41 seconds. Cost per patient is a release gate, not a guess.</small></div>
+</div>
+<div class="card soft"><b>What it is not.</b> It does not replace data managers or investigators. It does not make clinical judgements (it asks, the investigator decides). It never sends a query or changes data: a person approves every query, and a separate program, with no AI in it, posts approved ones. Its value claims are measured before they are made (section 8).</div>
+
+<h2 id="users">3. Who it helps, and how</h2>
+<div class="tbl"><table>
+<tr><th>User</th><th>Today</th><th>With the agent</th></tr>
+<tr><td><b>Data manager</b> (primary user)</td><td>Opens each patient, reads every form, cross-checks by hand, writes queries from scratch</td><td>Opens a queue of drafted queries, each with its evidence beside it. Approves, edits or rejects with a reason in minutes. Spends the saved time on the hard cases.</td></tr>
+<tr><td><b>Medical monitor</b></td><td>Reviews safety data patient by patient, looking for patterns such as liver signals</td><td>Sees safety-relevant drafts (for example raised transaminases with no adverse event) already assembled with the lab trend</td></tr>
+<tr><td><b>Site coordinator</b> (receives queries)</td><td>Gets vague queries, has to dig for what is meant, answers back and forth</td><td>Gets one specific question with the values, dates and the form to check</td></tr>
+<tr><td><b>Study leadership</b></td><td>Database lock slips; review effort is hard to forecast</td><td>Review throughput, query quality and cost per patient are tracked numbers</td></tr>
+<tr><td><b>Auditor or inspector</b></td><td>Reconstructs who decided what from emails and notes</td><td>A per-run record: data snapshot, versions, evidence, approver</td></tr>
+</table></div>
+
+<h2 id="agentic">4. Why this is agentic, and why most of it is not</h2>
+<p>An agent is worth its cost and risk only when all four of these hold. Data review passes all four:</p>
+<div class="tbl"><table>
+<tr><th>Test</th><th>Clinical data review</th><th></th></tr>
+<tr><td>Is the path unknown in advance?</td><td>What to look at next depends on what was just found: a high lab leads to adverse events, then to an onset date, then to the protocol's entry criteria, then to disposition. Each patient takes a different path.</td><td><span class="pill ok">yes</span></td></tr>
+<tr><td>Does it need several sources?</td><td>Five or more tables plus the protocol</td><td><span class="pill ok">yes</span></td></tr>
+<tr><td>Is judgement the hard part?</td><td>Deciding what is worth asking, and when a pattern does not apply (for example a high ALP explained by bone disease, not liver)</td><td><span class="pill ok">yes</span></td></tr>
+<tr><td>Can mistakes be caught?</td><td>A data manager approves every query before it reaches a site</td><td><span class="pill ok">yes</span></td></tr>
+</table></div>
+<p>The architect's point: <b>most of the system is deliberately not an agent.</b> Rules are cheaper, exact and easier to defend to an auditor, so everything a rule can do stays a rule:</p>
+<div class="tbl"><table>
+<tr><th>Piece</th><th>Built as</th><th>Why</th></tr>
+<tr><td>Loading data, SDTM-aligned layers</td><td><span class="pill ok">Pipeline</span></td><td>Reproducible and auditable</td></tr>
+<tr><td>Edit checks (out of range, impossible dates)</td><td><span class="pill ok">Rules</span></td><td>Exact and explainable</td></tr>
+<tr><td>Which patients to review first</td><td><span class="pill ok">Rules</span></td><td>A score from the rule hits</td></tr>
+<tr><td>Reviewing one patient across forms; drafting queries</td><td><span class="pill warn">Agent</span></td><td>Passes all four tests</td></tr>
+<tr><td>Approving and sending</td><td><span class="pill bad">Person</span> plus a plain program</td><td>Accountability stays human; the only writer has no AI in it</td></tr>
+</table></div>
+
+<h2 id="arch">5. Architecture</h2>
+<div class="figure">
+<svg viewBox="0 0 940 560" width="100%" role="img" aria-label="Architecture: OpenClinica feeds a Databricks lakehouse; the agent reads one patient through read-only tools and writes drafts; a data manager approves; a writer posts to OpenClinica after re-checking">
+  <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#5f6368"/></marker></defs>
+  <g font-size="13">
+    <!-- source -->
+    <rect x="20" y="40" width="170" height="90" rx="10" fill="#f4f7fb" stroke="#dbe5f1"/>
+    <text x="105" y="70" text-anchor="middle" font-weight="700">OpenClinica</text>
+    <text x="105" y="90" text-anchor="middle" fill="#5f6368">the trial's EDC</text>
+    <text x="105" y="108" text-anchor="middle" fill="#5f6368">CDISC ODM</text>
+    <!-- data layer -->
+    <rect x="240" y="20" width="400" height="140" rx="12" fill="#e8f5ec" stroke="#b9dfc4"/>
+    <text x="440" y="44" text-anchor="middle" font-weight="700" fill="#1a7f37">1 · Data layer: Databricks lakehouse (plain code)</text>
+    <rect x="258" y="60" width="110" height="40" rx="7" fill="#fff" stroke="#b9dfc4"/><text x="313" y="85" text-anchor="middle">raw</text>
+    <rect x="384" y="60" width="110" height="40" rx="7" fill="#fff" stroke="#b9dfc4"/><text x="439" y="85" text-anchor="middle">cleaned</text>
+    <rect x="510" y="60" width="116" height="40" rx="7" fill="#fff" stroke="#b9dfc4"/><text x="568" y="80" text-anchor="middle">curated</text><text x="568" y="94" text-anchor="middle" fill="#5f6368" font-size="11">SDTM-aligned, blinded</text>
+    <line x1="368" y1="80" x2="382" y2="80" stroke="#5f6368" marker-end="url(#ar)"/><line x1="494" y1="80" x2="508" y2="80" stroke="#5f6368" marker-end="url(#ar)"/>
+    <text x="440" y="124" text-anchor="middle" fill="#1a7f37">edit-check rules · patient ranking · snapshot ID and lineage on every row</text>
+    <text x="440" y="144" text-anchor="middle" fill="#5f6368" font-size="12">Shalini's pipeline</text>
+    <line x1="190" y1="85" x2="238" y2="85" stroke="#5f6368" marker-end="url(#ar)"/>
+    <!-- agent -->
+    <rect x="240" y="200" width="400" height="190" rx="12" fill="#fff4e0" stroke="#f0d3a0"/>
+    <text x="440" y="224" text-anchor="middle" font-weight="700" fill="#b26a00">2 · Agent layer: one patient per run</text>
+    <rect x="258" y="238" width="170" height="70" rx="8" fill="#fff" stroke="#f0d3a0"/>
+    <text x="343" y="262" text-anchor="middle" font-weight="600">Agent Harness loop</text>
+    <text x="343" y="280" text-anchor="middle" fill="#5f6368" font-size="12">budgets · stops · tracing</text>
+    <text x="343" y="296" text-anchor="middle" fill="#5f6368" font-size="12">cost meter · retries</text>
+    <rect x="452" y="238" width="170" height="70" rx="8" fill="#fff" stroke="#f0d3a0"/>
+    <text x="537" y="262" text-anchor="middle" font-weight="600">Claude (model port)</text>
+    <text x="537" y="280" text-anchor="middle" fill="#5f6368" font-size="12">Anthropic API now;</text>
+    <text x="537" y="296" text-anchor="middle" fill="#5f6368" font-size="12">Databricks Model Serving</text>
+    <line x1="428" y1="273" x2="450" y2="273" stroke="#5f6368" marker-end="url(#ar)"/>
+    <rect x="258" y="320" width="364" height="56" rx="8" fill="#fff" stroke="#f0d3a0"/>
+    <text x="440" y="342" text-anchor="middle" font-weight="600">10 read-only tools, patient bound by the run, blinded</text>
+    <text x="440" y="362" text-anchor="middle" fill="#5f6368" font-size="12">summary · labs · adverse events · meds · history · vitals · disposition · rules · prior queries · protocol</text>
+    <line x1="568" y1="160" x2="568" y2="318" stroke="#5f6368" marker-end="url(#ar)"/>
+    <text x="574" y="190" fill="#5f6368" font-size="12">reads one snapshot</text>
+    <!-- drafts -->
+    <rect x="690" y="250" width="220" height="70" rx="10" fill="#f4f7fb" stroke="#dbe5f1"/>
+    <text x="800" y="276" text-anchor="middle" font-weight="700">Drafts table</text>
+    <text x="800" y="296" text-anchor="middle" fill="#5f6368" font-size="12">propose_query: the agent's</text>
+    <text x="800" y="311" text-anchor="middle" fill="#5f6368" font-size="12">only write</text>
+    <line x1="640" y1="285" x2="688" y2="285" stroke="#5f6368" marker-end="url(#ar)"/>
+    <!-- human + writer -->
+    <rect x="240" y="430" width="400" height="110" rx="12" fill="#fdecea" stroke="#f3c2bd"/>
+    <text x="440" y="454" text-anchor="middle" font-weight="700" fill="#c62828">3 · People decide; a plain program writes</text>
+    <rect x="258" y="468" width="170" height="58" rx="8" fill="#fff" stroke="#f3c2bd"/>
+    <text x="343" y="492" text-anchor="middle" font-weight="600">Data manager</text>
+    <text x="343" y="510" text-anchor="middle" fill="#5f6368" font-size="12">approve · edit · reject</text>
+    <rect x="452" y="468" width="170" height="58" rx="8" fill="#fff" stroke="#f3c2bd"/>
+    <text x="537" y="492" text-anchor="middle" font-weight="600">Writer (no AI)</text>
+    <text x="537" y="510" text-anchor="middle" fill="#5f6368" font-size="12">re-check, then post</text>
+    <line x1="428" y1="497" x2="450" y2="497" stroke="#5f6368" marker-end="url(#ar)"/>
+    <path d="M800,320 C800,420 400,400 343,466" fill="none" stroke="#5f6368" marker-end="url(#ar)"/>
+    <path d="M622,497 C760,497 130,560 105,132" fill="none" stroke="#0f6cbd" stroke-dasharray="6 4" marker-end="url(#ar)"/>
+    <text x="40" y="300" fill="#0f6cbd" font-size="12">discrepancy note,</text>
+    <text x="40" y="316" fill="#0f6cbd" font-size="12">only if the field is</text>
+    <text x="40" y="332" fill="#0f6cbd" font-size="12">unchanged since review</text>
+    <!-- around -->
+    <text x="790" y="40" fill="#5f6368" font-size="12">Around everything:</text>
+    <text x="790" y="58" fill="#5f6368" font-size="12">· audit record per run</text>
+    <text x="790" y="74" fill="#5f6368" font-size="12">· OpenTelemetry traces</text>
+    <text x="790" y="90" fill="#5f6368" font-size="12">· spend ceilings</text>
+    <text x="790" y="106" fill="#5f6368" font-size="12">· read-only identities</text>
+    <text x="790" y="122" fill="#5f6368" font-size="12">· evals and release gates</text>
+  </g>
+</svg>
+</div>
+
+<h3>How one patient flows through it</h3>
+<ol>
+<li>The pipeline exports from OpenClinica, builds the curated layers, runs the edit checks and ranks patients. Every row carries a snapshot ID and a link back to its OpenClinica field.</li>
+<li>A worker picks the next patient. The harness starts a run bound to that patient and that snapshot.</li>
+<li>Claude reads a one-page summary, then drills in with the tools. Code does the arithmetic (for example "3.25 × the upper limit"); the model decides what it means.</li>
+<li>For each real inconsistency it saves a draft query, citing the records it relied on. The tool refuses evidence that does not exist in that patient's snapshot.</li>
+<li>A data manager approves, edits or rejects each draft. Edits and rejection reasons are kept: they measure the agent's quality.</li>
+<li>The writer re-reads the field in OpenClinica. If it changed since the snapshot, the draft goes back for re-review; otherwise it is posted as a discrepancy note.</li>
+</ol>
+
+<h3>Built on the AgentHarnessSuite</h3>
+<p>Ports and adapters, like the reference agents: every outside system sits behind an interface, and configuration chooses the implementation. Trial data has a local adapter (development) and a Databricks adapter; the model has an Anthropic adapter whose address switches it to Databricks Model Serving with no code change. The suite's catalogs check the design: <b>AHC</b> (what a production harness must contain: all 16 layers decided), <b>AAC</b> (what must be true: obligations such as least privilege, no action on a stale read, gated actions), <b>AgentTwin</b> (a simulated trial with planted problems) and the <b>Eval Harness</b> (checks on every output).</p>
+
+<h2 id="design">6. Design: the ten decisions</h2>
+<p class="muted">Each decision records the options, the choice, why, and what it costs. Full record: <code>docs/DECISIONS.md</code>.</p>
+<div class="tbl"><table>
+<tr><th>#</th><th>Decision</th><th>Choice</th><th>Why</th></tr>
+<tr><td>D1</td><td>Boundary</td><td>Rules for everything they can do; the agent only for cross-form review; a person approves</td><td>Cost and risk only where judgement is needed</td></tr>
+<tr><td>D2</td><td>Unit of work</td><td>One patient per run</td><td>The value is in the cross-form story; runs are independent and auditable</td></tr>
+<tr><td>D3</td><td>Where it reads</td><td>A lakehouse snapshot; the field is re-checked in OpenClinica before posting</td><td>Reproducible ("show me what it saw") and never queries a value the site already fixed</td></tr>
+<tr><td>D4</td><td>Tools</td><td>A summary up front, then narrow read-only tools; no SQL</td><td>The patient is bound by the run, the agent stays blinded, code does the arithmetic, every fact carries its source</td></tr>
+<tr><td>D5</td><td>How a query leaves</td><td>The agent drafts, a person approves, a separate program posts</td><td>The only component that can write to the EDC contains no model</td></tr>
+<tr><td>D6</td><td>Model and route</td><td>Our own loop on the Anthropic SDK; Databricks Model Serving as the target, Microsoft Foundry as fallback; Claude Opus 5.5 first</td><td>Fits the platform the company already governs; one swap point</td></tr>
+<tr><td>D7</td><td>What the model sees</td><td>Minimised, PII-scanned, free text marked untrusted</td><td>Safety comes from the structure, not the prompt</td></tr>
+<tr><td>D8</td><td>Proof</td><td>Planted problems, a labelled real sample, release gates, shadow mode</td><td>Measured, not demonstrated</td></tr>
+<tr><td>D9</td><td>Code structure</td><td>Ports and adapters on the shared harness, installed by version</td><td>Swappable vendors; framework improvements flow to every agent</td></tr>
+<tr><td>D10</td><td>Operating limits</td><td>Hard stops, spend ceilings, concurrency, tracing, pinned versions, approver rules</td><td>Closes every remaining AHC layer</td></tr>
+</table></div>
+
+<h3>The controls an auditor will ask about</h3>
+<div class="tbl"><table>
+<tr><th>Risk</th><th>Control</th></tr>
+<tr><td>The agent changes trial data</td><td>It has no write access to any data. Its only write is a draft row.</td></tr>
+<tr><td>A query goes out wrong</td><td>A named data manager approves each one; edits and rejections are recorded.</td></tr>
+<tr><td>Unblinding</td><td>Treatment-arm columns and the dose table never leave the pipeline; the tools check again.</td></tr>
+<tr><td>Reading the wrong patient</td><td>No tool accepts a patient ID; the run is bound to one patient.</td></tr>
+<tr><td>Instructions hidden in site text (prompt injection)</td><td>Site text is marked untrusted; and even if obeyed, it can only produce one draft that a person reviews.</td></tr>
+<tr><td>Personal data reaching the model</td><td>Subject IDs, never names; ages, never birth dates; free text scanned for PII.</td></tr>
+<tr><td>Posting about a value already fixed</td><td>The writer re-reads the field before posting; a changed field sends the draft back.</td></tr>
+<tr><td>Runaway cost or loops</td><td>12 steps, 3 minutes and $0.50 per patient; $20 a day; loop detection.</td></tr>
+<tr><td>"What did it see, and why?"</td><td>Per-run record: snapshot, versions, tool calls, evidence, model served, cost, trace.</td></tr>
+</table></div>
+
+<h2 id="proof">7. How it is proven</h2>
+<p>Nobody should trust it because a demo looked good. Before release, a version must pass gates set in advance:</p>
+<div class="grid">
+<div class="tile stat"><b>≥ 80%</b><small>of planted problems found, in a simulated trial with known defects and clean patients</small></div>
+<div class="tile stat"><b>≥ 70%</b><small>of drafts judged worth sending by a human labeller, with Claude as a judge only once it agrees with her</small></div>
+<div class="tile stat"><b>0</b><small>blinding or privacy failures; every evidence reference exists</small></div>
+<div class="tile stat"><b>≤ $0.30</b><small>per patient, and no worse than the previous version</small></div>
+</div>
+<p>At a real sponsor it would then run in <b>shadow mode</b>, drafting beside human reviewers without sending anything, until agreement is measured. It never earns sending without approval.</p>
+
+<h2 id="result">8. First result</h2>
+<p>The first real run, on pilot patient <b>01-705-1186</b> (CDISC pilot study, an 84-year-old patient whose liver tests rose after starting): <b>5 steps, 16 tool calls, 41 seconds, $0.19</b>, all served by Claude Opus 5.5. It drafted five queries, including the four a human reviewer had identified in advance, and one more:</p>
+<div class="query"><b>Adverse events, onset date.</b> Bilirubin was already 5.5 × the upper limit on 23 Jan; the event starts 26 Jan. Please check the onset date.</div>
+<div class="query"><b>Adverse events, possible missing event.</b> ALT and AST reached 3–4 × the upper limit with bilirubin above 2 ×; no event covers the transaminase rise. Investigator to assess.</div>
+<div class="query"><b>Eligibility.</b> Screening ALT, AST and bilirubin were above range; exclusion criterion EXCL27. Please confirm eligibility or a documented exception.</div>
+<div class="query"><b>Laboratory, visit date.</b> Labs labelled Week 4 are dated 29 Jan; the Week 4 visit is recorded on 7 Feb.</div>
+<div class="query"><b>Adverse events and disposition.</b> "Action taken" is blank; withdrawn by "physician decision" for hyperbilirubinemia. Should the reason be adverse event?</div>
+<p>It also noted from the medical history that the patient has <b>Paget's disease of bone</b>, which explains the high ALP, and correctly did not raise a query about it. A single patient is a demonstration, not proof: the measured results come from Phase 2 of the plan.</p>
+
+<h2>9. Status</h2>
+<p>Built and working on a local snapshot of the public CDISC pilot study. Next, by 2 Nov: the planted-problem trial and the measured run over about 40 patients; the Databricks pipeline; OpenClinica in a thin version; the specs and gates; the write-up. Plan and owners: <code>docs/PLAN.html</code>.</p>
+
+<h2>Words used here</h2>
+<div class="tbl"><table>
+<tr><th>Word</th><th>Meaning</th></tr>
+<tr><td>EDC</td><td>Electronic data capture: the trial's data-entry system (here, OpenClinica)</td></tr>
+<tr><td>Query, discrepancy note</td><td>A question raised on a specific field for the site to answer</td></tr>
+<tr><td>Database lock</td><td>The point where all queries are closed and data is frozen for analysis</td></tr>
+<tr><td>SDTM</td><td>The standard table layout regulators expect; one table per topic</td></tr>
+<tr><td>Blinded trial</td><td>Nobody running it knows who receives drug or placebo until the end</td></tr>
+<tr><td>Snapshot</td><td>A stamped, frozen copy of the data a run reads, so it can be reproduced</td></tr>
+<tr><td>ULN</td><td>Upper limit of normal for a lab test</td></tr>
+</table></div>
+
+</main>
+</body>
+</html>
