@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clinical Review Plan</title>
+<style>
+:root{--bg:#ffffff;--card:#fff;--ink:#1d1d1f;--muted:#5f6368;--line:#e3e3df;--accent:#0f6cbd;--soft:#f4f7fb;--code:#f3f3ef;
+--done:#1a7f37;--done-bg:#e8f5ec;--doing:#b26a00;--doing-bg:#fff4e0;--open:#0f6cbd;--open-bg:#e7f0fb;--later:#8250df;--later-bg:#f3ecfd;--risk:#c62828;--risk-bg:#fdecea}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:26px 16px 90px}
+h1{font-size:28px;margin:0 0 4px} h2{font-size:21px;margin:38px 0 10px;padding-top:10px;border-top:1px solid var(--line)}
+h3{font-size:16px;margin:0}
+p{margin:6px 0} .muted{color:var(--muted)} small{font-size:13px}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:13px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:12px 0;background:var(--card)}
+.soft{background:var(--soft);border-color:#dbe5f1}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0}
+.goal{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.goal b{display:block;font-size:15px;margin-bottom:4px}
+.stat{border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.stat b{display:block;font-size:22px} .stat span{font-size:13px;color:var(--muted)}
+.tbl{overflow-x:auto} table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:7px 8px;border-bottom:1px solid var(--line)}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);white-space:nowrap}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.done{color:var(--done);background:var(--done-bg)}.doing{color:var(--doing);background:var(--doing-bg)}
+.open{color:var(--open);background:var(--open-bg)}.later{color:var(--later);background:var(--later-bg)}.risk{color:var(--risk);background:var(--risk-bg)}
+.who{display:inline-block;font:700 11px ui-monospace,Menlo,monospace;padding:1px 6px;border-radius:5px;border:1px solid var(--line);white-space:nowrap}
+.timeline{display:flex;gap:4px;flex-wrap:wrap;margin:12px 0}
+.timeline div{flex:1 1 130px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-size:13px}
+.timeline div.now{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.timeline b{display:block}
+.phase{border:1px solid var(--line);border-radius:12px;margin:14px 0;overflow:hidden}
+.phase header{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;padding:10px 14px;background:var(--soft);border-bottom:1px solid var(--line)}
+.phase .tbl{padding:0 6px 6px}
+</style>
+</head>
+<body>
+<main>
+
+<p class="muted"><small>AG-102 · the clinical data review agent · plan written 28 Oct 2026 · updated on every move</small></p>
+<h1>The plan: clinical data review agent</h1>
+<p class="muted">One page for the whole project: why we are doing it, how we will know it worked, every piece of work with its owner and date, and what it gives back to the AgentHarnessSuite. Decisions live in <code>docs/DECISIONS.md</code>; findings in <code>FINDINGS.md</code>.</p>
+
+<div class="card soft">
+<b>The goal in one sentence.</b> Shalini understands agentic AI in clinical data management well enough to explain it to a CTO, and can truthfully say she set the architecture for a working, measured agent: one that reviews a trial patient across forms, drafts queries a data manager approves, and never changes data.
+</div>
+
+<h2>Five goals, and how we will know each is met</h2>
+<div class="grid" id="goals"></div>
+
+<h2>Where we are</h2>
+<div class="grid" id="stats"></div>
+<div class="timeline" id="timeline"></div>
+<p class="muted"><small>Owners: <span class="who">S</span> Shalini · <span class="who">B</span> Basant · <span class="who">C</span> Claude (builds, drafts, explains; Shalini decides and reviews) · <span class="who">T</span> together. Status: <span class="pill done">Done</span> <span class="pill doing">In progress</span> <span class="pill open">Next</span> <span class="pill later">Later</span> <span class="pill risk">Blocked</span></small></p>
+
+<h2>The phases</h2>
+<div id="phases"></div>
+
+<h2>What this gives back to the AgentHarnessSuite</h2>
+<p class="muted">Every finding is fixed in the suite, released, and re-pinned here; never patched around in this repository.</p>
+<div class="tbl"><table id="suite"></table></div>
+
+<h2>What you will be able to say at the end</h2>
+<div class="card">
+<p><b>For Director, Data &amp; AI Engineering:</b> "I set the architecture for a clinical data review agent: OpenClinica (CDISC ODM) feeding a Databricks lakehouse with SDTM-aligned layers and rule-based edit checks, with a Claude agent that investigates cross-form inconsistencies and drafts site queries under human approval. Ten recorded decisions, checked against an open harness and assurance catalog. Measured <i>X%</i> of planted defects found, <i>Y%</i> of drafts judged worth sending, zero blinding or privacy failures, at <i>$Z</i> per patient."</p>
+<p><b>For Principal Forward Deployed Engineer:</b> "I built and deployed an AI data-review agent into a live EDC: ODM ingestion into Databricks, an agent with read-only tools over curated data, approved queries written back as discrepancy notes with a write-time freshness check, and an eval suite with planted defects."</p>
+<p class="muted"><small>The numbers are filled in only once Phase 2 has measured them. Every sentence must be one Shalini can defend in an interview.</small></p>
+</div>
+
+<h2>Risks</h2>
+<div class="tbl"><table id="risks"></table></div>
+
+<h2>Change log</h2>
+<div class="tbl"><table id="log"></table></div>
+
+</main>
+<script>
+// ---- the data: edit these arrays as work moves; the page redraws itself ----
+const GOALS = [
+  {t:"1. Understand", what:"Explain where an agent belongs in clinical data management, and where it must not go.", measure:"Lessons 1–3 read; the 'In Shalini's words' line written for all ten decisions.", status:"doing"},
+  {t:"2. Architect", what:"Own the architecture: ten decisions, checked against AHC's 16 layers and the AAC obligations.", measure:"D1–D10 recorded; all 16 layers decided; the AOAS spec, harness profile and AAC config written and passing the gates.", status:"doing"},
+  {t:"3. Prove", what:"Measure it, not demo it.", measure:"≥80% of planted defects found · ≥70% of drafts worth sending · 0 blinding or privacy failures · ≤$0.30 per patient · repeat runs consistent.", status:"open"},
+  {t:"4. Real system", what:"Run against a real EDC and a real lakehouse, the way a sponsor would.", measure:"OpenClinica → Databricks pipeline (Shalini's) → agent → approval → discrepancy note posted, with the re-check at write time.", status:"later"},
+  {t:"5. Show", what:"Turn it into something she can present.", measure:"Director-level architecture write-up, a 5-minute demo, resume lines with measured numbers.", status:"later"},
+];
+
+const PHASES = [
+  {n:"Phase 0", title:"Learn and decide", when:"26–27 Oct", status:"done", tasks:[
+    ["Lesson 1: trial data and where an agent fits, on a real patient","C","done","docs/learn/01-trial-data-and-agents.html"],
+    ["Ten architecture decisions D1–D10, options and trade-offs","T","done","docs/DECISIONS.md"],
+    ["Coverage against AHC's 16 layers and the AAC obligations","C","done","all 16 layers decided"],
+    ["Write 'In Shalini's words' for each decision","S","open","the line that makes each decision hers"],
+    ["Correct Lesson 1 step 4: Paget's disease, not a blocked bile duct, explains the high ALP","C","open","found by the agent's first run"],
+  ]},
+  {n:"Phase 1", title:"First working agent", when:"27–28 Oct", status:"done", tasks:[
+    ["Local curated snapshot: blinded, stamped, every row traceable","C","done","306 patients"],
+    ["Eleven tools, four rules, edit checks, drafts store, 41 tests","C","done",""],
+    ["Agent Harness: Claude adapter, thinking blocks, append-only and job-shaped runs","C","done","reference-agent PR #1"],
+    ["First real run on 01-705-1186","C","done","5 drafts, all four Lesson 1 problems found, $0.19, 41 s"],
+  ]},
+  {n:"Phase 2", title:"Prove it, while the Claude credit lasts", when:"28 Oct – 2 Nov", status:"doing", tasks:[
+    ["A labelling page: each draft with its evidence, 'worth sending' or not, and a reason","C","open","28 Oct"],
+    ["Label the first five drafts (patient 01-705-1186)","S","open","28 Oct"],
+    ["Planted-problem trial in AgentTwin: about 30 known defects of different kinds, plus clean patients","C","open","29–30 Oct"],
+    ["Eval checks, cheapest first: evidence exists, schema, blinding, privacy (deterministic); Claude as judge (advisory)","C","open","30 Oct"],
+    ["Run about 40 patients × 3 repeats; measure the first five before the rest","C","open","31 Oct · ≤$30"],
+    ["Label the drafts of about 20 real patients","S","open","31 Oct – 1 Nov"],
+    ["Calibrate the Claude judge against Shalini's labels; gate report against the D8 thresholds","C","open","2 Nov"],
+    ["If credit remains: same set on Sonnet 5.5 and Haiku 5.5, choose the model on evidence","T","later","2 Nov"],
+    ["Claude credit expires","B","risk","3 Nov"],
+  ]},
+  {n:"Phase 3", title:"Shalini's data layer on Databricks", when:"4–15 Nov", status:"later", tasks:[
+    ["Log the Databricks CLI in to the Free Edition workspace","B","open","needs Basant at the keyboard"],
+    ["Asset bundle: raw, cleaned and curated layers, SDTM-aligned, blinded","S","later",""],
+    ["Snapshot IDs and lineage columns on every curated row (D3's two requirements)","S","later",""],
+    ["Edit checks as data-quality expectations in the pipeline; patient ranking","S","later",""],
+    ["Databricks adapter for the trial-data port; the same contract tests on both adapters","T","later",""],
+    ["Decide the model route after the credit: Databricks Model Serving if Free Edition offers Claude, else the paid API","T","later",""],
+  ]},
+  {n:"Phase 4", title:"The real system: OpenClinica in, approved queries out", when:"16–30 Nov", status:"later", tasks:[
+    ["OpenClinica Community 3.x in Docker (only while testing: 8 GB Mac)","C","later",""],
+    ["Case report forms from the pilot's blank CRF; pilot data loaded by ODM import","T","later",""],
+    ["Ingestion from OpenClinica into the lakehouse, with OpenClinica's identifiers as lineage","S","later",""],
+    ["The writer: re-check the field, post a discrepancy note, stale drafts sent back (D3, D5)","C","later",""],
+    ["The review app (Databricks App): approve, edit, reject with a reason; approver rules (G10)","T","later",""],
+  ]},
+  {n:"Phase 5", title:"Make the architecture checkable", when:"1–7 Dec", status:"later", tasks:[
+    ["AOAS spec: the agent's contract","C","later",""],
+    ["AHC harness profile: what fills each of the 16 layers","T","later",""],
+    ["AAC config: which obligations apply and how each is checked","T","later",""],
+    ["The four gates passing on the real build","C","later",""],
+    ["Lesson 3: how AHC, AAC and AgentTwin turn 'I think it's complete' into something measured","C","later",""],
+  ]},
+  {n:"Phase 6", title:"Portfolio", when:"8–15 Dec", status:"later", tasks:[
+    ["Director-level architecture write-up: decisions, evidence, cost, what changes at a real sponsor","S","later","Claude drafts, Shalini owns"],
+    ["Five-minute demo","S","later",""],
+    ["Resume lines with the measured numbers","S","later",""],
+    ["Decide whether the repository becomes public","B","later",""],
+  ]},
+];
+
+const SUITE = [
+  ["Agent Harness","Claude adapter; thinking blocks kept; append-only runs; job-shaped runs; local results bounded; cached tokens counted","done","PR #1, awaiting merge (B)"],
+  ["Agent Harness","Heavy required dependencies for a job agent (F-9); undeclared jinja2, hit by two agents now (F-11)","open","next harness change"],
+  ["Agent Harness","Already broken on main: two import contracts, type errors in order_system, three unformatted files (F-10)","open","to report"],
+  ["AAC","A new obligation: concealed fields such as treatment assignment are never exposed (F-6)","open","to propose"],
+  ["AHC","Determinism comes from replay, not temperature (F-4); append-only history as a capability (F-2); verify-at-write as a way to meet AHC-0107 (D3)","open","to propose"],
+  ["AgentTwin","Its first tabular world with planted defects, scored as found versus planted plus false alarms","open","Phase 2"],
+  ["Eval Harness","Claude as a judge, calibrated against human labels before it counts","open","Phase 2"],
+];
+
+const RISKS = [
+  ["The credit expires on 3 Nov, before Phase 2 can be finished","Phase 2 is ordered so the paid part (runs) comes first; labelling can continue after","risk"],
+  ["Shalini's labelling time","Twenty patients, about 3–5 drafts each; a page that makes each label one click and a reason","open"],
+  ["After 3 Nov, every agent run costs real money","Choose the model on Phase 2's evidence; Databricks Model Serving if available; runs are measured before scaling","open"],
+  ["OpenClinica and Databricks on an 8 GB Mac","OpenClinica runs only while testing; the lakehouse is in the cloud","open"],
+  ["PR #1 conflicts with uncommitted work in the reference-agent checkout","Merge once that work is committed; this agent is pinned to the exact commit meanwhile","open"],
+];
+
+const LOG = [
+  ["28 Oct 2026","Plan written. Phases 0 and 1 done; first real run found all four Lesson 1 problems plus one more for $0.19."],
+];
+
+// ---- drawing ----
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const LABEL = {done:"Done",doing:"In progress",open:"Next",later:"Later",risk:"Blocked"};
+const pill = s => `<span class="pill ${s}">${LABEL[s]}</span>`;
+
+$("goals").innerHTML = GOALS.map(g=>`<div class="goal"><b>${esc(g.t)} ${pill(g.status)}</b><small>${esc(g.what)}</small><p class="muted"><small><b style="display:inline">Met when:</b> ${esc(g.measure)}</small></p></div>`).join("");
+
+const all = PHASES.flatMap(p=>p.tasks);
+const done = all.filter(t=>t[2]==="done").length;
+const cell = (b,s)=>`<div class="stat"><b>${b}</b><span>${s}</span></div>`;
+$("stats").innerHTML = cell(`${done} / ${all.length}`,"tasks done") + cell("$0.19","of $100 credit used") + cell("5","drafts from the first run") + cell("11","findings, 6 fixed in the suite");
+
+$("timeline").innerHTML = PHASES.map(p=>`<div class="${p.status==="doing"?"now":""}"><b>${esc(p.n)}</b>${esc(p.title)}<br><span class="muted">${esc(p.when)}</span> ${pill(p.status)}</div>`).join("");
+
+$("phases").innerHTML = PHASES.map(p=>`<div class="phase"><header><h3>${esc(p.n)} · ${esc(p.title)}</h3><span class="muted">${esc(p.when)} ${pill(p.status)}</span></header>
+<div class="tbl"><table><tr><th>Task</th><th>Who</th><th>Status</th><th>Note</th></tr>
+${p.tasks.map(t=>`<tr><td>${esc(t[0])}</td><td><span class="who">${t[1]}</span></td><td>${pill(t[2])}</td><td class="muted">${esc(t[3])}</td></tr>`).join("")}
+</table></div></div>`).join("");
+
+$("suite").innerHTML = "<tr><th>Member</th><th>Contribution</th><th>Status</th><th>Where</th></tr>" + SUITE.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${pill(r[2])}</td><td class="muted">${esc(r[3])}</td></tr>`).join("");
+$("risks").innerHTML = "<tr><th>Risk</th><th>What we do about it</th><th></th></tr>" + RISKS.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${pill(r[2])}</td></tr>`).join("");
+$("log").innerHTML = "<tr><th>Date</th><th>Change</th></tr>" + LOG.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("");
+</script>
+</body>
+</html>
