@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Clinical Data Review Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#ffffff;--ink:#1d1d1f;--muted:#5f6368;--line:#e3e3df;--accent:#0f6cbd;--soft:#f4f7fb;--softline:#dbe5f1;--code:#f3f3ef;
 --ok:#1a7f37;--ok-bg:#e8f5ec;--warn:#b26a00;--warn-bg:#fff4e0;--bad:#c62828;--bad-bg:#fdecea}
@@ -31,6 +32,30 @@ th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute
 svg text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 .query{border-left:4px solid var(--accent);background:var(--soft);padding:9px 14px;border-radius:0 10px 10px 0;margin:8px 0;font-size:15px}
 nav a{color:var(--accent);text-decoration:none;margin-right:14px;font-size:14px;white-space:nowrap}
+
+figure.story{margin:14px 0;border:2px solid #222;border-radius:255px 18px 225px 18px/18px 225px 18px 255px;padding:14px;background:#fff}
+figure.story figcaption{font-family:"Patrick Hand","Comic Sans MS",cursive;font-size:18px;color:#5E5E5E;margin-top:6px}
+.story svg{min-width:760px}
+.story svg text{font-family:"Patrick Hand","Comic Sans MS",cursive}
+.story .hs2{font-size:15px;fill:#222}
+.story .ink{fill:none;stroke:#222;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.story .thin{stroke-width:1.6}
+.story .pf{stroke:none;opacity:.95}
+.story .dot{fill:#222}
+.story .zone{fill:#fafaf8;stroke:#222;stroke-width:2;stroke-dasharray:9 6}
+.story .zt{font-size:18px;letter-spacing:.08em;fill:#5E5E5E}
+.story .hl{font-size:22px;fill:#222}
+.story .hs{font-size:16px;fill:#5E5E5E}
+.story .hx{font-size:18px;fill:#222}
+.story .hxb{font-size:18px;fill:#1f6fb2}
+.story .hb{font-size:17px;fill:#222}
+.story .ar{fill:none;stroke:#222;stroke-width:2.6;stroke-linecap:round}
+.story .arb{fill:none;stroke:#1f6fb2;stroke-width:2.4;stroke-dasharray:8 6;stroke-linecap:round}
+.story .nm{fill:#222;stroke:#222}
+.story .nmt{fill:#fff;font-size:18px}
+.story .bubble{fill:#fff;stroke:#222;stroke-width:2}
+.story .badge{fill:#fff6c7;stroke:#222;stroke-width:2}
+.story .ok{fill:none;stroke:#1a7f37;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
 <body>
@@ -39,7 +64,173 @@ nav a{color:var(--accent);text-decoration:none;margin-right:14px;font-size:14px;
 <p class="muted"><small>AG-102 · Shalini (architecture and data layer), with Claude · overview written 28 Oct 2026</small></p>
 <h1>Clinical Data Review Agent</h1>
 <p class="lead">An AI agent that reviews one clinical-trial patient's record across forms and visits, finds the inconsistencies that simple field checks cannot judge, and drafts precise queries for a data manager to approve. It never changes trial data and never sends anything itself.</p>
-<nav><a href="#problem">The problem</a><a href="#cdm">Where it sits in CDM</a><a href="#benefit">Business benefit</a><a href="#users">Who it helps</a><a href="#agentic">Why agentic</a><a href="#arch">Architecture</a><a href="#flow">User and system flow</a><a href="#design">Design</a><a href="#proof">Proof</a><a href="#result">First result</a></nav>
+<nav><a href="#story">The story in one picture</a><a href="#problem">The problem</a><a href="#cdm">Where it sits in CDM</a><a href="#benefit">Business benefit</a><a href="#users">Who it helps</a><a href="#agentic">Why agentic</a><a href="#arch">Architecture</a><a href="#flow">User and system flow</a><a href="#design">Design</a><a href="#proof">Proof</a><a href="#result">First result</a></nav>
+
+
+<h2 id="story">The story in one picture</h2>
+
+<figure class="story">
+<svg viewBox="0 0 1200 900" width="100%" role="img" aria-label="The business flow as a picture: the patient visits the hospital, the nurse fills the online form book, a clean copy is made each night, the agent reads each patient and drafts questions, the checker approves, the writer posts the question to the form book, the doctor answers, and the next copy shows the answer.">
+<defs>
+<filter id="rough" filterUnits="userSpaceOnUse" x="-50" y="-50" width="1300" height="1000"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.6"/></filter>
+<marker id="sar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:#222"/></marker>
+<marker id="sab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:#1f6fb2"/></marker>
+</defs>
+<g filter="url(#rough)">
+
+<!-- zones -->
+<rect class="zone" x="24" y="70" width="350" height="620" rx="22"/>
+<path class="ink" d="M150,70 L199,30 L248,70"/><path class="ink thin" d="M199,40 L199,58 M190,49 L208,49"/>
+<text class="zt" x="199" y="104" text-anchor="middle">THE HOSPITAL (one of 17)</text>
+<rect class="zone" x="806" y="70" width="370" height="800" rx="22"/>
+<text class="zt" x="991" y="104" text-anchor="middle">THE DRUG COMPANY</text>
+
+<!-- people in the hospital -->
+<g>
+<path class="pf" style="fill:#ffe3c8" d="M78,276 Q78,242 107,242 Q136,242 136,276 Z"/>
+<circle class="pf" style="fill:#ffe3c8" cx="108" cy="219" r="17"/>
+<path class="ink" d="M75,272 Q75,238 105,238 Q135,238 135,272 Z"/>
+<circle class="ink" cx="105" cy="216" r="17"/>
+<circle class="dot" cx="99" cy="214" r="1.8"/><circle class="dot" cx="111" cy="214" r="1.8"/>
+<path class="ink thin" d="M99,223 Q105,227 111,223"/>
+<path class="ink thin" d="M93,240 L105,252 L117,240"/>
+<text class="hl" x="105" y="296" text-anchor="middle">Patient</text>
+<text class="hs" x="105" y="316" text-anchor="middle">comes for tests</text>
+</g>
+<g>
+<path class="pf" style="fill:#d9ecff" d="M258,276 Q258,242 287,242 Q316,242 316,276 Z"/>
+<circle class="pf" style="fill:#d9ecff" cx="288" cy="219" r="17"/>
+<path class="ink" d="M255,272 Q255,238 285,238 Q315,238 315,272 Z"/>
+<circle class="ink" cx="285" cy="216" r="17"/>
+<circle class="dot" cx="279" cy="214" r="1.8"/><circle class="dot" cx="291" cy="214" r="1.8"/>
+<path class="ink thin" d="M279,223 Q285,227 291,223"/>
+<path class="ink" d="M271,200 L299,200 L295,190 L275,190 Z"/><path class="ink thin" d="M285,192 L285,198 M282,195 L288,195"/>
+<text class="hl" x="285" y="296" text-anchor="middle">Nurse</text>
+<text class="hs" x="285" y="316" text-anchor="middle">writes it all down</text>
+</g>
+<g>
+<path class="pf" style="fill:#dff3df" d="M172,586 Q172,552 201,552 Q230,552 230,586 Z"/>
+<circle class="pf" style="fill:#dff3df" cx="202" cy="529" r="17"/>
+<path class="ink" d="M169,582 Q169,548 199,548 Q229,548 229,582 Z"/>
+<circle class="ink" cx="199" cy="526" r="17"/>
+<circle class="dot" cx="193" cy="524" r="1.8"/><circle class="dot" cx="205" cy="524" r="1.8"/>
+<path class="ink thin" d="M193,533 Q199,537 205,533"/>
+<path class="ink thin" d="M189,548 Q185,568 199,570 Q213,568 209,548"/><circle class="ink thin" cx="199" cy="573" r="3"/>
+<text class="hl" x="199" y="606" text-anchor="middle">Doctor</text>
+<text class="hs" x="199" y="626" text-anchor="middle">makes the medical calls</text>
+</g>
+
+<!-- the form book -->
+<g>
+<path class="pf" style="fill:#fff6c7" d="M520,148 Q560,132 604,148 L604,250 Q560,234 520,250 Z"/>
+<path class="pf" style="fill:#fff6c7" d="M604,148 Q648,132 690,148 L690,250 Q648,234 604,250 Z"/>
+<path class="ink" d="M515,144 Q555,128 600,144 L600,246 Q555,230 515,246 Z"/>
+<path class="ink" d="M600,144 Q645,128 686,144 L686,246 Q645,230 600,246 Z"/>
+<path class="ink thin" d="M530,170 Q555,162 585,170 M530,190 Q555,182 585,190 M530,210 Q555,202 585,210 M615,170 Q640,162 670,170 M615,190 Q640,182 670,190 M615,210 Q640,202 670,210"/>
+<text class="hl" x="600" y="282" text-anchor="middle">Online form book</text>
+<text class="hs" x="600" y="304" text-anchor="middle">OpenClinica · shared by every hospital</text>
+</g>
+
+<!-- nightly copy: database cylinder -->
+<g>
+<path class="pf" style="fill:#e4f4e4" d="M916,150 L916,232 Q991,258 1066,232 L1066,150 Z"/>
+<ellipse class="ink" cx="991" cy="148" rx="75" ry="20"/>
+<path class="ink" d="M916,148 L916,228 Q991,258 1066,228 L1066,148"/>
+<path class="ink thin" d="M916,188 Q991,214 1066,188"/>
+<text class="hl" x="991" y="286" text-anchor="middle">Clean copy, made every night</text>
+<text class="hs" x="991" y="308" text-anchor="middle">Databricks · Shalini's pipeline</text>
+</g>
+
+<!-- the agent: robot -->
+<g>
+<rect class="pf" x="944" y="392" width="102" height="82" rx="18" style="fill:#ffe9b8"/>
+<path class="ink" d="M991,388 L991,366"/><circle class="ink" cx="991" cy="360" r="7"/>
+<rect class="ink" x="940" y="388" width="102" height="82" rx="18"/>
+<circle class="ink" cx="970" cy="422" r="10"/><circle class="ink" cx="1012" cy="422" r="10"/>
+<circle class="dot" cx="970" cy="422" r="3.5"/><circle class="dot" cx="1012" cy="422" r="3.5"/>
+<path class="ink" d="M968,450 Q991,462 1014,450"/>
+<path class="ink thin" d="M940,420 L928,420 M1042,420 L1054,420"/>
+<text class="hl" x="991" y="500" text-anchor="middle">The agent (Claude)</text>
+<text class="hs" x="991" y="522" text-anchor="middle">reads every page of a patient,</text><text class="hs" x="991" y="543" text-anchor="middle">drafts questions</text>
+</g>
+<!-- agent bubble -->
+<path class="bubble" d="M816,356 Q816,336 836,336 L904,336 Q922,336 922,352 L922,394 Q922,410 904,410 L900,410 L926,428 L884,410 L836,410 Q816,410 816,394 Z"/>
+<text class="hs2" x="869" y="360" text-anchor="middle">“Liver 3× normal,</text><text class="hs2" x="869" y="380" text-anchor="middle">no side effect</text><text class="hs2" x="869" y="400" text-anchor="middle">recorded…”</text>
+
+<!-- checker at laptop -->
+<g>
+<g>
+<path class="pf" style="fill:#f2e1ff" d="M898,716 Q898,682 927,682 Q956,682 956,716 Z"/>
+<circle class="pf" style="fill:#f2e1ff" cx="928" cy="659" r="17"/>
+<path class="ink" d="M895,712 Q895,678 925,678 Q955,678 955,712 Z"/>
+<circle class="ink" cx="925" cy="656" r="17"/>
+<circle class="dot" cx="919" cy="654" r="1.8"/><circle class="dot" cx="931" cy="654" r="1.8"/>
+<path class="ink thin" d="M919,663 Q925,667 931,663"/>
+<circle class="ink thin" cx="918" cy="654" r="5"/><circle class="ink thin" cx="932" cy="654" r="5"/><path class="ink thin" d="M923,654 L927,654"/>
+<text class="hl" x="925" y="736" text-anchor="middle">The checker</text>
+<text class="hs" x="925" y="756" text-anchor="middle">data manager</text>
+</g>
+<path class="pf" style="fill:#eef3fa" d="M1044,640 L1134,640 L1134,700 L1044,700 Z"/>
+<rect class="ink" x="1040" y="636" width="92" height="62" rx="6"/>
+<path class="ink" d="M1028,712 L1144,712 L1134,698 L1040,698 Z"/>
+<path class="ok" d="M1068,668 L1081,681 L1106,652"/>
+<text class="hs" x="1086" y="740" text-anchor="middle">approve · edit · reject</text>
+</g>
+
+<!-- the writer: envelope -->
+<g>
+<rect class="pf" x="560" y="636" width="96" height="62" rx="6" style="fill:#e8f1fb"/>
+<rect class="ink" x="556" y="632" width="96" height="62" rx="6"/>
+<path class="ink" d="M556,634 L604,668 L652,634"/>
+<text class="hl" x="604" y="722" text-anchor="middle">The writer</text>
+<text class="hs" x="604" y="744" text-anchor="middle">a plain program, no AI:</text><text class="hs" x="604" y="765" text-anchor="middle">checks nothing changed, then posts</text>
+</g>
+
+<!-- arrows -->
+<path class="ar" d="M140,244 L234,244" marker-end="url(#sar)"/>
+<path class="ar" d="M322,226 Q420,180 508,190" marker-end="url(#sar)"/>
+<path class="ar" d="M694,190 Q800,170 906,186" marker-end="url(#sar)"/>
+<path class="ar" d="M991,322 L991,350" marker-end="url(#sar)"/>
+<path class="ar" d="M991,548 L991,606" marker-end="url(#sar)"/>
+<path class="ar" d="M880,670 Q790,690 662,668" marker-end="url(#sar)"/>
+<path class="ar" d="M604,626 Q600,450 604,316" marker-end="url(#sar)"/>
+<path class="ar" d="M540,266 Q380,380 238,520" marker-end="url(#sar)"/>
+<path class="arb" d="M250,600 Q470,560 560,330" marker-end="url(#sab)"/>
+
+<!-- numbers and step words -->
+<circle class="nm" cx="187" cy="222" r="15"/><text class="nmt" x="187" y="228" text-anchor="middle">1</text><text class="hx" x="187" y="196" text-anchor="middle">visit &amp; tests</text>
+<circle class="nm" cx="415" cy="178" r="15"/><text class="nmt" x="415" y="184" text-anchor="middle">2</text><text class="hx" x="415" y="150" text-anchor="middle">fills in the forms</text>
+<circle class="nm" cx="800" cy="160" r="15"/><text class="nmt" x="800" y="166" text-anchor="middle">3</text><text class="hx" x="800" y="134" text-anchor="middle">copied each night</text>
+<circle class="nm" cx="1040" cy="336" r="15"/><text class="nmt" x="1040" y="342" text-anchor="middle">4</text><text class="hx" x="1060" y="330" text-anchor="start">reads,</text><text class="hx" x="1060" y="351" text-anchor="start">drafts</text>
+<circle class="nm" cx="1030" cy="578" r="15"/><text class="nmt" x="1030" y="584" text-anchor="middle">5</text><text class="hx" x="1052" y="584" text-anchor="start">reviews</text><text class="hx" x="1052" y="605" text-anchor="start">drafts</text>
+<circle class="nm" cx="770" cy="690" r="15"/><text class="nmt" x="770" y="696" text-anchor="middle">6</text><text class="hx" x="770" y="642" text-anchor="middle">sends approved</text><text class="hx" x="770" y="663" text-anchor="middle">question</text>
+<circle class="nm" cx="624" cy="470" r="15"/><text class="nmt" x="624" y="476" text-anchor="middle">7</text><text class="hx" x="642" y="462" text-anchor="start">question lands on</text><text class="hx" x="642" y="483" text-anchor="start">the exact field</text>
+<circle class="nm" cx="390" cy="392" r="15"/><text class="nmt" x="390" y="398" text-anchor="middle">8</text><text class="hx" x="360" y="350" text-anchor="end">doctor or nurse</text><text class="hx" x="360" y="371" text-anchor="end">is asked</text>
+<circle class="nm" cx="470" cy="520" r="15"/><text class="nmt" x="470" y="526" text-anchor="middle">9</text><text class="hxb" x="488" y="512" text-anchor="start">answer goes back in;</text><text class="hxb" x="488" y="533" text-anchor="start">next night's copy shows it</text>
+
+<!-- badges -->
+<rect class="badge" x="818" y="548" width="158" height="36" rx="10"/>
+<text class="hb" x="897" y="571" text-anchor="middle">never sends, never edits</text>
+<rect class="badge" x="1004" y="770" width="150" height="40" rx="10"/>
+<text class="hb" x="1079" y="795" text-anchor="middle">minutes, not hours</text>
+
+<!-- before / after strip -->
+<line class="ink thin" x1="24" y1="790" x2="790" y2="790"/>
+<text class="zt" x="30" y="822">TODAY</text>
+<text class="hx" x="110" y="822" text-anchor="start">the checker reads every page of every patient by hand: slow, tiring, things get missed</text>
+<text class="zt" x="30" y="856">WITH THE AGENT</text>
+<text class="hx" x="200" y="856" text-anchor="start">the agent reads and drafts; the checker only decides</text>
+
+</g>
+</svg>
+<figcaption>Follow the numbers. Everything in the hospital stays exactly as it is today; the agent only changes step 4 and makes step 5 quick. A person approves every question (5), and the only thing that writes to the form book is a plain program with no AI in it (6).</figcaption>
+</figure>
+
+<div class="card soft">
+<p><b>Who is who.</b> A drug company tests a new medicine on 300 patients at 17 hospitals. The <b>nurse</b> writes down every visit in an online form book that all hospitals share (<b>OpenClinica</b>). The <b>checker</b> at the drug company (a <i>data manager</i>) must make sure every patient's file is correct before the trial can finish. The <b>doctor</b> at the hospital makes the medical calls.</p>
+<p><b>The problem.</b> Each page of a file can look fine on its own while the pages together don't add up: a liver test three times normal, but no side effect recorded. Finding that means reading every page of every patient and writing careful questions to the hospital. It is slow, things get missed, and <b>the trial cannot finish until every question is answered.</b></p>
+<p><b>What changes.</b> The agent does the reading and drafts the questions, each pointing at the exact numbers and dates. The checker only approves, edits or rejects. Nothing else in the hospital or the form book changes.</p>
+</div>
 
 <h2 id="problem">1. The problem it solves</h2>
 <p>A clinical trial's data has to be clean before the database can be <b>locked</b> and analysed. Data is entered by hospital staff (sites) into an <b>EDC</b> system, one form at a time. Two kinds of checking clean it:</p>
