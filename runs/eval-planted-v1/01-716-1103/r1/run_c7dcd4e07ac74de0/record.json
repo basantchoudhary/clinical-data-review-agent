@@ -1,0 +1,77 @@
+{
+  "run_id": "run_c7dcd4e07ac74de0",
+  "patient": "01-716-1103",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T09:18:21.688142+00:00",
+  "seconds": 28.0,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I saved two draft queries for patient 01-716-1103 (79-year-old male, site 716). Both are on the Adverse Events form. The patient had no edit-check hits, and there were no earlier queries to duplicate. Nothing has been sent; the drafts wait for a data manager to approve them.\n\n**What I checked:** the patient summary and visit dates, all adverse events, the hemoglobin, ALT, CK and BUN lab results over time, medical history, concomitant medications, disposition, and the protocol's lab entry criteria.\n\n**Drafts saved:**\n1. **drf-8615ff8095ac6c64:** The blister that started 2014-07-09 is marked as requiring hospitalisation but not as serious. The query asks the site to confirm whether the patient was hospitalised, and to reassess seriousness (and report it as a serious event if needed) or correct the hospitalisation field.\n2. **drf-ff8363eee7741a1c:** There are two blister records with the same dates (2014-08-17 to 2014-08-24), severity (severe) and relationship. One says \"not recovered\" even though it has an end date; the other says \"recovered\". The query asks whether these are separate events or a duplicate, and to fix the outcome or end date.\n\n**Looked at but no query raised:**\n- **Hemoglobin** was slightly low at every visit, about 6.8\u20137.5 mmol/L against a lower limit of 7.76, starting from screening. The protocol has no hemoglobin entry limit, and the level stayed steady.\n- **BUN and CK** were mildly high at times (up to about 1.25 times the upper limit of normal), with no clear pattern.\n- **ALT** was normal throughout.\n- **Disposition** says \"protocol completed\" on 2014-09-20, which matches the last dose and the end of study.\n- **Missing consent date:** the study notes say not to query this.\n\n**Possible extra queries for the data manager to decide on:**\n- The screening labs are dated 2014-03-07, but the screening visits are recorded as 2014-03-18.\n- None of the medications have an indication recorded.\n- Daypro and Cortisone are left uncoded.\n- Each medication appears on many repeated records.",
+    "termination": "goal_reached"
+  },
+  "steps": 5,
+  "tool_calls": [
+    "patient_summary",
+    "adverse_events",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "prior_queries",
+    "medical_history",
+    "protocol_section",
+    "medications",
+    "lab_trend",
+    "disposition",
+    "propose_query",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 38113,
+    "output_tokens": 2508,
+    "cached_input_tokens": 10010
+  },
+  "cost_usd": 0.2046,
+  "drafts": [
+    {
+      "key": "drf-8615ff8095ac6c64",
+      "run_id": "run_c7dcd4e07ac74de0",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-716-1103",
+      "form": "Adverse Events",
+      "category": "other",
+      "issue": "AE BLISTER (start 2014-07-09) is recorded with hospitalisation = Y but serious = N, which is inconsistent with seriousness criteria.",
+      "query_text": "For the adverse event BLISTER (start 2014-07-09, end 2014-07-16, moderate), the hospitalisation field is recorded as \"Y\" while the event is marked as not serious (Serious = N). Please confirm whether the patient was hospitalised for this event. If yes, please review the seriousness assessment and complete SAE reporting as required; if not, please correct the hospitalisation field.",
+      "evidence": [
+        "AE:01-716-1103:2"
+      ],
+      "created_at": "2026-10-28T09:18:41.391455+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-ff8363eee7741a1c",
+      "run_id": "run_c7dcd4e07ac74de0",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-716-1103",
+      "form": "Adverse Events",
+      "category": "other",
+      "issue": "AE BLISTER (2014-08-17 to 2014-08-24) has an end date but outcome NOT RECOVERED/NOT RESOLVED, and appears to duplicate a second BLISTER record with identical dates and severity but outcome RECOVERED/RESOLVED.",
+      "query_text": "Two adverse event records of BLISTER are reported with identical start date (2014-08-17), end date (2014-08-24), severity (SEVERE) and relationship (PROBABLE). One record has outcome \"NOT RECOVERED/NOT RESOLVED\" despite having an end date of 2014-08-24; the other has outcome \"RECOVERED/RESOLVED\". Please clarify whether these are two distinct events (e.g. different body locations) or a duplicate entry. If distinct, please confirm the outcome of the record marked not recovered and whether its end date should be removed; if a duplicate, please correct the record accordingly.",
+      "evidence": [
+        "AE:01-716-1103:4",
+        "AE:01-716-1103:5"
+      ],
+      "created_at": "2026-10-28T09:18:41.392097+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

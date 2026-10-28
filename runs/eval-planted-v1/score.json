@@ -1,0 +1,23 @@
+{
+  "runs": 5,
+  "patients": 5,
+  "recall": 1.0,
+  "recall_by_kind": {
+    "event_after_lab": "2/2",
+    "hospitalised_not_serious": "1/1",
+    "lab_no_event": "2/2"
+  },
+  "consistency": "5/5 planted patients found every time or never",
+  "clean_runs": 0,
+  "drafts_on_clean_patients_per_run": null,
+  "deterministic_checks": "25/25",
+  "deterministic_failures": [],
+  "cost_usd": 1.118,
+  "cost_per_patient_run": 0.224,
+  "gates": {
+    "recall >= 0.80": true,
+    "deterministic checks 100%": true,
+    "cost per patient <= $0.30": true,
+    "worth sending >= 70%": "measured from labels and the calibrated judge (task 2.7)"
+  }
+}

@@ -122,11 +122,41 @@ def _served_models(spans: list[dict[str, Any]]) -> list[str]:
                    if s["name"] == "gen_ai.chat" and s["attributes"].get("gen_ai.response.model")})
 
 
-async def review(usubjid: str, *, effort: str = "medium") -> dict[str, Any]:
-    exporter = telemetry.configure(service_name="clinical-review", service_version=PROMPT_VERSION)
-    data = ParquetTrialData.latest(ROOT / "data" / "curated")
+_EXPORTER: Any = None
+
+
+def _exporter() -> Any:
+    """One telemetry provider per process; concurrent runs are told apart by trace."""
+    global _EXPORTER
+    if _EXPORTER is None:
+        _EXPORTER = telemetry.configure(service_name="clinical-review", service_version=PROMPT_VERSION)
+    return _EXPORTER
+
+
+def _spans_of(run_id: str) -> list[dict[str, Any]]:
+    finished = [json.loads(s.to_json()) for s in _exporter().get_finished_spans()]
+    trace = next((s["context"]["trace_id"] for s in finished
+                  if s["name"] == "agent.run" and s["attributes"].get("agent.run.id") == run_id), None)
+    if trace is None:
+        trace = next((s["context"]["trace_id"] for s in finished
+                      if s["name"] == "agent.run" and run_id in json.dumps(s["attributes"])), None)
+    return [s for s in finished if s["context"]["trace_id"] == trace]
+
+
+async def review(
+    usubjid: str,
+    *,
+    effort: str = "medium",
+    snapshot: Path | None = None,
+    drafts_path: Path | None = None,
+    out_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Review one patient. `snapshot`, `drafts_path` and `out_dir` let a batch give
+    every run its own world, drafts store and record folder."""
+    _exporter()
+    data = ParquetTrialData(snapshot) if snapshot else ParquetTrialData.latest(ROOT / "data" / "curated")
     run_id = new_run_id()
-    drafts = JsonlDraftStore(RUNS / "drafts.jsonl")
+    drafts = JsonlDraftStore(drafts_path or RUNS / "drafts.jsonl")
     tools = PatientTools(data, usubjid, drafts, run_id=str(run_id))
     llm = ResilientLLM(
         AnthropicClient(model=MODEL, api_key=load_key(), effort=effort, fallbacks="default"),
@@ -145,7 +175,7 @@ async def review(usubjid: str, *, effort: str = "medium") -> dict[str, Any]:
         run_id=run_id,
         meter=meter,
     )
-    spans = [json.loads(s.to_json()) for s in exporter.get_finished_spans()]
+    spans = _spans_of(str(run_id))
     created = [d for d in drafts.for_patient(usubjid) if d["run_id"] == str(run_id)]
     record = {
         "run_id": str(run_id),
@@ -163,7 +193,7 @@ async def review(usubjid: str, *, effort: str = "medium") -> dict[str, Any]:
         "cost_usd": round(float(meter.spend), 4),
         "drafts": created,
     }
-    out = RUNS / str(run_id)
+    out = (out_dir or RUNS) / str(run_id)
     out.mkdir(parents=True, exist_ok=True)
     (out / "record.json").write_text(json.dumps(record, indent=2, default=str) + "\n")
     (out / "spans.json").write_text(json.dumps(spans, indent=1, default=str) + "\n")

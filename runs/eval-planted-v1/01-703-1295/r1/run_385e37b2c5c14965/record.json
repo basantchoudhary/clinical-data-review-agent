@@ -1,0 +1,65 @@
+{
+  "run_id": "run_385e37b2c5c14965",
+  "patient": "01-703-1295",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T09:17:58.988661+00:00",
+  "seconds": 22.7,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I found one issue in patient 01-703-1295's record and saved one draft query for a data manager to review. Nothing has been sent.\n\n**What I checked:** the patient summary, the one edit-check hit, liver tests over time (ALT, AST, ALP, bilirubin), adverse events, how and why the patient left the study, medical history, medications, the protocol's lab exclusion criteria, and earlier queries (there were none).\n\n**Draft saved (Laboratory form, ID drf-6b5c008f73e90103):**\n- **Week 8 ALT (2014-01-15):** ALT was 134.4 U/L, about 4.2 times the upper normal limit of 32 U/L. Every other ALT was normal (14 at Week 6, 15 at Week 12), and AST (19 U/L) and bilirubin on the same day were normal. No adverse event for raised liver enzymes is recorded. The query asks the site to check the value against the source lab report, or, if it is correct, whether the investigator thinks it is clinically significant and an adverse event should be recorded.\n\n**Looked at, no query raised:**\n- **ALP above normal at every visit (361\u2013398 U/L, about 3.1\u20133.5 times the upper limit, including screening):** the history records Paget's disease of bone, which could account for it. The exclusion criterion lists creatinine, bilirubin, AST and ALT \"etc.\" against a lab reference range that isn't in the data. ALP isn't named there, so I didn't raise an eligibility query; a data manager may want to confirm that.\n- **Arthritis (moderate, not serious, not resolved):** this fits the recorded history of joint pain and use of Tylenol. Nothing to query.\n- **Leaving the study:** withdrawal at the family's wish, with the final visit on 2014-05-19. This matches the visit dates. The last dose was 2014-04-19, a month before that final visit; this doesn't contradict anything recorded, so no query.\n- **Missing consent date:** not queried, because the study notes say consent dates aren't recorded in this study.",
+    "termination": "goal_reached"
+  },
+  "steps": 5,
+  "tool_calls": [
+    "patient_summary",
+    "prior_queries",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "adverse_events",
+    "disposition",
+    "protocol_section",
+    "medical_history",
+    "medications",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 43398,
+    "output_tokens": 1992,
+    "cached_input_tokens": 8008
+  },
+  "cost_usd": 0.215,
+  "drafts": [
+    {
+      "key": "drf-6b5c008f73e90103",
+      "run_id": "run_385e37b2c5c14965",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-703-1295",
+      "form": "Laboratory",
+      "category": "missing_event",
+      "issue": "Isolated ALT 134.4 U/L (4.2x ULN) at Week 8 with normal AST and bilirubin, normal ALT before and after, and no related adverse event recorded; the value may be a transcription error or a clinically significant result with no AE recorded.",
+      "query_text": "The Week 8 (2014-01-15) ALT result is 134.4 U/L (reference range 6\u201332 U/L, about 4.2x ULN). ALT was 14 U/L at Week 6 (2014-01-01) and 15 U/L at Week 12 (2014-02-18). AST on 2014-01-15 was 19 U/L and total bilirubin was 10.26 umol/L, both within normal range. No adverse event for raised liver enzymes is recorded. Please check the Week 8 ALT value against the source laboratory report and correct it if it was entered wrongly. If the value is correct, please tell us whether the investigator considers it clinically significant and, if so, whether an adverse event should be recorded.",
+      "evidence": [
+        "LB:01-703-1295:163",
+        "LB:01-703-1295:133",
+        "LB:01-703-1295:193",
+        "LB:01-703-1295:164",
+        "LB:01-703-1295:166",
+        "AE:01-703-1295:1"
+      ],
+      "created_at": "2026-10-28T09:18:14.356208+00:00",
+      "status": "pending_review"
+    }
+  ]
+}
