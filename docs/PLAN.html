@@ -40,7 +40,7 @@ th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute
 <body>
 <main>
 
-<p class="muted"><small>AG-102 · the clinical data review agent · plan written 28 Oct 2026 · target: everything by 2 Nov · updated on every move</small></p>
+<p class="muted"><small>AG-102 · the clinical data review agent · plan written 28 Oct 2026 · <b>paused 28 Oct at version 1</b> (owner's call: enough to learn the architecture challenges; next agent is the hotel concierge)</small></p>
 <h1>The plan: clinical data review agent</h1>
 <p class="muted">One page for the whole project: why we are doing it, how we will know it worked, every piece of work with its owner and date, and what it gives back to the AgentHarnessSuite. Decisions live in <code>docs/DECISIONS.md</code>; findings in <code>FINDINGS.md</code>.</p>
 
@@ -105,17 +105,17 @@ const PHASES = [
     ["Agent Harness: Claude adapter, thinking blocks, append-only and job-shaped runs","C","done","reference-agent PR #1"],
     ["First real run on 01-705-1186","C","done","5 drafts, all four Lesson 1 problems found, $0.19, 41 s"],
   ]},
-  {n:"Phase 2", title:"Prove it, while the Claude credit lasts", when:"28–31 Oct", status:"doing", tasks:[
+  {n:"Phase 2", title:"Prove it, while the Claude credit lasts", when:"28 Oct", status:"later", tasks:[
     ["A labelling page: each draft with its evidence, 'worth sending' or not, and a reason","C","done","python -m clinical_review.labeling"],
     ["Label the first five drafts (patient 01-705-1186)","S","done","5 of 5 worth sending as written"],
     ["Planted-problem trial, AgentTwin-style in this repo: 24 known problems of 12 kinds (one a hidden instruction), plus 16 clean patients","C","done","worlds/planted-v1 · moving it into AgentTwin is a suite task"],
     ["Eval checks, cheapest first: evidence, schema, blinding, privacy, hidden instruction; Claude as judge (advisory); the scorer","C","done","64 tests · judge agrees with Shalini on 2 of 2 so far"],
-    ["Run about 40 patients × 3 repeats; measure the first five before the rest","C","doing","pass 1 (v1) done: recall 21/24 (87.5%), checks 202/202, $0.21 per patient, $8.42 · repeats Thu 30"],
+    ["Run about 40 patients × 3 repeats; measure the first five before the rest","C","later","pass 1 (v1) done: recall 21/24 (87.5%), checks 202/202, $0.21 per patient, $8.42 · repeats Thu 30"],
     ["Label the drafts of about 20 real patients","S","open","Thu 30 · ~2 h"],
     ["Calibrate the Claude judge against Shalini's labels; gate report against the D8 thresholds","C","open","Fri 31"],
     ["If credit remains: same set on Sonnet 5.5 and Haiku 5.5, choose the model on evidence","T","later","Sat 1"],
   ]},
-  {n:"Phase 3", title:"Shalini's data layer on Databricks", when:"29–31 Oct", status:"open", tasks:[
+  {n:"Phase 3", title:"Shalini's data layer on Databricks", when:"29–31 Oct", status:"later", tasks:[
     ["Log the Databricks CLI in to the Free Edition workspace","B","open","Tue 28 · ~10 min"],
     ["Asset bundle: raw, cleaned and curated layers, SDTM-aligned, blinded","S","open","Wed 29 · pairing with Claude"],
     ["Snapshot IDs and lineage columns on every curated row (D3's two requirements)","S","open","Thu 30"],
@@ -123,20 +123,20 @@ const PHASES = [
     ["Edit checks as data-quality expectations in the pipeline; patient ranking","S","open","Fri 31"],
     ["Model route after the credit: Databricks Model Serving if Free Edition offers Claude, else the paid API","T","later","Sat 1"],
   ]},
-  {n:"Phase 4", title:"OpenClinica, thin version", when:"29–31 Oct", status:"open", tasks:[
+  {n:"Phase 4", title:"OpenClinica, thin version", when:"29–31 Oct", status:"later", tasks:[
     ["OpenClinica Community 3.x in Docker with a handful of pilot patients → GO / NO-GO","C","open","Wed 29 evening"],
     ["If GO: the writer re-checks the field and posts approved drafts as discrepancy notes; stale drafts sent back","C","open","Fri 31"],
     ["If NO-GO: the writer runs against the fake EDC adapter, and the claim becomes 'designed and tested against the OpenClinica API'","C","later","Fri 31"],
     ["Approval through a simple local page (the Databricks App is cut)","C","open","Fri 31"],
   ]},
-  {n:"Phase 5", title:"Make the architecture checkable", when:"31 Oct – 1 Nov", status:"open", tasks:[
+  {n:"Phase 5", title:"Make the architecture checkable", when:"31 Oct – 1 Nov", status:"later", tasks:[
     ["AOAS spec: the agent's contract","C","open","Fri 31"],
     ["AHC harness profile: what fills each of the 16 layers","C","open","Fri 31 · Shalini reviews"],
     ["AAC config: which obligations apply and how each is checked","C","open","Fri 31 · Shalini reviews"],
     ["The four gates on the real build","C","open","Sat 1"],
     ["Merge PR #1 and tag agent-harness 0.3.0; re-pin this agent","B","open","Sat 1"],
   ]},
-  {n:"Phase 6", title:"Show it", when:"1–2 Nov", status:"open", tasks:[
+  {n:"Phase 6", title:"Show it", when:"1–2 Nov", status:"later", tasks:[
     ["One-page overview: business benefit, users, why agentic, architecture and design","C","done","docs/OVERVIEW.html · the write-up starts from it"],
     ["Director-level architecture write-up: decisions, evidence, cost, what changes at a real sponsor","S","open","Claude drafts Sat 1, Shalini edits"],
     ["Resume lines with the measured numbers","T","open","Sun 2"],
@@ -174,6 +174,7 @@ const RISKS = [
 ];
 
 const LOG = [
+  ["28 Oct 2026","PAUSED at version 1 (Basant's call): the agent has surfaced the architecture challenges, which was the learning goal. Results frozen as the baseline; 'Architecture challenges we hit' added to the overview. Shalini's claim is 'designed and evaluated'; the data layer, OpenClinica and the worth-sending gate are not done. Next agent: hotel concierge (AG-201)."],
   ["28 Oct 2026","Pass 1 of the planted trial (v1): 21 of 24 planted problems found (87.5%, gate 80%); 202/202 deterministic checks; $0.21 per patient. Missed: two 'lab outside its visit' and one 'under age', both rule jobs D1 says rules should flag. 'Clean' patients drew 2.6 drafts each: mostly real pilot problems (duplicate AE records, a fatal event marked not serious) plus study-wide blanks that need study notes."],
   ["28 Oct 2026","Task 2.4 done: deterministic checks, Claude judge, scorer. First 5 planted patients: recall 5/5, deterministic checks 25/25 (after fixing a phone pattern that matched subject IDs), $0.22 per patient."],
   ["28 Oct 2026","Task 2.3 done: planted trial built (24 problems, 12 kinds, 16 clean patients, seeded). Found on the way: 30 real adverse events in the pilot are 'hospitalised' but 'not serious'; the AE tool now shows seriousness criteria (tools-v2)."],

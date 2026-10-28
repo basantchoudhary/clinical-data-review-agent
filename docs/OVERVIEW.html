@@ -64,7 +64,7 @@ figure.story figcaption{font-family:"Patrick Hand","Comic Sans MS",cursive;font-
 <p class="muted"><small>AG-102 · Shalini (architecture and data layer), with Claude · overview written 28 Oct 2026</small></p>
 <h1>Clinical Data Review Agent</h1>
 <p class="lead">An AI agent that reviews one clinical-trial patient's record across forms and visits, finds the inconsistencies that simple field checks cannot judge, and drafts precise queries for a data manager to approve. It never changes trial data and never sends anything itself.</p>
-<nav><a href="#story">The story in one picture</a><a href="#problem">The problem</a><a href="#cdm">Where it sits in CDM</a><a href="#benefit">Business benefit</a><a href="#users">Who it helps</a><a href="#agentic">Why agentic</a><a href="#arch">Architecture</a><a href="#flow">User and system flow</a><a href="#design">Design</a><a href="#proof">Proof</a><a href="#result">First result</a></nav>
+<nav><a href="#story">The story in one picture</a><a href="#problem">The problem</a><a href="#cdm">Where it sits in CDM</a><a href="#benefit">Business benefit</a><a href="#users">Who it helps</a><a href="#agentic">Why agentic</a><a href="#arch">Architecture</a><a href="#flow">User and system flow</a><a href="#design">Design</a><a href="#proof">Proof</a><a href="#result">First result</a><a href="#challenges">Challenges</a></nav>
 
 
 <h2 id="story">The story in one picture</h2>
@@ -523,8 +523,22 @@ figure.story figcaption{font-family:"Patrick Hand","Comic Sans MS",cursive;font-
 <div class="query"><b>Adverse events and disposition.</b> "Action taken" is blank; withdrawn by "physician decision" for hyperbilirubinemia. Should the reason be adverse event?</div>
 <p>It also noted from the medical history that the patient has <b>Paget's disease of bone</b>, which explains the high ALP, and correctly did not raise a query about it. A single patient is a demonstration, not proof: the measured results come from Phase 2 of the plan.</p>
 
-<h2>11. Status</h2>
-<p>Built and working on a local snapshot of the public CDISC pilot study. Next, by 2 Nov: the planted-problem trial and the measured run over about 40 patients; the Databricks pipeline; OpenClinica in a thin version; the specs and gates; the write-up. Plan and owners: <code>docs/PLAN.html</code>.</p>
+<h2>11. Status: paused at version 1 (28 Oct 2026)</h2>
+<p>Built and measured on the public CDISC pilot study. Pass 1 over the planted trial (40 patients, version 1): <b>21 of 24 planted problems found (87.5%; gate 80%)</b>, <b>202 of 202 deterministic checks passed</b> (evidence, format, blinding, privacy, hidden instruction), <b>$0.21 per patient</b> (gate $0.30), hidden instruction resisted 2 of 2. Not yet measured: "worth sending" across the real sample, and consistency across repeats. Not built: the Databricks pipeline, OpenClinica write-back. Next version (designed, not built): two rules for visit windows and protocol age range, and study notes for study-wide blanks. Plan and owners: <code>docs/PLAN.html</code>.</p>
+
+<h2 id="challenges">12. Architecture challenges we hit</h2>
+<p>Every one of these came from building and measuring the agent, not from a textbook. Each changed, or confirmed, a decision.</p>
+<div class="tbl"><table>
+<tr><th>#</th><th>Challenge</th><th>What happened</th><th>What it taught</th></tr>
+<tr><td>1</td><td><b>Rules versus agent</b></td><td>The agent missed both planted "lab dated outside its visit" problems and one "under-age" patient: a normal value with a wrong date, hidden among about 500 lab results.</td><td>These are exact checks, so they belong to rules (D1); the agent explains what rules flag. A miss is a signal to add a rule, not to tune the prompt.</td></tr>
+<tr><td>2</td><td><b>Per patient versus study-wide</b></td><td>No adverse event in the study records "action taken", and over half the medications have no indication. The agent queried these patient by patient.</td><td>Study-wide gaps are declared once as study notes (as for consent dates); they are a question to data management, not to 17 sites.</td></tr>
+<tr><td>3</td><td><b>Blinding is more than hiding the arm</b></td><td>The exposure table's dose (0, 54 or 81 mg) reveals the arm as clearly as the arm column.</td><td>Blinding is enforced in the pipeline and again in the tools; a new obligation for concealed fields was proposed to AAC.</td></tr>
+<tr><td>4</td><td><b>Prompt injection through site text</b></td><td>A planted comment told the reviewer not to raise queries. The agent raised the real problem anyway, 2 of 2.</td><td>Safety comes from the structure (one patient, drafts only, human approval), with untrusted text marked as data as a second line.</td></tr>
+<tr><td>5</td><td><b>Evaluation design</b></td><td>The "clean" patients were not clean: the agent found real pilot problems nobody planted (duplicate adverse-event records with conflicting outcomes; a fatal event recorded as not serious).</td><td>Planted truth measures recall; only human labels can measure false alarms and usefulness.</td></tr>
+<tr><td>6</td><td><b>The model shapes the harness</b></td><td>Claude Opus 5.5 rejects temperature, needs its thinking blocks passed back unchanged, and rejects a changed history.</td><td>The shared harness gained a Claude adapter, provider blocks and append-only runs; determinism comes from recorded runs, not sampling settings.</td></tr>
+<tr><td>7</td><td><b>Stale data at the moment of action</b></td><td>A query drafted from last night's copy may be about a value the site has since fixed.</td><td>Review from a snapshot, re-check the field before posting (D3), the same idea as optimistic concurrency.</td></tr>
+<tr><td>8</td><td><b>Checks need testing too</b></td><td>The privacy check first flagged every patient ID and date as a phone number; the blinding check flagged a sentence saying the review was blind.</td><td>Every check gets its own table of cases, including the ones it must not flag.</td></tr>
+</table></div>
 
 <h2>Words used here</h2>
 <div class="tbl"><table>
