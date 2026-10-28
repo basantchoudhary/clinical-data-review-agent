@@ -6,11 +6,14 @@ requires-python = ">=3.12"
 dependencies = [
     "pandas>=2.2",
     "pyarrow>=17",
+    # The harness, installed and pinned to an exact commit (D9): reference-agent
+    # PR #1 (`claude-adapter`), until it is merged and tagged 0.3.0.
+    "agent-harness[claude] @ git+https://github.com/dataagentsai/reference-agent@080ff6e#subdirectory=packages/agent-harness",
+    "evalharness @ git+https://github.com/dataagentsai/eval-harness-framework@2ab3538",
+    # Imported by agent_harness.context and not declared by agent-harness
+    # (claims-fnol-azure F-1; hit again here as F-11). Declared until the library does.
+    "jinja2>=3.1",
 ]
-
-[project.optional-dependencies]
-# The model adapter imports the SDK only when it is used.
-claude = ["anthropic>=2.3"]
 
 [dependency-groups]
 dev = ["pytest>=8"]
