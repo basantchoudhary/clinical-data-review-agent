@@ -40,7 +40,7 @@ th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute
 <body>
 <main>
 
-<p class="muted"><small>AG-102 · the clinical data review agent · plan written 28 Oct 2026 · updated on every move</small></p>
+<p class="muted"><small>AG-102 · the clinical data review agent · plan written 28 Oct 2026 · target: everything by 2 Nov · updated on every move</small></p>
 <h1>The plan: clinical data review agent</h1>
 <p class="muted">One page for the whole project: why we are doing it, how we will know it worked, every piece of work with its owner and date, and what it gives back to the AgentHarnessSuite. Decisions live in <code>docs/DECISIONS.md</code>; findings in <code>FINDINGS.md</code>.</p>
 
@@ -55,6 +55,10 @@ th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute
 <div class="grid" id="stats"></div>
 <div class="timeline" id="timeline"></div>
 <p class="muted"><small>Owners: <span class="who">S</span> Shalini · <span class="who">B</span> Basant · <span class="who">C</span> Claude (builds, drafts, explains; Shalini decides and reviews) · <span class="who">T</span> together. Status: <span class="pill done">Done</span> <span class="pill doing">In progress</span> <span class="pill open">Next</span> <span class="pill later">Later</span> <span class="pill risk">Blocked</span></small></p>
+
+<h2>Day by day, to 2 Nov</h2>
+<p class="muted">Agreed 28 Oct: about 3 hours a day from Shalini, about 14 hours in all; OpenClinica in a thin version with a go/no-go on Wednesday evening.</p>
+<div class="tbl"><table id="days"></table></div>
 
 <h2>The phases</h2>
 <div id="phases"></div>
@@ -83,8 +87,8 @@ const GOALS = [
   {t:"1. Understand", what:"Explain where an agent belongs in clinical data management, and where it must not go.", measure:"Lessons 1–3 read; the 'In Shalini's words' line written for all ten decisions.", status:"doing"},
   {t:"2. Architect", what:"Own the architecture: ten decisions, checked against AHC's 16 layers and the AAC obligations.", measure:"D1–D10 recorded; all 16 layers decided; the AOAS spec, harness profile and AAC config written and passing the gates.", status:"doing"},
   {t:"3. Prove", what:"Measure it, not demo it.", measure:"≥80% of planted defects found · ≥70% of drafts worth sending · 0 blinding or privacy failures · ≤$0.30 per patient · repeat runs consistent.", status:"open"},
-  {t:"4. Real system", what:"Run against a real EDC and a real lakehouse, the way a sponsor would.", measure:"OpenClinica → Databricks pipeline (Shalini's) → agent → approval → discrepancy note posted, with the re-check at write time.", status:"later"},
-  {t:"5. Show", what:"Turn it into something she can present.", measure:"Director-level architecture write-up, a 5-minute demo, resume lines with measured numbers.", status:"later"},
+  {t:"4. Real system", what:"Run against a real EDC and a real lakehouse, the way a sponsor would.", measure:"Shalini's Databricks pipeline feeds the agent; approved drafts posted to OpenClinica with the write-time re-check (thin version; go/no-go 29 Oct).", status:"open"},
+  {t:"5. Show", what:"Turn it into something she can present.", measure:"Director-level architecture write-up, a 5-minute demo, resume lines with measured numbers, by 2 Nov.", status:"open"},
 ];
 
 const PHASES = [
@@ -92,8 +96,8 @@ const PHASES = [
     ["Lesson 1: trial data and where an agent fits, on a real patient","C","done","docs/learn/01-trial-data-and-agents.html"],
     ["Ten architecture decisions D1–D10, options and trade-offs","T","done","docs/DECISIONS.md"],
     ["Coverage against AHC's 16 layers and the AAC obligations","C","done","all 16 layers decided"],
-    ["Write 'In Shalini's words' for each decision","S","open","the line that makes each decision hers"],
-    ["Correct Lesson 1 step 4: Paget's disease, not a blocked bile duct, explains the high ALP","C","open","found by the agent's first run"],
+    ["Write 'In Shalini's words' for each decision","S","open","Sat 1 Nov"],
+    ["Correct Lesson 1 step 4: Paget's disease, not a blocked bile duct, explains the high ALP","C","open","Tue 28 Oct"],
   ]},
   {n:"Phase 1", title:"First working agent", when:"27–28 Oct", status:"done", tasks:[
     ["Local curated snapshot: blinded, stamped, every row traceable","C","done","306 patients"],
@@ -101,45 +105,52 @@ const PHASES = [
     ["Agent Harness: Claude adapter, thinking blocks, append-only and job-shaped runs","C","done","reference-agent PR #1"],
     ["First real run on 01-705-1186","C","done","5 drafts, all four Lesson 1 problems found, $0.19, 41 s"],
   ]},
-  {n:"Phase 2", title:"Prove it, while the Claude credit lasts", when:"28 Oct – 2 Nov", status:"doing", tasks:[
-    ["A labelling page: each draft with its evidence, 'worth sending' or not, and a reason","C","open","28 Oct"],
-    ["Label the first five drafts (patient 01-705-1186)","S","open","28 Oct"],
-    ["Planted-problem trial in AgentTwin: about 30 known defects of different kinds, plus clean patients","C","open","29–30 Oct"],
-    ["Eval checks, cheapest first: evidence exists, schema, blinding, privacy (deterministic); Claude as judge (advisory)","C","open","30 Oct"],
-    ["Run about 40 patients × 3 repeats; measure the first five before the rest","C","open","31 Oct · ≤$30"],
-    ["Label the drafts of about 20 real patients","S","open","31 Oct – 1 Nov"],
-    ["Calibrate the Claude judge against Shalini's labels; gate report against the D8 thresholds","C","open","2 Nov"],
-    ["If credit remains: same set on Sonnet 5.5 and Haiku 5.5, choose the model on evidence","T","later","2 Nov"],
-    ["Claude credit expires","B","risk","3 Nov"],
+  {n:"Phase 2", title:"Prove it, while the Claude credit lasts", when:"28–31 Oct", status:"doing", tasks:[
+    ["A labelling page: each draft with its evidence, 'worth sending' or not, and a reason","C","open","Tue 28"],
+    ["Label the first five drafts (patient 01-705-1186)","S","open","Tue 28 · ~30 min"],
+    ["Planted-problem trial in AgentTwin: about 30 known defects, plus clean patients","C","open","Tue 28 – Wed 29"],
+    ["Eval checks, cheapest first: evidence, schema, blinding, privacy; Claude as judge (advisory)","C","open","Wed 29"],
+    ["Run about 40 patients × 3 repeats; measure the first five before the rest","C","open","Thu 30 · ≤$30"],
+    ["Label the drafts of about 20 real patients","S","open","Thu 30 · ~2 h"],
+    ["Calibrate the Claude judge against Shalini's labels; gate report against the D8 thresholds","C","open","Fri 31"],
+    ["If credit remains: same set on Sonnet 5.5 and Haiku 5.5, choose the model on evidence","T","later","Sat 1"],
   ]},
-  {n:"Phase 3", title:"Shalini's data layer on Databricks", when:"4–15 Nov", status:"later", tasks:[
-    ["Log the Databricks CLI in to the Free Edition workspace","B","open","needs Basant at the keyboard"],
-    ["Asset bundle: raw, cleaned and curated layers, SDTM-aligned, blinded","S","later",""],
-    ["Snapshot IDs and lineage columns on every curated row (D3's two requirements)","S","later",""],
-    ["Edit checks as data-quality expectations in the pipeline; patient ranking","S","later",""],
-    ["Databricks adapter for the trial-data port; the same contract tests on both adapters","T","later",""],
-    ["Decide the model route after the credit: Databricks Model Serving if Free Edition offers Claude, else the paid API","T","later",""],
+  {n:"Phase 3", title:"Shalini's data layer on Databricks", when:"29–31 Oct", status:"open", tasks:[
+    ["Log the Databricks CLI in to the Free Edition workspace","B","open","Tue 28 · ~10 min"],
+    ["Asset bundle: raw, cleaned and curated layers, SDTM-aligned, blinded","S","open","Wed 29 · pairing with Claude"],
+    ["Snapshot IDs and lineage columns on every curated row (D3's two requirements)","S","open","Thu 30"],
+    ["Databricks adapter for the trial-data port; the same contract tests on both adapters","C","open","Thu 30"],
+    ["Edit checks as data-quality expectations in the pipeline; patient ranking","S","open","Fri 31"],
+    ["Model route after the credit: Databricks Model Serving if Free Edition offers Claude, else the paid API","T","later","Sat 1"],
   ]},
-  {n:"Phase 4", title:"The real system: OpenClinica in, approved queries out", when:"16–30 Nov", status:"later", tasks:[
-    ["OpenClinica Community 3.x in Docker (only while testing: 8 GB Mac)","C","later",""],
-    ["Case report forms from the pilot's blank CRF; pilot data loaded by ODM import","T","later",""],
-    ["Ingestion from OpenClinica into the lakehouse, with OpenClinica's identifiers as lineage","S","later",""],
-    ["The writer: re-check the field, post a discrepancy note, stale drafts sent back (D3, D5)","C","later",""],
-    ["The review app (Databricks App): approve, edit, reject with a reason; approver rules (G10)","T","later",""],
+  {n:"Phase 4", title:"OpenClinica, thin version", when:"29–31 Oct", status:"open", tasks:[
+    ["OpenClinica Community 3.x in Docker with a handful of pilot patients → GO / NO-GO","C","open","Wed 29 evening"],
+    ["If GO: the writer re-checks the field and posts approved drafts as discrepancy notes; stale drafts sent back","C","open","Fri 31"],
+    ["If NO-GO: the writer runs against the fake EDC adapter, and the claim becomes 'designed and tested against the OpenClinica API'","C","later","Fri 31"],
+    ["Approval through a simple local page (the Databricks App is cut)","C","open","Fri 31"],
   ]},
-  {n:"Phase 5", title:"Make the architecture checkable", when:"1–7 Dec", status:"later", tasks:[
-    ["AOAS spec: the agent's contract","C","later",""],
-    ["AHC harness profile: what fills each of the 16 layers","T","later",""],
-    ["AAC config: which obligations apply and how each is checked","T","later",""],
-    ["The four gates passing on the real build","C","later",""],
-    ["Lesson 3: how AHC, AAC and AgentTwin turn 'I think it's complete' into something measured","C","later",""],
+  {n:"Phase 5", title:"Make the architecture checkable", when:"31 Oct – 1 Nov", status:"open", tasks:[
+    ["AOAS spec: the agent's contract","C","open","Fri 31"],
+    ["AHC harness profile: what fills each of the 16 layers","C","open","Fri 31 · Shalini reviews"],
+    ["AAC config: which obligations apply and how each is checked","C","open","Fri 31 · Shalini reviews"],
+    ["The four gates on the real build","C","open","Sat 1"],
+    ["Merge PR #1 and tag agent-harness 0.3.0; re-pin this agent","B","open","Sat 1"],
   ]},
-  {n:"Phase 6", title:"Portfolio", when:"8–15 Dec", status:"later", tasks:[
-    ["Director-level architecture write-up: decisions, evidence, cost, what changes at a real sponsor","S","later","Claude drafts, Shalini owns"],
-    ["Five-minute demo","S","later",""],
-    ["Resume lines with the measured numbers","S","later",""],
-    ["Decide whether the repository becomes public","B","later",""],
+  {n:"Phase 6", title:"Show it", when:"1–2 Nov", status:"open", tasks:[
+    ["Director-level architecture write-up: decisions, evidence, cost, what changes at a real sponsor","S","open","Claude drafts Sat 1, Shalini edits"],
+    ["Resume lines with the measured numbers","T","open","Sun 2"],
+    ["Five-minute demo","S","open","Sun 2"],
+    ["Final plan update; decide whether the repository becomes public","B","open","Sun 2"],
   ]},
+];
+
+const DAYS = [
+  ["Tue 28 Oct","Labelling page; start the planted trial; fix Lesson 1","Label the first 5 drafts (~30 min)","Log the Databricks CLI in (~10 min)"],
+  ["Wed 29 Oct","Planted trial and eval checks; OpenClinica trial run → GO / NO-GO by evening","Databricks pipeline, raw to curated, pairing with Claude (~3 h)",""],
+  ["Thu 30 Oct","Run 40 patients × 3; Databricks adapter for the agent","Label ~20 real patients' drafts (~2 h); snapshots and lineage (~1 h)",""],
+  ["Fri 31 Oct","Judge calibration and gate report; the writer; spec, profile and AAC config","Edit checks in the pipeline; review the specs (~3 h)",""],
+  ["Sat 1 Nov","Gates on the real build; write-up draft; model comparison if credit remains","'In my words' for all ten decisions; edit the write-up (~3 h)","Merge PR #1, tag 0.3.0"],
+  ["Sun 2 Nov","Final plan update; resume lines with the measured numbers","Record a 5-minute demo; final read (~2 h)","Decide public or private"],
 ];
 
 const SUITE = [
@@ -153,7 +164,8 @@ const SUITE = [
 ];
 
 const RISKS = [
-  ["The credit expires on 3 Nov, before Phase 2 can be finished","Phase 2 is ordered so the paid part (runs) comes first; labelling can continue after","risk"],
+  ["Everything must finish by 2 Nov","Day-by-day schedule above; Shalini ~3 h a day; OpenClinica thin with a go/no-go; the Databricks App cut","risk"],
+  ["OpenClinica does not run cleanly on the Mac","Go/no-go Wed 29 evening; fall back to the fake EDC adapter and say so in the claim","open"],
   ["Shalini's labelling time","Twenty patients, about 3–5 drafts each; a page that makes each label one click and a reason","open"],
   ["After 3 Nov, every agent run costs real money","Choose the model on Phase 2's evidence; Databricks Model Serving if available; runs are measured before scaling","open"],
   ["OpenClinica and Databricks on an 8 GB Mac","OpenClinica runs only while testing; the lakehouse is in the cloud","open"],
@@ -161,6 +173,7 @@ const RISKS = [
 ];
 
 const LOG = [
+  ["28 Oct 2026","Compressed to finish by 2 Nov (Shalini: ~3 h a day; OpenClinica thin, go/no-go 29 Oct; Databricks App cut). Day-by-day schedule added."],
   ["28 Oct 2026","Plan written. Phases 0 and 1 done; first real run found all four Lesson 1 problems plus one more for $0.19."],
 ];
 
@@ -186,6 +199,7 @@ ${p.tasks.map(t=>`<tr><td>${esc(t[0])}</td><td><span class="who">${t[1]}</span><
 
 $("suite").innerHTML = "<tr><th>Member</th><th>Contribution</th><th>Status</th><th>Where</th></tr>" + SUITE.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${pill(r[2])}</td><td class="muted">${esc(r[3])}</td></tr>`).join("");
 $("risks").innerHTML = "<tr><th>Risk</th><th>What we do about it</th><th></th></tr>" + RISKS.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${pill(r[2])}</td></tr>`).join("");
+$("days").innerHTML = "<tr><th>Day</th><th>Claude</th><th>Shalini</th><th>Basant</th></tr>" + DAYS.map(d=>`<tr><td><b>${esc(d[0])}</b></td><td>${esc(d[1])}</td><td>${esc(d[2])}</td><td>${esc(d[3])}</td></tr>`).join("");
 $("log").innerHTML = "<tr><th>Date</th><th>Change</th></tr>" + LOG.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("");
 </script>
 </body>
