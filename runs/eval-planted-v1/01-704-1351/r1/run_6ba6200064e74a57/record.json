@@ -1,0 +1,61 @@
+{
+  "run_id": "run_6ba6200064e74a57",
+  "patient": "01-704-1351",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:22:00.654971+00:00",
+  "seconds": 22.9,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I found one real inconsistency in patient 01-704-1351's record and saved one draft query for a data manager to review. The edit checks flagged nothing, and there were no earlier queries for this patient.\n\n**What I checked:** the patient summary, all adverse events, the lymphocyte and white cell count trends, medications, medical history and disposition. I also checked the protocol's lab-based exclusion criteria. Specifically:\n- **Entry labs:** the protocol's lab exclusion names creatinine, bilirubin and the liver enzymes, and none of these were abnormal. Only mild out-of-range values appeared: white cell count was 13.54 GI/L at Screening 1 and normal by 2013-10-03. Lymphocytes ran slightly high on and off, at most 1.2\u00d7 the upper limit. I didn't pull the full trends for the other mildly abnormal tests (albumin, MCV, monocytes), only their counts in the summary. None of this looked like it needed a query.\n- **Disposition:** the patient completed the protocol on 2014-04-18 (Week 26), which matches the last dose and study end. No adverse event led to stopping.\n- **Consent date:** missing, but the study notes say not to query it, so I didn't.\n\n**Draft saved:**\n- **drf-4d6604f9ae526ad7 (Adverse Events form):** Flatulence and pollakiuria (frequent urination) are each recorded twice, with the same dates (2013-10-27 to 2014-04-04). In each pair, one record says \"recovered/resolved\" and the other \"not recovered/not resolved\", and the \"not recovered\" records still have an end date. The query asks the site whether these are duplicate entries and what the correct outcome and end date are.\n\n**Possible duplicates I didn't query:** the medications form lists Multivitamin 13 times with identical details. The herbal preparation taken on 2013-11-30 has no indication or drug code. Several medical history entries also appear twice. These look like the same kind of duplicate entry, and a data manager may want to check them.",
+    "termination": "goal_reached"
+  },
+  "steps": 5,
+  "tool_calls": [
+    "patient_summary",
+    "adverse_events",
+    "prior_queries",
+    "lab_trend",
+    "lab_trend",
+    "medications",
+    "medical_history",
+    "disposition",
+    "protocol_section",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 26086,
+    "output_tokens": 1835,
+    "cached_input_tokens": 10010
+  },
+  "cost_usd": 0.143,
+  "drafts": [
+    {
+      "key": "drf-4d6604f9ae526ad7",
+      "run_id": "run_6ba6200064e74a57",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-704-1351",
+      "form": "Adverse Events",
+      "category": "other",
+      "issue": "Flatulence and pollakiuria are each recorded twice with identical start (2013-10-27) and end (2014-04-04) dates but conflicting outcomes; the 'Not recovered/not resolved' records also carry an end date.",
+      "query_text": "Two adverse events appear to be recorded twice, with conflicting outcomes. FLATULENCE (AE records 2 and 4) and POLLAKIURIA (AE records 1 and 3) each started on 2013-10-27 and ended on 2014-04-04, and both are recorded as mild, non-serious and not related. In each pair, one record has outcome 'NOT RECOVERED/NOT RESOLVED' and the other has 'RECOVERED/RESOLVED'. The 'not recovered' records also have an end date of 2014-04-04, which does not match that outcome. Please confirm whether each pair is a duplicate entry or two separate episodes. Please also confirm the correct outcome and end date for each event, and update or delete records as needed.",
+      "evidence": [
+        "AE:01-704-1351:1",
+        "AE:01-704-1351:2",
+        "AE:01-704-1351:3",
+        "AE:01-704-1351:4"
+      ],
+      "created_at": "2026-10-28T10:22:15.602701+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

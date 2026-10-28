@@ -1,0 +1,84 @@
+{
+  "run_id": "run_ec2c43664ed04ddc",
+  "patient": "01-710-1249",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:19:33.436837+00:00",
+  "seconds": 24.4,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I reviewed patient 01-710-1249 and saved two draft queries for a data manager to approve. Nothing was sent to the site.\n\n**What I checked:** the summary, visits, adverse events, the BUN, TSH and creatinine results, medications, medical history, disposition, the protocol's entry criteria and earlier queries. There were no edit-check hits and no earlier queries.\n\n**What I found consistent or did not query:**\n- **Disposition:** the patient completed the protocol on 2014-06-28, the date of the last dose and the Week 26 visit. That matches.\n- **Skin adverse events:** the four mild-to-moderate itching and redness events have consistent dates. None is serious.\n- **BUN:** urea was slightly high at screening (1.12 times the upper limit) and stayed mildly high on and off. Creatinine was normal throughout. The renal exclusion criterion names creatinine but not BUN, and its age-specific reference range isn't in the data. So I didn't query it.\n- **Consent date:** it's missing, but the study notes say consent dates aren't recorded in this study, so I didn't query it.\n\n**Drafts saved:**\n1. **Eligibility (drf-5db0b42a92c24c2e):** the screening TSH on 2013-12-19 was 0.31 mU/L, just below the 0.32\u20135.0 range. The protocol excludes patients whose thyroid results are outside the range, but the patient was dosed on 2013-12-28. The query asks whether a retest, waiver or protocol deviation was recorded. The patient has a history of underactive thyroid treated with Synthroid.\n2. **Concomitant Medications (drf-e54da109baaff2fa):** cortisone was started on 2014-04-27 with no reason recorded. That was three days after the moderate itching event of 2014-04-24 began. The query asks the site to enter the reason and say which adverse event, if any, it was given for.",
+    "termination": "goal_reached"
+  },
+  "steps": 6,
+  "tool_calls": [
+    "patient_summary",
+    "prior_queries",
+    "adverse_events",
+    "lab_trend",
+    "lab_trend",
+    "medications",
+    "medical_history",
+    "protocol_section",
+    "protocol_section",
+    "disposition",
+    "lab_trend",
+    "lab_trend",
+    "propose_query",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 43691,
+    "output_tokens": 2273,
+    "cached_input_tokens": 12012
+  },
+  "cost_usd": 0.2226,
+  "drafts": [
+    {
+      "key": "drf-5db0b42a92c24c2e",
+      "run_id": "run_ec2c43664ed04ddc",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-710-1249",
+      "form": "Eligibility",
+      "category": "eligibility",
+      "issue": "Screening TSH 0.31 mU/L was below the reference range (0.32\u20135.0), and exclusion criterion EXCL28 excludes patients whose thyroid function test values fall outside the reference range, yet the patient was dosed on 2013-12-28.",
+      "query_text": "The Screening 1 central laboratory TSH result on 2013-12-19 was 0.31 mU/L, flagged LOW against the reference range of 0.32\u20135.0 mU/L. Exclusion criterion EXCL28 excludes patients with central laboratory thyroid function test values outside the reference range. The patient received the first dose on 2013-12-28. Was a repeat thyroid function test done before randomisation, or was an eligibility waiver or deviation documented? Please confirm the patient's eligibility against EXCL28 and update the Eligibility form or record a protocol deviation if needed.",
+      "evidence": [
+        "LB:01-710-1249:33",
+        "TI:EXCL28",
+        "SV:01-710-1249:3",
+        "MH:01-710-1249:4",
+        "CM:01-710-1249:1"
+      ],
+      "created_at": "2026-10-28T10:19:51.292000+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-e54da109baaff2fa",
+      "run_id": "run_ec2c43664ed04ddc",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-710-1249",
+      "form": "Concomitant Medications",
+      "category": "other",
+      "issue": "CORTISONE was started on 2014-04-27 with no indication recorded, three days after the onset of the moderate PRURITUS adverse event on 2014-04-24, and the AE has no action recorded.",
+      "query_text": "CORTISONE (1.0 cm, start date 2014-04-27, ongoing) is recorded on the Concomitant Medications form with no indication. It was started three days after the moderate adverse event PRURITUS that began on 2014-04-24 and is not resolved. Please enter the indication for CORTISONE. If it was given for an adverse event, please confirm which one and check that the related AE record is complete.",
+      "evidence": [
+        "CM:01-710-1249:23",
+        "CM:01-710-1249:26",
+        "CM:01-710-1249:29",
+        "AE:01-710-1249:4"
+      ],
+      "created_at": "2026-10-28T10:19:51.292854+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

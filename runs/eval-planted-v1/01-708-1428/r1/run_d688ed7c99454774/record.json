@@ -1,0 +1,82 @@
+{
+  "run_id": "run_d688ed7c99454774",
+  "patient": "01-708-1428",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:23:16.016877+00:00",
+  "seconds": 21.9,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I found two problems in patient 01-708-1428's record and saved two draft queries for a data manager to review. Nothing has been sent to the site.\n\n**What I checked:** the patient summary, the adverse events, the disposition record, the one abnormal lab test and the earlier queries for this patient. The automated edit checks flagged nothing and there were no earlier queries. I did not look at medications, medical history, vital signs or the protocol's entry criteria.\n\n**Findings with no query:**\n- **Blood count (MCV, red cell size):** it was slightly high once, at 102 fL against an upper limit of 100 on 2013-12-10 (Week 4). It was normal before and after (95 fL at Week 8), so I raised nothing.\n- **Nosebleed:** the one mild nosebleed on 2013-11-22 is recorded consistently.\n- **Consent date:** it is missing, but the study notes say not to query that.\n\n**Drafts saved:**\n1. **drf-3281d8c52eddcf56 (Adverse Events form):** The three skin reactions where the drug was applied (redness, itching and warmth) are each recorded twice with the same dates, 2013-12-10 to 2013-12-21. One copy is \"moderate, not recovered\" and the other is \"severe, recovered\". The query asks whether these are separate events or one event that changed severity. If it changed, it asks for the dates of each change. It also asks the site to fix the \"not recovered\" records, which have an end date.\n2. **drf-a7613d0bb7e01d2c (Adverse Events form):** The patient left the study because of an adverse event, but none of the 7 adverse event records says what action was taken with the study drug. The query asks which event led to stopping, asks the site to fill in the action taken, and asks them to confirm the leaving date of 2014-01-31, since the last dose was 2013-12-14.",
+    "termination": "goal_reached"
+  },
+  "steps": 4,
+  "tool_calls": [
+    "patient_summary",
+    "prior_queries",
+    "adverse_events",
+    "disposition",
+    "lab_trend",
+    "propose_query",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 12188,
+    "output_tokens": 2186,
+    "cached_input_tokens": 8008
+  },
+  "cost_usd": 0.0941,
+  "drafts": [
+    {
+      "key": "drf-3281d8c52eddcf56",
+      "run_id": "run_d688ed7c99454774",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-708-1428",
+      "form": "Adverse Events",
+      "category": "date_inconsistency",
+      "issue": "Three application-site AEs are each recorded twice with identical start/end dates (2013-12-10 to 2013-12-21), once as MODERATE/NOT RECOVERED and once as SEVERE/RECOVERED; the NOT RECOVERED records also carry an end date.",
+      "query_text": "Application site erythema (AE 3 and AE 6), application site pruritus (AE 2 and AE 5) and application site warmth (AE 4 and AE 7) are each recorded twice. Both records in each pair have a start date of 2013-12-10 and an end date of 2013-12-21. In each pair, one record is MODERATE with outcome NOT RECOVERED/NOT RESOLVED and the other is SEVERE with outcome RECOVERED/RESOLVED. Please confirm whether these are separate events or a change in severity of one event. If severity changed, please give the date of each severity change so the records do not overlap. Please also confirm the outcome of the MODERATE records, because an end date of 2013-12-21 does not match NOT RECOVERED/NOT RESOLVED.",
+      "evidence": [
+        "AE:01-708-1428:2",
+        "AE:01-708-1428:3",
+        "AE:01-708-1428:4",
+        "AE:01-708-1428:5",
+        "AE:01-708-1428:6",
+        "AE:01-708-1428:7"
+      ],
+      "created_at": "2026-10-28T10:23:31.617284+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-a7613d0bb7e01d2c",
+      "run_id": "run_d688ed7c99454774",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-708-1428",
+      "form": "Adverse Events",
+      "category": "disposition",
+      "issue": "Disposition is ADVERSE EVENT, but no AE record has an action taken entered, so the AE that led to discontinuation cannot be identified.",
+      "query_text": "The Disposition form records the reason for discontinuation as ADVERSE EVENT (dated 2014-01-31, Week 8 visit), and the last dose was on 2013-12-14. However, \"action taken with study drug\" is blank for all 7 AE records, including the application site erythema, pruritus and warmth events that started on 2013-12-10. Please identify which adverse event(s) led to discontinuation and complete the action taken for those records (e.g. drug withdrawn). Please also confirm whether the disposition date of 2014-01-31 is correct, given that the last dose was on 2013-12-14.",
+      "evidence": [
+        "DS:01-708-1428:1",
+        "AE:01-708-1428:1",
+        "AE:01-708-1428:2",
+        "AE:01-708-1428:3",
+        "AE:01-708-1428:4",
+        "AE:01-708-1428:5",
+        "AE:01-708-1428:6",
+        "AE:01-708-1428:7"
+      ],
+      "created_at": "2026-10-28T10:23:31.617832+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

@@ -28,6 +28,7 @@ def failed(checks):
         pytest.param(rec([{**GOOD, "query_text": "On placebo, so unlikely related."}]), False, ["blinded"], id="names the arm"),
         pytest.param(rec([{**GOOD, "query_text": "Call 020 7946 0958 or a.b@site.org"}]), False, ["no_personal_data"], id="personal data"),
         pytest.param(rec([GOOD], termination="step_budget_exhausted"), False, ["ended_cleanly"], id="ran out of steps"),
+        pytest.param(rec([GOOD], reply="I made no judgement about the treatment arm."), False, [], id="mentioning blinding is not unblinding"),
         pytest.param(rec([{**GOOD, "query_text": "Patient 01-703-1295, ALT on 2014-01-15T09:10 was 4.2x ULN."}]), False, [],
                      id="subject IDs and dates are not phone numbers"),
         pytest.param(rec([{**GOOD, "query_text": "Please call +44 20 7946 0958."}]), False, ["no_personal_data"], id="international phone"),

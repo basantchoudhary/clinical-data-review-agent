@@ -1,0 +1,60 @@
+{
+  "run_id": "run_3d89e04b49394df2",
+  "patient": "01-701-1211",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:22:58.894730+00:00",
+  "seconds": 20.2,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I found one problem in patient 01-701-1211's record and saved one draft query for a data manager to review. Nothing has been sent to the site.\n\n**What I checked:** the patient summary, all 9 adverse events, disposition, and the lab trends for the out-of-range tests (bilirubin, alkaline phosphatase, GGT, albumin, sodium). I also checked the entry labs against the protocol's lab exclusion criteria and looked for earlier queries. There were none, and the automated edit checks flagged nothing.\n\n**Draft saved:**\n- **Adverse Events form, Sudden death on 2013-01-14 (drf-6891b80a9b2b4fbe):** the event is marked not serious, but its outcome is fatal, it is marked as resulting in death and life-threatening, and the Disposition form records death on the same date. The query asks the site to review or correct the seriousness field and to confirm whether a serious adverse event report was submitted.\n\n**No query needed:**\n- **Lab values:** the out-of-range results after dosing were small. The highest was alkaline phosphatase at 183 U/L (1.6 times the upper limit of normal) at Week 8. Bilirubin and GGT were about 1.1\u20131.3 times the upper limit, albumin was slightly low and sodium was occasionally low. None of this looked like it needed an adverse event recorded, so I raised nothing.\n- **Eligibility:** bilirubin at screening was 18.8 \u00b5mol/L, which is within the normal range. The screening sodium was slightly low (133 mmol/L), but sodium isn't among the analytes the lab exclusion criterion names.\n- **Dates:** the last dose (2013-01-12), the date of death and the end of study (both 2013-01-14) are consistent with each other.\n- **Consent date:** it is missing, but the study notes say not to query it.",
+    "termination": "goal_reached"
+  },
+  "steps": 5,
+  "tool_calls": [
+    "patient_summary",
+    "adverse_events",
+    "prior_queries",
+    "disposition",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "protocol_section",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 25306,
+    "output_tokens": 1645,
+    "cached_input_tokens": 10010
+  },
+  "cost_usd": 0.1361,
+  "drafts": [
+    {
+      "key": "drf-6891b80a9b2b4fbe",
+      "run_id": "run_3d89e04b49394df2",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-701-1211",
+      "form": "Adverse Events",
+      "category": "other",
+      "issue": "The fatal AE SUDDEN DEATH (2013-01-14) is recorded as Serious = N, although its outcome is FATAL, Results in Death = Y and Life Threatening = Y, and the Disposition form records DEATH on 2013-01-14.",
+      "query_text": "The adverse event \"SUDDEN DEATH\" (start/end 2013-01-14, severity SEVERE, outcome FATAL) has Results in Death = Y and Life Threatening = Y, but Serious = N. The Disposition form also records DEATH on 2013-01-14. An event with a fatal outcome normally meets the seriousness criteria. Please review the Serious field for this event and correct it if needed, or tell us why it was recorded as non-serious. Please also confirm whether an SAE report has been submitted for this event.",
+      "evidence": [
+        "AE:01-701-1211:9",
+        "DS:01-701-1211:1"
+      ],
+      "created_at": "2026-10-28T10:23:12.236681+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

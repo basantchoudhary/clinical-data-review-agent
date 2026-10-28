@@ -1,0 +1,1706 @@
+[
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x3d06d6c182392a1c",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x5d52cd639744a494",
+  "start_time": "2026-10-28T10:20:35.119947Z",
+  "end_time": "2026-10-28T10:20:35.119956Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_model"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "anthropic.messages.create",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x39eb63c936774bd8",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.CLIENT",
+  "parent_id": "0x4989000148243298",
+  "start_time": "2026-10-28T10:20:35.121360Z",
+  "end_time": "2026-10-28T10:20:36.762383Z",
+  "status": {
+   "status_code": "OK"
+  },
+  "attributes": {
+   "server.address": "api.anthropic.com",
+   "server.port": 443,
+   "http.request.method": "POST",
+   "http.route": "/v1/messages",
+   "gen_ai.provider.name": "anthropic",
+   "gen_ai.operation.name": "chat",
+   "gen_ai.request.model": "claude-opus-5-5",
+   "gen_ai.request.max_tokens": 8000,
+   "gen_ai.request.reasoning.level": "medium",
+   "anthropic.beta": [
+    "server-side-fallback-2026-07-01"
+   ],
+   "url.scheme": "https",
+   "url.path": "/v1/messages",
+   "url.full": "https://api.anthropic.com/v1/messages",
+   "anthropic.request.id": "req_011CgUU3dZ67qYL4Cb4mFv5r",
+   "anthropic.organization.id": "ca2cb3fa-5624-40d7-b2c5-1d31957e8a7c",
+   "anthropic.workspace.id": "wrkspc_01J6Hy7vDNebjobNuA6sEJPU",
+   "gen_ai.response.id": "msg_011CgUU3djzawKjyWEv4RWSh",
+   "gen_ai.response.model": "claude-opus-5-5",
+   "anthropic.message.stop_reason": "tool_use",
+   "gen_ai.usage.input_tokens": 2090,
+   "gen_ai.usage.cache_write.input_tokens": 0,
+   "gen_ai.usage.cache_read.input_tokens": 2002,
+   "anthropic.usage.cache_creation.ephemeral_5m_input_tokens": 0,
+   "anthropic.usage.cache_creation.ephemeral_1h_input_tokens": 0,
+   "anthropic.response.service_tier": "standard",
+   "gen_ai.usage.output_tokens": 28,
+   "gen_ai.usage.reasoning.output_tokens": 0,
+   "http.response.status_code": 200
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "gen_ai.chat",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x4989000148243298",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x5d52cd639744a494",
+  "start_time": "2026-10-28T10:20:35.120056Z",
+  "end_time": "2026-10-28T10:20:36.762949Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.provider.name": "anthropic",
+   "gen_ai.system": "anthropic",
+   "gen_ai.operation.name": "chat",
+   "gen_ai.request.model": "claude-opus-5-5",
+   "gen_ai.response.model": "claude-opus-5-5",
+   "gen_ai.usage.cache_read.input_tokens": 2002,
+   "gen_ai.usage.input_tokens": 88,
+   "gen_ai.usage.output_tokens": 28
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xab883e979f1a296e",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x5d52cd639744a494",
+  "start_time": "2026-10-28T10:20:36.763638Z",
+  "end_time": "2026-10-28T10:20:36.763662Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.tool.local",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xe5824b675ec7424f",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x5d52cd639744a494",
+  "start_time": "2026-10-28T10:20:36.763775Z",
+  "end_time": "2026-10-28T10:20:36.823596Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.tool.name": "patient_summary",
+   "agent.tool.side_effect": "read",
+   "agent.tool.outcome": "ok"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x8b63d4690837efdf",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x5d52cd639744a494",
+  "start_time": "2026-10-28T10:20:36.823736Z",
+  "end_time": "2026-10-28T10:20:36.823748Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "post_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.step",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x5d52cd639744a494",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x09a61c5a3b734b9a",
+  "start_time": "2026-10-28T10:20:35.119827Z",
+  "end_time": "2026-10-28T10:20:36.823794Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.step": 0,
+   "agent.run.id": "run_6ac8be24157a4f38",
+   "agent.context.chars": 1494,
+   "agent.context.exchanges": 1,
+   "agent.context.trimmed": 0
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xa78e9c0b2255acd4",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:36.823917Z",
+  "end_time": "2026-10-28T10:20:36.823925Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_model"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "anthropic.messages.create",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x1ce1b93614576e28",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.CLIENT",
+  "parent_id": "0x3c1f7f1c537d6567",
+  "start_time": "2026-10-28T10:20:36.824362Z",
+  "end_time": "2026-10-28T10:20:40.270796Z",
+  "status": {
+   "status_code": "OK"
+  },
+  "attributes": {
+   "server.address": "api.anthropic.com",
+   "server.port": 443,
+   "http.request.method": "POST",
+   "http.route": "/v1/messages",
+   "gen_ai.provider.name": "anthropic",
+   "gen_ai.operation.name": "chat",
+   "gen_ai.request.model": "claude-opus-5-5",
+   "gen_ai.request.max_tokens": 8000,
+   "gen_ai.request.reasoning.level": "medium",
+   "anthropic.beta": [
+    "server-side-fallback-2026-07-01"
+   ],
+   "url.scheme": "https",
+   "url.path": "/v1/messages",
+   "url.full": "https://api.anthropic.com/v1/messages",
+   "anthropic.request.id": "req_011CgUU3kY27F4UQnBbbp7ov",
+   "anthropic.organization.id": "ca2cb3fa-5624-40d7-b2c5-1d31957e8a7c",
+   "anthropic.workspace.id": "wrkspc_01J6Hy7vDNebjobNuA6sEJPU",
+   "gen_ai.response.id": "msg_011CgUU3kiCDywHNowXa6LHC",
+   "gen_ai.response.model": "claude-opus-5-5",
+   "anthropic.message.stop_reason": "tool_use",
+   "gen_ai.usage.input_tokens": 3662,
+   "gen_ai.usage.cache_write.input_tokens": 0,
+   "gen_ai.usage.cache_read.input_tokens": 2002,
+   "anthropic.usage.cache_creation.ephemeral_5m_input_tokens": 0,
+   "anthropic.usage.cache_creation.ephemeral_1h_input_tokens": 0,
+   "anthropic.response.service_tier": "standard",
+   "gen_ai.usage.output_tokens": 264,
+   "gen_ai.usage.reasoning.output_tokens": 37,
+   "http.response.status_code": 200
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "gen_ai.chat",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x3c1f7f1c537d6567",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:36.823985Z",
+  "end_time": "2026-10-28T10:20:40.271188Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.provider.name": "anthropic",
+   "gen_ai.system": "anthropic",
+   "gen_ai.operation.name": "chat",
+   "gen_ai.request.model": "claude-opus-5-5",
+   "gen_ai.response.model": "claude-opus-5-5",
+   "gen_ai.usage.cache_read.input_tokens": 2002,
+   "gen_ai.usage.input_tokens": 1660,
+   "gen_ai.usage.output_tokens": 264
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x2f8141054ad905d4",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.271690Z",
+  "end_time": "2026-10-28T10:20:40.271711Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x43745e74f42e3d94",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.271821Z",
+  "end_time": "2026-10-28T10:20:40.271833Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x24a98ad8990a7be6",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.271900Z",
+  "end_time": "2026-10-28T10:20:40.271911Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xb5b19f32c2902c3c",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.271974Z",
+  "end_time": "2026-10-28T10:20:40.271985Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x1ee2871418276359",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.272046Z",
+  "end_time": "2026-10-28T10:20:40.272057Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x37ce46a11edc7a3b",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.272116Z",
+  "end_time": "2026-10-28T10:20:40.272127Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.tool.local",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xfc75d9ff4d2dcb08",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0xff35177e7b991008",
+  "start_time": "2026-10-28T10:20:40.272447Z",
+  "end_time": "2026-10-28T10:20:40.278924Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.tool.name": "adverse_events",
+   "agent.tool.side_effect": "read",
+   "agent.tool.outcome": "ok"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.tool.local",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x095255bfe6c9b35c",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0xff35177e7b991008",
+  "start_time": "2026-10-28T10:20:40.279030Z",
+  "end_time": "2026-10-28T10:20:40.283042Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.tool.name": "lab_trend",
+   "agent.tool.side_effect": "read",
+   "agent.tool.outcome": "ok"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.tool.local",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x8fc813dfc1c48a99",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0xff35177e7b991008",
+  "start_time": "2026-10-28T10:20:40.283139Z",
+  "end_time": "2026-10-28T10:20:40.286177Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.tool.name": "lab_trend",
+   "agent.tool.side_effect": "read",
+   "agent.tool.outcome": "ok"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.tool.local",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x21fd55dc23822e79",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0xff35177e7b991008",
+  "start_time": "2026-10-28T10:20:40.286257Z",
+  "end_time": "2026-10-28T10:20:40.292313Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.tool.name": "protocol_section",
+   "agent.tool.side_effect": "read",
+   "agent.tool.outcome": "ok"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.tool.local",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xf9a8bef3ec75936c",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0xff35177e7b991008",
+  "start_time": "2026-10-28T10:20:40.292395Z",
+  "end_time": "2026-10-28T10:20:40.292490Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.tool.name": "prior_queries",
+   "agent.tool.side_effect": "read",
+   "agent.tool.outcome": "ok"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.tool.local",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x33120b8977a1e7e4",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0xff35177e7b991008",
+  "start_time": "2026-10-28T10:20:40.292545Z",
+  "end_time": "2026-10-28T10:20:40.297257Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.tool.name": "medical_history",
+   "agent.tool.side_effect": "read",
+   "agent.tool.outcome": "ok"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.flow.fanout",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xff35177e7b991008",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.272228Z",
+  "end_time": "2026-10-28T10:20:40.312886Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.flow.count": 6,
+   "agent.flow.peak": 1
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x88f6d303afa4594f",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.312965Z",
+  "end_time": "2026-10-28T10:20:40.312974Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "post_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xe1d4add7f9f0ea26",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.313060Z",
+  "end_time": "2026-10-28T10:20:40.313068Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "post_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xe03022ae745d5258",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.313139Z",
+  "end_time": "2026-10-28T10:20:40.313147Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "post_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xb6a7ecdedd68c1da",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.313208Z",
+  "end_time": "2026-10-28T10:20:40.313215Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "post_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x4fc37dfead545e9d",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.313268Z",
+  "end_time": "2026-10-28T10:20:40.313274Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "post_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x663202a7f1ebf153",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x90135c3e0f9099c3",
+  "start_time": "2026-10-28T10:20:40.313330Z",
+  "end_time": "2026-10-28T10:20:40.313336Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "post_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.step",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x90135c3e0f9099c3",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x09a61c5a3b734b9a",
+  "start_time": "2026-10-28T10:20:36.823847Z",
+  "end_time": "2026-10-28T10:20:40.313357Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.step": 1,
+   "agent.run.id": "run_6ac8be24157a4f38",
+   "agent.context.chars": 4236,
+   "agent.context.exchanges": 2,
+   "agent.context.trimmed": 0
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x30a5b392c2fe2007",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x34e0d5b2880e45e2",
+  "start_time": "2026-10-28T10:20:40.313471Z",
+  "end_time": "2026-10-28T10:20:40.313478Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_model"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "anthropic.messages.create",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x710a70ba6772372e",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.CLIENT",
+  "parent_id": "0x58915dcc3e5d8c1b",
+  "start_time": "2026-10-28T10:20:40.313944Z",
+  "end_time": "2026-10-28T10:20:55.959198Z",
+  "status": {
+   "status_code": "OK"
+  },
+  "attributes": {
+   "server.address": "api.anthropic.com",
+   "server.port": 443,
+   "http.request.method": "POST",
+   "http.route": "/v1/messages",
+   "gen_ai.provider.name": "anthropic",
+   "gen_ai.operation.name": "chat",
+   "gen_ai.request.model": "claude-opus-5-5",
+   "gen_ai.request.max_tokens": 8000,
+   "gen_ai.request.reasoning.level": "medium",
+   "anthropic.beta": [
+    "server-side-fallback-2026-07-01"
+   ],
+   "url.scheme": "https",
+   "url.path": "/v1/messages",
+   "url.full": "https://api.anthropic.com/v1/messages",
+   "anthropic.request.id": "req_011CgUU41SUSqZPHw3EDQ3yj",
+   "anthropic.organization.id": "ca2cb3fa-5624-40d7-b2c5-1d31957e8a7c",
+   "anthropic.workspace.id": "wrkspc_01J6Hy7vDNebjobNuA6sEJPU",
+   "gen_ai.response.id": "msg_011CgUU41eNjPXLbk5xtKo8n",
+   "gen_ai.response.model": "claude-opus-5-5",
+   "anthropic.message.stop_reason": "tool_use",
+   "gen_ai.usage.input_tokens": 8059,
+   "gen_ai.usage.cache_write.input_tokens": 0,
+   "gen_ai.usage.cache_read.input_tokens": 2002,
+   "anthropic.usage.cache_creation.ephemeral_5m_input_tokens": 0,
+   "anthropic.usage.cache_creation.ephemeral_1h_input_tokens": 0,
+   "anthropic.response.service_tier": "standard",
+   "gen_ai.usage.output_tokens": 1765,
+   "gen_ai.usage.reasoning.output_tokens": 349,
+   "http.response.status_code": 200
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "gen_ai.chat",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x58915dcc3e5d8c1b",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x34e0d5b2880e45e2",
+  "start_time": "2026-10-28T10:20:40.313532Z",
+  "end_time": "2026-10-28T10:20:55.959973Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.provider.name": "anthropic",
+   "gen_ai.system": "anthropic",
+   "gen_ai.operation.name": "chat",
+   "gen_ai.request.model": "claude-opus-5-5",
+   "gen_ai.response.model": "claude-opus-5-5",
+   "gen_ai.usage.cache_read.input_tokens": 2002,
+   "gen_ai.usage.input_tokens": 6057,
+   "gen_ai.usage.output_tokens": 1765
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xf519631ae6d8473a",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x34e0d5b2880e45e2",
+  "start_time": "2026-10-28T10:20:55.960735Z",
+  "end_time": "2026-10-28T10:20:55.960760Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xa52cde6fa3c6a387",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x34e0d5b2880e45e2",
+  "start_time": "2026-10-28T10:20:55.960849Z",
+  "end_time": "2026-10-28T10:20:55.960862Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xf5fae51915aa783f",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x34e0d5b2880e45e2",
+  "start_time": "2026-10-28T10:20:55.960936Z",
+  "end_time": "2026-10-28T10:20:55.960948Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.tool.local",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xd95df4f2a626ad27",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x34e0d5b2880e45e2",
+  "start_time": "2026-10-28T10:20:55.961058Z",
+  "end_time": "2026-10-28T10:20:55.988240Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.tool.name": "propose_query",
+   "agent.tool.side_effect": "reversible",
+   "agent.tool.outcome": "ok"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.tool.local",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xafc5324d1a8d6e28",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x34e0d5b2880e45e2",
+  "start_time": "2026-10-28T10:20:55.988344Z",
+  "end_time": "2026-10-28T10:20:55.988584Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.tool.name": "propose_query",
+   "agent.tool.side_effect": "reversible",
+   "agent.tool.outcome": "ok"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.tool.local",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xcbca61728d394759",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x34e0d5b2880e45e2",
+  "start_time": "2026-10-28T10:20:55.988638Z",
+  "end_time": "2026-10-28T10:20:55.988824Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.tool.name": "propose_query",
+   "agent.tool.side_effect": "reversible",
+   "agent.tool.outcome": "ok"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x4a35871018313902",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x34e0d5b2880e45e2",
+  "start_time": "2026-10-28T10:20:55.988893Z",
+  "end_time": "2026-10-28T10:20:55.988901Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "post_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x3644031870910922",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x34e0d5b2880e45e2",
+  "start_time": "2026-10-28T10:20:55.988988Z",
+  "end_time": "2026-10-28T10:20:55.988995Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "post_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xdb375f58dfe659e7",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x34e0d5b2880e45e2",
+  "start_time": "2026-10-28T10:20:55.989062Z",
+  "end_time": "2026-10-28T10:20:55.989069Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "post_tool"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.step",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x34e0d5b2880e45e2",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x09a61c5a3b734b9a",
+  "start_time": "2026-10-28T10:20:40.313399Z",
+  "end_time": "2026-10-28T10:20:55.989096Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.step": 2,
+   "agent.run.id": "run_6ac8be24157a4f38",
+   "agent.context.chars": 11496,
+   "agent.context.exchanges": 3,
+   "agent.context.trimmed": 0
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x415ea9234a03ea8d",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x26f7f803c554931c",
+  "start_time": "2026-10-28T10:20:55.989215Z",
+  "end_time": "2026-10-28T10:20:55.989222Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "pre_model"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "anthropic.messages.create",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0xd89fac301c290e51",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.CLIENT",
+  "parent_id": "0x0f6c1eb000d9ad1b",
+  "start_time": "2026-10-28T10:20:55.989736Z",
+  "end_time": "2026-10-28T10:21:03.480046Z",
+  "status": {
+   "status_code": "OK"
+  },
+  "attributes": {
+   "server.address": "api.anthropic.com",
+   "server.port": 443,
+   "http.request.method": "POST",
+   "http.route": "/v1/messages",
+   "gen_ai.provider.name": "anthropic",
+   "gen_ai.operation.name": "chat",
+   "gen_ai.request.model": "claude-opus-5-5",
+   "gen_ai.request.max_tokens": 8000,
+   "gen_ai.request.reasoning.level": "medium",
+   "anthropic.beta": [
+    "server-side-fallback-2026-07-01"
+   ],
+   "url.scheme": "https",
+   "url.path": "/v1/messages",
+   "url.full": "https://api.anthropic.com/v1/messages",
+   "anthropic.request.id": "req_011CgUU5AVTqZSorPXhK4vZW",
+   "anthropic.organization.id": "ca2cb3fa-5624-40d7-b2c5-1d31957e8a7c",
+   "anthropic.workspace.id": "wrkspc_01J6Hy7vDNebjobNuA6sEJPU",
+   "gen_ai.response.id": "msg_011CgUU5Aj6uGHNGQmzWf77H",
+   "gen_ai.response.model": "claude-opus-5-5",
+   "anthropic.message.stop_reason": "end_turn",
+   "gen_ai.usage.input_tokens": 10178,
+   "gen_ai.usage.cache_write.input_tokens": 0,
+   "gen_ai.usage.cache_read.input_tokens": 2002,
+   "anthropic.usage.cache_creation.ephemeral_5m_input_tokens": 0,
+   "anthropic.usage.cache_creation.ephemeral_1h_input_tokens": 0,
+   "anthropic.response.service_tier": "standard",
+   "gen_ai.usage.output_tokens": 696,
+   "gen_ai.usage.reasoning.output_tokens": 0,
+   "http.response.status_code": 200
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "gen_ai.chat",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x0f6c1eb000d9ad1b",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x26f7f803c554931c",
+  "start_time": "2026-10-28T10:20:55.989280Z",
+  "end_time": "2026-10-28T10:21:03.480682Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "gen_ai.provider.name": "anthropic",
+   "gen_ai.system": "anthropic",
+   "gen_ai.operation.name": "chat",
+   "gen_ai.request.model": "claude-opus-5-5",
+   "gen_ai.response.model": "claude-opus-5-5",
+   "gen_ai.usage.cache_read.input_tokens": 2002,
+   "gen_ai.usage.input_tokens": 8176,
+   "gen_ai.usage.output_tokens": 696
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.policy",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x1ce8dfe1f2609104",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x26f7f803c554931c",
+  "start_time": "2026-10-28T10:21:03.481234Z",
+  "end_time": "2026-10-28T10:21:03.481258Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.policy.position": "post_model"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.step",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x26f7f803c554931c",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": "0x09a61c5a3b734b9a",
+  "start_time": "2026-10-28T10:20:55.989144Z",
+  "end_time": "2026-10-28T10:21:03.481365Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.step": 3,
+   "agent.run.id": "run_6ac8be24157a4f38",
+   "agent.context.chars": 12123,
+   "agent.context.exchanges": 4,
+   "agent.context.trimmed": 0
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ },
+ {
+  "name": "agent.run",
+  "context": {
+   "trace_id": "0x1d0d5f4116a7867e32cfa263211352dd",
+   "span_id": "0x09a61c5a3b734b9a",
+   "trace_state": "[]"
+  },
+  "kind": "SpanKind.INTERNAL",
+  "parent_id": null,
+  "start_time": "2026-10-28T10:20:35.119591Z",
+  "end_time": "2026-10-28T10:21:03.481435Z",
+  "status": {
+   "status_code": "UNSET"
+  },
+  "attributes": {
+   "agent.run.id": "run_6ac8be24157a4f38",
+   "agent.tenant": "clinical-review-worker",
+   "agent.cost.call_usd": 0.0470244,
+   "agent.cost.usd": 0.1205856,
+   "agent.termination.reason": "goal_reached"
+  },
+  "events": [],
+  "links": [],
+  "resource": {
+   "attributes": {
+    "telemetry.sdk.language": "python",
+    "telemetry.sdk.name": "opentelemetry",
+    "telemetry.sdk.version": "1.45.1",
+    "service.instance.id": "41f1a06b-7d56-44ff-8df0-7bc82ee70adc",
+    "service.name": "clinical-review",
+    "service.version": "review-v1"
+   },
+   "schema_url": ""
+  }
+ }
+]

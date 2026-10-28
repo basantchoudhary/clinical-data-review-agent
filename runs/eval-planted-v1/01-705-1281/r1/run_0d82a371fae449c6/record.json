@@ -1,0 +1,80 @@
+{
+  "run_id": "run_0d82a371fae449c6",
+  "patient": "01-705-1281",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:22:59.585352+00:00",
+  "seconds": 28.0,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I reviewed patient 01-705-1281 and saved two draft queries for a data manager to review. Nothing has been sent.\n\n**What I checked:** the patient summary and visit dates, the adverse events, disposition, concomitant medications, medical history, the out-of-range labs (RBC, MCV, vitamin B12) plus haemoglobin, the protocol's lab exclusion criteria, and existing queries (there were none). The automated edit checks flagged nothing.\n\n**No query needed:**\n- **Red blood cells:** a few readings were slightly below normal (lowest 3.7 TI/L against a lower limit of 3.9). Haemoglobin stayed within normal range throughout.\n- **MCV:** one reading was slightly high (101 fL at Week 8).\n- **Vitamin B12:** high at screening (1109.7 pmol/L, upper limit 664). That doesn't make her ineligible: the protocol only excludes B12 *below* the reference range (exclusion criterion 28).\n- **Ongoing adverse events:** the three skin events (itching \u00d72, excoriation) have no end date and are marked not resolved. That fits, since there was an adverse-event follow-up visit on 2014-04-20.\n- **Consent date:** missing, but the study notes say not to query it.\n\n**Drafts saved (both on the Adverse Events form):**\n1. **drf-fe8e29b8a9da1b2e (disposition):** the patient left the study for \"ADVERSE EVENT\" on 2014-03-17 (last dose 2014-02-27), but none of the three adverse events records what was done with the study drug. The query asks which event led to stopping, whether any event is missing, or whether the disposition reason is wrong.\n2. **drf-6abcffb695254838 (other):** there are two itching records with the same start date (2014-01-30), both still open, one graded mild and one moderate. The query asks whether this is a duplicate, two separate events, or a change in severity that needs end and start dates.",
+    "termination": "goal_reached"
+  },
+  "steps": 6,
+  "tool_calls": [
+    "patient_summary",
+    "adverse_events",
+    "disposition",
+    "prior_queries",
+    "medications",
+    "medical_history",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "protocol_section",
+    "propose_query",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 38908,
+    "output_tokens": 2367,
+    "cached_input_tokens": 12012
+  },
+  "cost_usd": 0.2054,
+  "drafts": [
+    {
+      "key": "drf-fe8e29b8a9da1b2e",
+      "run_id": "run_0d82a371fae449c6",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-705-1281",
+      "form": "Adverse Events",
+      "category": "disposition",
+      "issue": "Disposition shows discontinuation due to ADVERSE EVENT on 2014-03-17 (last dose 2014-02-27), but none of the three AEs records an action taken with study drug, so it is unclear which AE led to discontinuation.",
+      "query_text": "The Disposition form gives the reason for discontinuation as \"ADVERSE EVENT\" at the Week 16 visit (2014-03-17), and the last dose of study drug is recorded as 2014-02-27. The three adverse events recorded (EXCORIATION, moderate; PRURITUS, mild; PRURITUS, moderate; all starting 2014-01-30 and not recovered) have the \"Action taken with study drug\" field left blank. Please confirm which adverse event(s) led to discontinuation and complete the action taken field for each AE. If another AE led to discontinuation and has not been recorded, please add it. If the disposition reason is not correct, please update the Disposition form.",
+      "evidence": [
+        "DS:01-705-1281:1",
+        "AE:01-705-1281:1",
+        "AE:01-705-1281:2",
+        "AE:01-705-1281:3"
+      ],
+      "created_at": "2026-10-28T10:23:20.885434+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-6abcffb695254838",
+      "run_id": "run_0d82a371fae449c6",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-705-1281",
+      "form": "Adverse Events",
+      "category": "other",
+      "issue": "Two PRURITUS records share the same start date (2014-01-30) with no end dates but different severities (mild vs moderate), which may be a duplicate or an undocumented change in severity.",
+      "query_text": "There are two Adverse Event records for PRURITUS, both starting 2014-01-30 with no end date and outcome \"not recovered/not resolved\". One is graded MILD and the other MODERATE, and both are recorded as possibly related. Please clarify whether these are two separate events (e.g. different locations), a single event entered twice, or one event whose severity changed. If the severity changed, please give the date the first episode ended and the date the second began, in line with the study's AE recording conventions. If it is a duplicate, please correct the record.",
+      "evidence": [
+        "AE:01-705-1281:1",
+        "AE:01-705-1281:3"
+      ],
+      "created_at": "2026-10-28T10:23:20.885997+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

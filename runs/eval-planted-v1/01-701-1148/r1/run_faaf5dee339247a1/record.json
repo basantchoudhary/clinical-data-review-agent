@@ -1,0 +1,75 @@
+{
+  "run_id": "run_faaf5dee339247a1",
+  "patient": "01-701-1148",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:19:57.883247+00:00",
+  "seconds": 26.3,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I found two data problems in patient 01-701-1148's adverse event records and saved a draft query for each. Nothing has been sent; a data manager needs to review both drafts.\n\n**What I checked:** the patient summary and edit-check hits, all adverse events, concomitant medications, medical history, the eosinophil results (the only abnormal lab), disposition and prior queries (there were none). The missing informed consent date is excluded by the study notes, so I didn't query it.\n\n**Drafts saved:**\n1. **drf-d528ab5173d2b7c2 (Adverse Events, date inconsistency):** Actinic keratosis ends on 2014-02-03, before it starts on 2014-02-12. It also has an end date even though its outcome is \"not recovered/not resolved\". This confirms the edit-check hit; the query asks the site to correct the dates and outcome.\n2. **drf-5a0765a7a2454bb9 (Adverse Events, other):** There are two lower respiratory tract infection records with the same dates (2013-10-12 to 2013-11-10) but different outcomes. The query asks whether this is a duplicate or two separate episodes. One record also says \"not recovered\" despite having an end date.\n\n**Looked at, no query needed:**\n- **Eosinophils:** one high result at Week 24 (0.76 GI/L, 1.33 \u00d7 the upper limit of normal), back to normal at Week 26. It's mild and passing, and I found no adverse event it should match.\n- **Disposition:** \"protocol completed\" on 2014-02-20 matches the last dose and study end.\n- **Medications against events:** the medications fit the adverse events in timing (Fluoroplex with the actinic keratosis; naproxen and hydrocodone/APAP with the flank pain and urethral stone). The dyspepsia and depressed mood events started before the first dose, but both conditions are in the medical history.\n- **Gaps that may be worth a later query:** no medication has an indication recorded, and several aren't coded. Hydrocortisone, started 2013-11-18 and ongoing, can't be linked to any event without an indication.",
+    "termination": "goal_reached"
+  },
+  "steps": 5,
+  "tool_calls": [
+    "patient_summary",
+    "adverse_events",
+    "prior_queries",
+    "medications",
+    "medical_history",
+    "lab_trend",
+    "rule_hits",
+    "propose_query",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 43146,
+    "output_tokens": 2257,
+    "cached_input_tokens": 10010
+  },
+  "cost_usd": 0.2197,
+  "drafts": [
+    {
+      "key": "drf-d528ab5173d2b7c2",
+      "run_id": "run_faaf5dee339247a1",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-701-1148",
+      "form": "Adverse Events",
+      "category": "date_inconsistency",
+      "issue": "AE ACTINIC KERATOSIS has an end date (2014-02-03) before its start date (2014-02-12), and also has an end date even though the outcome is NOT RECOVERED/NOT RESOLVED.",
+      "query_text": "For the adverse event \"ACTINIC KERATOSIS\", the start date is 2014-02-12 and the end date is 2014-02-03, so the event ends before it starts. The outcome is also recorded as NOT RECOVERED/NOT RESOLVED, which does not fit with an end date being entered. Fluoroplex was started on 2014-02-12 (concomitant medications). Please check the start date, end date and outcome against source and correct them as needed. If the event was still ongoing at study end (2014-02-20), please confirm whether the end date should be left blank.",
+      "evidence": [
+        "AE:01-701-1148:10",
+        "CM:01-701-1148:36",
+        "DS:01-701-1148:1"
+      ],
+      "created_at": "2026-10-28T10:20:16.141481+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-5a0765a7a2454bb9",
+      "run_id": "run_faaf5dee339247a1",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-701-1148",
+      "form": "Adverse Events",
+      "category": "other",
+      "issue": "Two LOWER RESPIRATORY TRACT INFECTION records have the same dates (2013-10-12 to 2013-11-10) but different outcomes. One says NOT RECOVERED/NOT RESOLVED despite having an end date.",
+      "query_text": "There are two adverse event records for \"LOWER RESPIRATORY TRACT INFECTION\". Both have start date 2013-10-12, end date 2013-11-10, moderate severity and relationship NONE. One record has outcome NOT RECOVERED/NOT RESOLVED and the other has RECOVERED/RESOLVED. Please confirm whether these are two separate episodes or one event entered twice. If it is a duplicate, please remove one record. If they are separate, please check the dates and the outcome for each. An outcome of NOT RECOVERED/NOT RESOLVED with an end date of 2013-11-10 is inconsistent and needs to be checked either way.",
+      "evidence": [
+        "AE:01-701-1148:3",
+        "AE:01-701-1148:4"
+      ],
+      "created_at": "2026-10-28T10:20:16.142107+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

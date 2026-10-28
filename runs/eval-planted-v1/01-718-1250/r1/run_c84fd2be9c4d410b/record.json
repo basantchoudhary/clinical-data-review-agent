@@ -1,0 +1,108 @@
+{
+  "run_id": "run_c84fd2be9c4d410b",
+  "patient": "01-718-1250",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:21:36.653609+00:00",
+  "seconds": 33.1,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I reviewed patient 01-718-1250 and saved three draft queries for a data manager to review. Nothing has been sent to the site.\n\n**What I checked:** the patient summary and visits, all 11 adverse event records, CK and ALT results over time, disposition, medications, medical history and the protocol's lab exclusion criteria. There were no automatic edit-check hits and no earlier queries. I didn't raise the missing consent date, because the study notes say consent dates aren't recorded in this study.\n\n**Drafts saved:**\n1. **Disposition: reason for stopping.** The patient stopped because of an adverse event on 2014-02-08, but none of the adverse event records has \"Action Taken\" filled in. The query asks the site which event led to stopping (application site itching, ongoing 2013-12-29 to 2014-02-19, is the likely one) and to fill in \"Action Taken\".\n2. **Adverse Events: repeated records.** Balance disorder, bruising and application site itching are each entered three times with the same start and end dates but different severity. Two of each three have an end date even though the outcome says \"not recovered\". The query asks for the real date range for each severity level and a matching outcome, or removal of duplicates.\n3. **Laboratory: screening date.** The first screening blood samples are dated 2013-08-15, six days before the screening visit on 2013-08-21. The query asks the site to correct or confirm the date.\n\n**Considered but not raised:**\n- **CK (a muscle enzyme):** slightly high at screening (218 U/L, 1.29 times the upper limit). The protocol's lab exclusion criterion doesn't name CK, and later values were mostly normal, so I didn't raise eligibility.\n- **Medication records:** the medications are uncoded and entered several times over. I left this alone because it looks like how the medication data are structured, not a site error.",
+    "termination": "goal_reached"
+  },
+  "steps": 6,
+  "tool_calls": [
+    "patient_summary",
+    "adverse_events",
+    "lab_trend",
+    "disposition",
+    "prior_queries",
+    "rule_hits",
+    "protocol_section",
+    "medications",
+    "medical_history",
+    "lab_trend",
+    "propose_query",
+    "propose_query",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 52368,
+    "output_tokens": 3045,
+    "cached_input_tokens": 12012
+  },
+  "cost_usd": 0.2728,
+  "drafts": [
+    {
+      "key": "drf-cc80daaab237b10a",
+      "run_id": "run_c84fd2be9c4d410b",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-718-1250",
+      "form": "Disposition",
+      "category": "disposition",
+      "issue": "The Disposition form gives ADVERSE EVENT as the reason for discontinuation on 2014-02-08, but none of the AE records has an action taken recorded, so it is unclear which AE led to discontinuation.",
+      "query_text": "The Disposition form records discontinuation due to ADVERSE EVENT on 2014-02-08 (Week 20). Last dose is recorded as 2014-01-31. None of the 11 adverse event records has 'Action Taken' completed. The only AE ongoing near the last dose is Application Site Pruritus, which started 2013-12-29 and ended 2014-02-19. Please confirm which adverse event(s) led to discontinuation and update 'Action Taken' on the relevant AE record(s), e.g. study drug withdrawn. If the reason for discontinuation is not an adverse event, please correct the Disposition form.",
+      "evidence": [
+        "DS:01-718-1250:1",
+        "AE:01-718-1250:9",
+        "AE:01-718-1250:10",
+        "AE:01-718-1250:11",
+        "AE:01-718-1250:1",
+        "AE:01-718-1250:2",
+        "AE:01-718-1250:3",
+        "AE:01-718-1250:8"
+      ],
+      "created_at": "2026-10-28T10:22:02.705652+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-ef8136ea80c7c9b3",
+      "run_id": "run_c84fd2be9c4d410b",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-718-1250",
+      "form": "Adverse Events",
+      "category": "date_inconsistency",
+      "issue": "Balance Disorder, Contusion and Application Site Pruritus are each recorded three times with identical start and end dates but different severity, and two records of each have an end date but outcome NOT RECOVERED/NOT RESOLVED.",
+      "query_text": "Three adverse events are each recorded three times with the same start and end dates. Balance Disorder (2013-10-09 to 2013-11-15) is recorded as MODERATE/Not Recovered, MILD/Not Recovered and MILD/Recovered. Contusion (2013-10-15 to 2013-11-02) is recorded as MODERATE/Not Recovered, MILD/Not Recovered and MILD/Recovered. Application Site Pruritus (2013-12-29 to 2014-02-19) is recorded as MODERATE/Not Recovered, MILD/Not Recovered and MILD/Recovered. Records with outcome NOT RECOVERED/NOT RESOLVED would not normally have an end date. If these records show changes in severity over time, please enter the actual start and end date of each severity period and the matching outcome. If they are duplicates, please correct them.",
+      "evidence": [
+        "AE:01-718-1250:1",
+        "AE:01-718-1250:4",
+        "AE:01-718-1250:6",
+        "AE:01-718-1250:3",
+        "AE:01-718-1250:5",
+        "AE:01-718-1250:7",
+        "AE:01-718-1250:9",
+        "AE:01-718-1250:10",
+        "AE:01-718-1250:11"
+      ],
+      "created_at": "2026-10-28T10:22:02.706228+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-1b6e13a066ab0cc4",
+      "run_id": "run_c84fd2be9c4d410b",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-718-1250",
+      "form": "Laboratory",
+      "category": "date_inconsistency",
+      "issue": "The Screening 1 laboratory samples are dated 2013-08-15, six days before the Screening 1 visit date of 2013-08-21.",
+      "query_text": "The Screening 1 laboratory results (for example CK 218 U/L and ALT 15 U/L) have a collection date of 2013-08-15 09:15. The Screening 1 visit is recorded on 2013-08-21. Please check and correct the lab collection date or the visit date. If the samples really were collected before the visit, please confirm this.",
+      "evidence": [
+        "LB:01-718-1250:10",
+        "LB:01-718-1250:3",
+        "SV:01-718-1250:1"
+      ],
+      "created_at": "2026-10-28T10:22:02.706562+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "run_id": "run_89d259873dea438d",
+  "patient": "01-716-1044",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:19:59.958089+00:00",
+  "seconds": 35.2,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I reviewed patient 01-716-1044 and saved three draft queries for a data manager to review. Nothing has been sent to the site. The automated edit checks found nothing for this patient, and there were no earlier queries.\n\n**What I checked:** the patient overview, adverse events, medications, medical history, how the patient left the study, bilirubin, alkaline phosphatase and haemoglobin results over time, blood pressure readings, and the protocol's lab entry criteria.\n\n**Draft queries saved:**\n1. **Adverse Events:** diarrhoea is entered twice with the same dates (2013-05-21 to 2013-05-26). One record says \"not recovered\" even though it has an end date; the other says \"recovered\". I asked whether it's a duplicate and how the outcomes should be corrected.\n2. **Medical History:** amlodipine 5 mg was started on 2013-05-27 for hypertension, and systolic blood pressure was already 160\u2013176 mmHg lying down from screening onwards. Hypertension isn't recorded in either the medical history or the adverse events. I asked the site which form it belongs on.\n3. **Concomitant Medications:** there are nine identical Imodium 2 mg entries starting 2013-05-21, all with no reason for use and no end date, although the diarrhoea ended on 2013-05-26. I asked whether they are duplicates and for the missing reason and end dates.\n\n**Not raised:**\n- **Confusion:** reported from 2013-10-15, and the patient has Alzheimer's disease. Nothing in the record contradicts the entry.\n- **Bilirubin:** a few mild rises during the study, up to 1.47 times the upper limit. The screening value was normal (0.65 times the upper limit), so the lab entry criterion was met.\n- **Low haemoglobin:** steady at about 6.9\u20137.6 mmol/L from screening onwards, with no clear worsening.\n- **Disposition:** recorded as completed on 2013-11-03, which is consistent.\n- **Consent date:** missing, but the study notes say not to query it.\n\n**Possibly worth a query:** the screening labs are dated 2013-04-13, a week before the Screening 1 visit on 2013-04-20. I didn't raise it, but you may want to ask the site to confirm the sample date.",
+    "termination": "goal_reached"
+  },
+  "steps": 5,
+  "tool_calls": [
+    "patient_summary",
+    "adverse_events",
+    "lab_trend",
+    "lab_trend",
+    "prior_queries",
+    "medical_history",
+    "medications",
+    "lab_trend",
+    "vital_signs",
+    "vital_signs",
+    "protocol_section",
+    "disposition",
+    "propose_query",
+    "propose_query",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 42787,
+    "output_tokens": 3417,
+    "cached_input_tokens": 10010
+  },
+  "cost_usd": 0.2415,
+  "drafts": [
+    {
+      "key": "drf-ec05db4ee1976a00",
+      "run_id": "run_89d259873dea438d",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-716-1044",
+      "form": "Adverse Events",
+      "category": "other",
+      "issue": "Two DIARRHOEA AE records have identical start/end dates (2013-05-21 to 2013-05-26), severity and relationship, but conflicting outcomes (one NOT RECOVERED/NOT RESOLVED despite an end date, one RECOVERED/RESOLVED).",
+      "query_text": "Two Adverse Event records for DIARRHOEA are entered with the same start date (2013-05-21), end date (2013-05-26), severity (Mild) and relationship (Possible). AE record 1 shows outcome \"NOT RECOVERED/NOT RESOLVED\" even though it has an end date of 2013-05-26. AE record 2 shows outcome \"RECOVERED/RESOLVED\". Could you please confirm whether these are two separate episodes or one duplicated entry? If it is a duplicate, please remove the extra record. If they are separate, please check the dates and the outcome on record 1 so that they agree.",
+      "evidence": [
+        "AE:01-716-1044:1",
+        "AE:01-716-1044:2"
+      ],
+      "created_at": "2026-10-28T10:20:25.734696+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-279d929dbde81857",
+      "run_id": "run_89d259873dea438d",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-716-1044",
+      "form": "Medical History",
+      "category": "missing_event",
+      "issue": "Amlodipine 5 mg started 2013-05-27 for HYPERTENSION, and supine SBP was 160-176 mmHg from screening, but hypertension is not on Medical History or Adverse Events.",
+      "query_text": "Concomitant medication AMLODIPINE 5 mg was started on 2013-05-27 with the indication \"HYPERTENSION\". Supine systolic blood pressure was already 176 mmHg at Screening 1 (2013-04-20), 166 mmHg at Screening 2 (2013-04-25) and 160 mmHg at Baseline (2013-04-27). However, hypertension is not recorded on the Medical History form or on the Adverse Events form. Please confirm whether hypertension was present before the study, in which case please add it to Medical History. If it started or worsened during the study, should it be reported as an adverse event? Please update the relevant form or explain.",
+      "evidence": [
+        "CM:01-716-1044:10",
+        "VS:01-716-1044:86",
+        "VS:01-716-1044:89",
+        "VS:01-716-1044:92",
+        "MH:01-716-1044:1",
+        "MH:01-716-1044:2",
+        "MH:01-716-1044:3",
+        "MH:01-716-1044:4",
+        "MH:01-716-1044:5"
+      ],
+      "created_at": "2026-10-28T10:20:25.735473+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-3d37e4bf3e4701be",
+      "run_id": "run_89d259873dea438d",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-716-1044",
+      "form": "Concomitant Medications",
+      "category": "other",
+      "issue": "Nine identical IMODIUM 2 mg entries start 2013-05-21 with no indication and no end date, although the related diarrhoea AE ended 2013-05-26.",
+      "query_text": "Nine Concomitant Medication records for IMODIUM (loperamide) 2 mg are entered with the same start date (2013-05-21). None has an indication or an end date. The DIARRHOEA adverse events that started on 2013-05-21 are recorded as ending on 2013-05-26. Please confirm whether these nine records are separate administrations or duplicate entries. Please also add the indication, and either an end date or confirm that the medication was ongoing.",
+      "evidence": [
+        "CM:01-716-1044:1",
+        "CM:01-716-1044:2",
+        "CM:01-716-1044:3",
+        "CM:01-716-1044:4",
+        "CM:01-716-1044:5",
+        "CM:01-716-1044:6",
+        "CM:01-716-1044:7",
+        "CM:01-716-1044:8",
+        "CM:01-716-1044:9",
+        "AE:01-716-1044:1",
+        "AE:01-716-1044:2"
+      ],
+      "created_at": "2026-10-28T10:20:25.735809+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

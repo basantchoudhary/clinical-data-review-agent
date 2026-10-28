@@ -1,0 +1,88 @@
+{
+  "run_id": "run_11ba8ed11adc4340",
+  "patient": "01-713-1073",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:22:44.364073+00:00",
+  "seconds": 31.6,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I reviewed patient 01-713-1073 and saved 2 draft queries for a data manager to approve. Nothing has been sent.\n\n**What I checked:** the patient overview, adverse events, the lab results flagged as abnormal (WBC, RBC, MCV and BUN), concomitant medications, medical history, a vital signs summary, disposition, the protocol's lab entry criteria, and existing queries (there were none). The automated edit checks found nothing for this patient.\n\n**Drafts saved:**\n1. **Adverse Events, possible missing event (drf-283f177498c23892):** WBC was below the normal range at 8 of 10 timepoints, starting at screening (3.22 GI/L). The lowest on-treatment values were 2.54 GI/L at Week 4 and 2.87 GI/L at Week 20. No adverse event or medical history entry mentions low WBC. The query asks the investigator whether the values are clinically significant, and whether the low WBC belongs in Adverse Events or Medical History.\n2. **Laboratory, date mismatch (drf-531eca4db97b57a3):** The screening lab samples are dated 2014-03-10, five days before the recorded Screening 1 visit on 2014-03-15. The query asks the site which date is correct.\n\n**Checked and not queried:**\n- Mildly low RBC, slightly high MCV (around 101 fL) and one high BUN at Week 4 (1.04 \u00d7 upper limit) are all borderline.\n- Topical hydrocortisone started on 2014-07-21, a week after the itching at the patch site began. The timing fits treatment for that event.\n- Lorazepam was started on the last study day, recorded as given for the main study condition. I didn't query this. A data manager may want to ask whether it treated a new symptom that should be an adverse event.\n- The disposition says the patient completed the study, which matches the last dose and study end dates.\n- Informed consent date is missing. The study notes say not to query this.\n- The protocol excludes patients whose screening labs exceed a \"Lilly Reference Range III\", but those ranges aren't in the protocol text available to me. I couldn't check eligibility against them, and nothing is drafted on it.",
+    "termination": "goal_reached"
+  },
+  "steps": 5,
+  "tool_calls": [
+    "patient_summary",
+    "lab_trend",
+    "lab_trend",
+    "adverse_events",
+    "medications",
+    "medical_history",
+    "prior_queries",
+    "protocol_section",
+    "lab_trend",
+    "lab_trend",
+    "vital_signs",
+    "disposition",
+    "propose_query",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 48814,
+    "output_tokens": 3075,
+    "cached_input_tokens": 10010
+  },
+  "cost_usd": 0.2588,
+  "drafts": [
+    {
+      "key": "drf-283f177498c23892",
+      "run_id": "run_11ba8ed11adc4340",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-713-1073",
+      "form": "Adverse Events",
+      "category": "missing_event",
+      "issue": "WBC was below the reference range at 8 of 10 timepoints, including on-treatment lows of 2.54 GI/L (Week 4) and 2.87 GI/L (Week 20), but no adverse event or medical history entry covers low WBC.",
+      "query_text": "The central lab reports leukocytes (WBC) below the reference range (3.8\u201310.7 GI/L) at Screening 1 (3.22 GI/L, 2014-03-10) and at most on-treatment visits. The lowest values were 2.54 GI/L at Week 4 (2014-04-26) and 2.87 GI/L at Week 20 (2014-08-17). The only adverse event recorded is application site pruritus, and medical history does not include low WBC. Please review these results and confirm whether the investigator considers any of the on-treatment values clinically significant. If so, please record an adverse event. If the low WBC was a pre-existing condition, please consider whether it should be added to Medical History. If no change is needed, please confirm.",
+      "evidence": [
+        "LB:01-713-1073:37",
+        "LB:01-713-1073:104",
+        "LB:01-713-1073:261",
+        "LB:01-713-1073:326",
+        "AE:01-713-1073:1",
+        "MH:01-713-1073:1",
+        "MH:01-713-1073:2",
+        "MH:01-713-1073:3"
+      ],
+      "created_at": "2026-10-28T10:23:08.144089+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-531eca4db97b57a3",
+      "run_id": "run_11ba8ed11adc4340",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-713-1073",
+      "form": "Laboratory",
+      "category": "date_inconsistency",
+      "issue": "The Screening 1 lab samples are dated 2014-03-10, five days before the Screening 1 visit date of 2014-03-15.",
+      "query_text": "The laboratory results assigned to the Screening 1 visit (for example WBC, RBC, BUN and MCV) have a collection date/time of 2014-03-10 11:45. The Screening 1 visit is recorded as 2014-03-15. Please confirm the correct collection date for the screening labs, or the correct Screening 1 visit date, and update whichever record is wrong.",
+      "evidence": [
+        "SV:01-713-1073:1",
+        "LB:01-713-1073:37",
+        "LB:01-713-1073:31",
+        "LB:01-713-1073:7",
+        "LB:01-713-1073:24"
+      ],
+      "created_at": "2026-10-28T10:23:08.145062+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

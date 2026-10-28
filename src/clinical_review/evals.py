@@ -25,7 +25,9 @@ from evalharness.core import EvalRequest, EvalResult, Passage, Response, Scale
 
 from clinical_review.drafts import CATEGORIES
 
-ARM_WORDS = ("placebo", "xanomeline", "high dose", "low dose", "treatment arm", "randomised to", "randomized to")
+ARM_WORDS = ("placebo", "xanomeline", "high dose", "low dose")
+"""Names that reveal an arm. Saying the review is blind ("no judgement about the
+treatment arm") reveals nothing and is not a failure."""
 PII = {
     "email": re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),
     # A phone needs a phone's shape: a leading +, brackets, or space-separated

@@ -1,0 +1,63 @@
+{
+  "run_id": "run_7c243a37800f4e70",
+  "patient": "01-715-1319",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:22:10.872723+00:00",
+  "seconds": 23.7,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I reviewed patient 01-715-1319 and saved one draft query for a data manager to approve. The automated edit checks found nothing, and no earlier queries exist for this patient.\n\n**What I checked:**\n- **Adverse event vs pulse:** The only adverse event is moderate sinus bradycardia (slow heart rate) on 2013-03-18. The pulse taken lying down at the Week 4 visit that day was 48 beats/min, so the two records agree.\n- **Medical history:** Sinus bradycardia is already listed as a pre-existing condition. All screening and baseline pulses were 67\u201377 beats/min lying down, so there is no sign of an entry problem. The protocol's screening-ECG exclusion (EXCL16) doesn't list its conditions, and there's no ECG data to check against it, so I raised nothing on eligibility.\n- **Labs:** The only abnormal result is cholesterol at Week 4: 3.67 mmol/L, flagged low against a lower limit of 3.85. That's not clinically notable, so no query.\n- **Medications:** None recorded.\n- **Withdrawal record:** The patient withdrew at Week 4 (2013-03-18), and the reason given was that the study was too much trouble for the caregiver. The final lab visit was the same day, and the dates match the visit records.\n- **Consent date:** It's missing, but I didn't raise it because the study notes say consent dates are not recorded in this study's data.\n\n**Draft saved:**\n1. **Exposure form, date inconsistency (drf-fae185fbc3ffcbb9):** The last dose of study drug is recorded as 2013-03-05, 13 days before the withdrawal on 2013-03-18. No adverse event, action taken or withdrawal record explains the earlier stop. The query asks the site to confirm or correct the last dose date and, if it's right, to explain why dosing stopped early. The last dose date comes from the patient summary, which has no record reference, so the query cites the visit, withdrawal and adverse event records instead.",
+    "termination": "goal_reached"
+  },
+  "steps": 6,
+  "tool_calls": [
+    "patient_summary",
+    "adverse_events",
+    "vital_signs",
+    "prior_queries",
+    "medications",
+    "disposition",
+    "medical_history",
+    "lab_trend",
+    "vital_signs",
+    "protocol_section",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 20516,
+    "output_tokens": 2121,
+    "cached_input_tokens": 12012
+  },
+  "cost_usd": 0.1269,
+  "drafts": [
+    {
+      "key": "drf-fae185fbc3ffcbb9",
+      "run_id": "run_7c243a37800f4e70",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-715-1319",
+      "form": "Exposure",
+      "category": "date_inconsistency",
+      "issue": "Last dose date 2013-03-05 is 13 days before the subject-withdrawal/final visit on 2013-03-18, and no adverse event, action taken or disposition record explains the earlier stop of study drug.",
+      "query_text": "The record shows a last dose of study drug on 2013-03-05, two days after the Week 2 visit (2013-03-03). The subject's withdrawal (\"TOO MUCH TROUBLE FOR CAREGIVER\") and final lab visit are both recorded at Week 4 on 2013-03-18. The only adverse event (sinus bradycardia, 2013-03-18) has no action taken recorded. Please confirm the last dose date of 2013-03-05 is correct. If it is, please say why study drug stopped about 13 days before the withdrawal date, and whether the disposition date or reason should be updated. If it is not, please correct the exposure end date.",
+      "evidence": [
+        "SV:01-715-1319:4",
+        "SV:01-715-1319:5",
+        "DS:01-715-1319:1",
+        "DS:01-715-1319:2",
+        "AE:01-715-1319:1"
+      ],
+      "created_at": "2026-10-28T10:22:27.464591+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

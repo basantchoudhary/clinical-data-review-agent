@@ -1,0 +1,58 @@
+{
+  "run_id": "run_e32442a42b2a4d20",
+  "patient": "01-716-1157",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:19:37.653708+00:00",
+  "seconds": 22.3,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I found one issue in patient 01-716-1157's record and saved one draft query. The edit checks flagged nothing and there were no earlier queries.\n\n**What I checked:** the patient summary, adverse events, medical history, medications, disposition, the haemoglobin results over time, and the protocol's lab entry criteria.\n\n- **Haemoglobin:** it was low at every visit from screening onward (7.0\u20137.7 mmol/L against a lower limit of 7.76) and stayed level throughout. The protocol's entry criteria don't set a haemoglobin limit. The patient has a history of gastrectomy and was taking iron throughout. I raised no query, but a reviewer may want to confirm the investigator sees this as pre-existing.\n- **Erythema and pruritus:** both started on 2013-10-25 and are recorded as ongoing, which is consistent with the patient completing the study.\n- **Disposition:** \"Completed\" on 2014-04-05 matches the last dose (2014-04-04) and the Week 26 visit.\n- **Medications:** each one appears many times with the same details. This looks like how the data is stored (a copy at each visit) rather than a site error, so I didn't query it. I couldn't see the full list because the tool cut it off partway through.\n- **Consent date:** not recorded, but the study notes say not to query this.\n\n**Draft saved:**\n- **drf-6852c2bd7ad189c0** (Adverse Events form): two \"Upper respiratory tract infection\" entries have the same dates (2013-10-17 to 2013-11-04), severity and relationship, but different outcomes. One is marked \"not resolved\" even though it has an end date. The query asks the site whether it's a duplicate and which outcome is correct.",
+    "termination": "goal_reached"
+  },
+  "steps": 5,
+  "tool_calls": [
+    "patient_summary",
+    "adverse_events",
+    "prior_queries",
+    "lab_trend",
+    "medical_history",
+    "protocol_section",
+    "medications",
+    "disposition",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 37191,
+    "output_tokens": 1442,
+    "cached_input_tokens": 10010
+  },
+  "cost_usd": 0.1796,
+  "drafts": [
+    {
+      "key": "drf-6852c2bd7ad189c0",
+      "run_id": "run_e32442a42b2a4d20",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-716-1157",
+      "form": "Adverse Events",
+      "category": "other",
+      "issue": "Two Upper Respiratory Tract Infection AE records have identical start/end dates and severity but conflicting outcomes, and one has an end date with outcome 'not recovered/not resolved', suggesting a duplicate entry.",
+      "query_text": "Two adverse event records report \"Upper respiratory tract infection\" with the same start date (2013-10-17), end date (2013-11-04), severity (mild) and relationship (none). AE record 1 has outcome \"Not recovered/not resolved\", even though it has an end date of 2013-11-04. AE record 4 has outcome \"Recovered/resolved\". Are these the same event entered twice? If so, please delete the duplicate and confirm the correct outcome. If they are two separate events, please confirm the dates for each one, and check that the outcome on record 1 matches its end date.",
+      "evidence": [
+        "AE:01-716-1157:1",
+        "AE:01-716-1157:4"
+      ],
+      "created_at": "2026-10-28T10:19:53.178742+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

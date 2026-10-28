@@ -1,0 +1,61 @@
+{
+  "run_id": "run_5eb75f70380c44f8",
+  "patient": "01-701-1383",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:23:03.993843+00:00",
+  "seconds": 24.6,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I reviewed patient 01-701-1383 and saved one draft query. The record is otherwise consistent.\n\n**What I checked:** the patient summary and visit schedule, all 12 adverse events, the concomitant medications, medical history, disposition and prior queries (there were none). I also looked at the ALT, bilirubin and creatinine trends. The automated edit checks found nothing, and no lab result was flagged abnormal.\n\n- **Labs:** ALT, bilirubin and creatinine were in the normal range at every visit, so no lab result went without a matching adverse event. I didn't pull the protocol entry criteria, because the screening labs were all well within normal.\n- **Disposition:** \"Protocol completed\" on 2013-08-06 matches the Week 26 visit, last dose and study end. No adverse event led to withdrawal.\n- **Adverse events:** the repeated application-site reactions and the later chest discomfort, headache and cough have dates that fit the visits. Promethazine with codeine (2013-07-19 to 07-25) lines up with the cough. Several application-site events are still recorded as \"not resolved\" at study end, which is acceptable as recorded.\n- **Not queried:** hydrocortisone, which started 2013-05-14, also has no indication recorded. The timing fits treatment of the ongoing application-site reactions, so I didn't draft a query. A data manager could add one if every medication must have an indication. The missing consent date is excluded by the study notes.\n\n**Draft saved:**\n1. **Concomitant Medications (missing event), drf-73d1b3e70afa4717:** cephalexin 500 mg (2013-07-19 to 2013-08-01) has no indication. The query asks the site for the indication and whether a new condition, such as an infection, should be added to the Adverse Events form, or whether the existing cough entry (2013-07-17 to 07-26) covers it.",
+    "termination": "goal_reached"
+  },
+  "steps": 5,
+  "tool_calls": [
+    "patient_summary",
+    "adverse_events",
+    "prior_queries",
+    "medications",
+    "medical_history",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "disposition",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 40501,
+    "output_tokens": 1882,
+    "cached_input_tokens": 10010
+  },
+  "cost_usd": 0.2016,
+  "drafts": [
+    {
+      "key": "drf-73d1b3e70afa4717",
+      "run_id": "run_5eb75f70380c44f8",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-701-1383",
+      "form": "Concomitant Medications",
+      "category": "missing_event",
+      "issue": "Cephalexin 500 mg (started 2013-07-19, stopped 2013-08-01) has no indication recorded, and no adverse event recorded around that time appears to explain antibiotic use; the only AE nearby is cough (2013-07-17 to 2013-07-26).",
+      "query_text": "The Concomitant Medications form shows Cephalexin 500 mg from 2013-07-19 to 2013-08-01 with no indication recorded. The only adverse event around that time is Cough (moderate, 2013-07-17 to 2013-07-26, not related). Could you please give the indication for Cephalexin? If it was prescribed for a condition that started during the study (for example an infection) and that condition is not already on the Adverse Events form, please consider whether an adverse event entry should be added, or confirm that the existing Cough entry fully covers it. Thank you.",
+      "evidence": [
+        "CM:01-701-1383:16",
+        "CM:01-701-1383:20",
+        "AE:01-701-1383:12",
+        "CM:01-701-1383:17"
+      ],
+      "created_at": "2026-10-28T10:23:20.461400+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

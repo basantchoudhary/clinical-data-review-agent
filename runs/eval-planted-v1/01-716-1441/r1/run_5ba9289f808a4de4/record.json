@@ -1,0 +1,64 @@
+{
+  "run_id": "run_5ba9289f808a4de4",
+  "patient": "01-716-1441",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:23:19.116304+00:00",
+  "seconds": 26.6,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I reviewed patient 01-716-1441 and saved one draft query. Nothing has been sent; a data manager needs to approve it.\n\n**What I checked:** the patient summary, the single adverse event, concomitant medications, medical history and disposition. I also looked at the BUN (urea), creatinine, MCV (red cell size), RBC, ALT (liver enzyme) and bilirubin results over time. The automated edit checks flagged nothing, and there were no earlier queries to avoid repeating. Per the study notes, I did not query the missing consent date.\n\n**What looked consistent:**\n- **Disposition:** the patient completed the protocol at Week 26 (2014-07-22), which matches the last dose date and the study end date.\n- **Liver and kidney:** ALT, bilirubin and creatinine stayed within normal limits throughout.\n- **Out-of-range labs:** none seemed worth a query.\n  - BUN was occasionally slightly high, at most 1.2\u00d7 the upper limit (10.35 mmol/L at Week 26).\n  - MCV was slightly high from Week 2 (up to 109 fL); it was already 99 fL at screening.\n  - RBC was slightly low twice (3.8\u20133.9).\n- **Erythema and history:** the erythema adverse event fits with the patient's history of skin conditions and long-term topical treatments.\n\n**Draft saved:**\n- **drf-ff67f33abe2b0b21 (Concomitant Medications):** Topical cortisone 0.1% was started on 2014-07-08 with no reason recorded. Meanwhile the erythema that began on 2014-05-11 is still ongoing, and its \"action taken\" field is blank. The query asks the site what the cortisone was for. If it was for the erythema, it asks them to review the action-taken field; if it was for something else, it asks whether that should be reported as an adverse event.\n\n**Not queried:** the older medications (multivitamin, quinine, vitamin E, ibuprofen, Metrogel and triamcinolone) are also uncoded and mostly have no reason recorded. They predate the study, so I left them alone; a data manager may want to deal with them as a batch.",
+    "termination": "goal_reached"
+  },
+  "steps": 5,
+  "tool_calls": [
+    "patient_summary",
+    "adverse_events",
+    "medications",
+    "medical_history",
+    "prior_queries",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "disposition",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 55398,
+    "output_tokens": 2030,
+    "cached_input_tokens": 10010
+  },
+  "cost_usd": 0.2642,
+  "drafts": [
+    {
+      "key": "drf-ff67f33abe2b0b21",
+      "run_id": "run_5ba9289f808a4de4",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-716-1441",
+      "form": "Concomitant Medications",
+      "category": "other",
+      "issue": "Topical cortisone 0.1% was started on 2014-07-08 with no indication recorded, while the only adverse event (erythema, starting 2014-05-11) is ongoing and its action-taken field is blank, so we can't tell what the medication was started for.",
+      "query_text": "The Concomitant Medications form lists CORTISONE 0.1% starting on 2014-07-08 (Week 24) with no indication recorded. The Adverse Events form lists ERYTHEMA (mild, started 2014-05-11, not recovered/not resolved), and its action-taken field is blank. Please enter the indication for the cortisone. If it was started to treat the reported erythema, please confirm this and review the AE action-taken field. If it was started for a different condition, please confirm whether that condition should be reported as an adverse event or is already in the medical history. Thank you.",
+      "evidence": [
+        "CM:01-716-1441:73",
+        "CM:01-716-1441:80",
+        "AE:01-716-1441:1",
+        "SV:01-716-1441:12"
+      ],
+      "created_at": "2026-10-28T10:23:36.220310+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

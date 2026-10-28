@@ -1,0 +1,83 @@
+{
+  "run_id": "run_08d4d856e96f4ed2",
+  "patient": "01-710-1137",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:22:34.567211+00:00",
+  "seconds": 29.4,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I've reviewed patient 01-710-1137 and saved two draft queries for a data manager to approve. Nothing has been sent.\n\n**What I checked:** the patient summary, prior queries (none), adverse events, disposition, concomitant medications, medical history and the visit schedule. I also looked at the trends for the flagged lab tests calcium, red blood cells and cholesterol. The automated edit checks found nothing.\n\n- **Labs:** the low values were already slightly low at screening and stay close to the normal range. Calcium and cholesterol went back to normal by Week 4. Red blood cells were 3.6 at Week 6, against 3.7 at screening and a lower normal limit of 3.9. I didn't think these needed a query.\n- **Not checked:** I didn't look at the other two flagged tests (MCV and MCH), vital signs, or the protocol's entry criteria against the screening labs.\n- **Consent date:** it's missing, but the study notes say not to query it, so I didn't.\n\n**Drafts saved:**\n1. **Adverse Events form, reason for leaving the study (drf-1e6b6d80e2f1c757):** the patient stopped the study for an adverse event on 2013-11-13. But none of her four adverse events records what was done with the study drug, so it isn't clear which event led to stopping. All four are also still open with no end date. The query asks the site which event caused it, to complete the missing fields and to confirm outcomes as of the 2013-11-25 follow-up visit.\n2. **Concomitant Medications form (drf-dd8003de1f2a3f29):** topical hydrocortisone was started on 2013-10-25 with no reason recorded. The query asks the site to enter the reason, and to say whether it was given for the skin redness and itching reported from 2013-10-13.",
+    "termination": "goal_reached"
+  },
+  "steps": 6,
+  "tool_calls": [
+    "patient_summary",
+    "prior_queries",
+    "adverse_events",
+    "disposition",
+    "medications",
+    "medical_history",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "propose_query",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 41687,
+    "output_tokens": 2193,
+    "cached_input_tokens": 12012
+  },
+  "cost_usd": 0.213,
+  "drafts": [
+    {
+      "key": "drf-1e6b6d80e2f1c757",
+      "run_id": "run_08d4d856e96f4ed2",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-710-1137",
+      "form": "Adverse Events",
+      "category": "disposition",
+      "issue": "Disposition records discontinuation due to ADVERSE EVENT on 2013-11-13, but none of the four recorded AEs has an action taken with study drug documented, so it is unclear which AE led to discontinuation.",
+      "query_text": "The Disposition form records the reason for discontinuation as \"ADVERSE EVENT\" at the Week 6 visit on 2013-11-13 (last dose 2013-11-13). On the Adverse Events form, the \"action taken with study drug\" field is blank for all four events: Erythema (start 2013-10-13, mild), Pruritus (start 2013-10-13, mild), Vertigo (start 2013-11-04, moderate) and Headache (start 2013-11-13, mild). All four are recorded as not recovered/not resolved with no end date. Please say which adverse event(s) led to discontinuation, and complete the action taken field for each event (for example, drug withdrawn or dose not changed). If the discontinuation was linked to an event not yet recorded, please add it. Please also confirm the outcome and end dates as of the AE follow-up visit on 2013-11-25.",
+      "evidence": [
+        "DS:01-710-1137:1",
+        "AE:01-710-1137:1",
+        "AE:01-710-1137:2",
+        "AE:01-710-1137:3",
+        "AE:01-710-1137:4",
+        "SV:01-710-1137:7",
+        "SV:01-710-1137:101"
+      ],
+      "created_at": "2026-10-28T10:22:52.138766+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-dd8003de1f2a3f29",
+      "run_id": "run_08d4d856e96f4ed2",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-710-1137",
+      "form": "Concomitant Medications",
+      "category": "other",
+      "issue": "Topical hydrocortisone, started 2013-10-25 during treatment, has no indication recorded; it may relate to the ongoing skin AEs, but the form does not say.",
+      "query_text": "Topical hydrocortisone (1 cm) is recorded as starting on 2013-10-25 (Week 2 visit), but no indication is entered. The Adverse Events form records Erythema and Pruritus, both starting 2013-10-13. Please enter the indication for topical hydrocortisone. If it was given for a recorded adverse event, please make sure the indication matches that AE term.",
+      "evidence": [
+        "CM:01-710-1137:21",
+        "AE:01-710-1137:1",
+        "AE:01-710-1137:2",
+        "SV:01-710-1137:4"
+      ],
+      "created_at": "2026-10-28T10:22:57.077577+00:00",
+      "status": "pending_review"
+    }
+  ]
+}

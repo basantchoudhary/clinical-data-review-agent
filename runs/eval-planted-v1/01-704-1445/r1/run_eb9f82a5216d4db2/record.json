@@ -1,0 +1,136 @@
+{
+  "run_id": "run_eb9f82a5216d4db2",
+  "patient": "01-704-1445",
+  "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+  "started_at": "2026-10-28T10:20:50.552470+00:00",
+  "seconds": 37.8,
+  "versions": {
+    "model_requested": "claude-opus-5-5",
+    "models_served": [
+      "claude-opus-5-5"
+    ],
+    "prompt": "review-v1",
+    "tools": "tools-v2",
+    "effort": "medium"
+  },
+  "termination": "goal_reached",
+  "result": {
+    "kind": "completed",
+    "reply": "I saved five draft queries for patient 01-704-1445; nothing has been sent. The automated edit checks flagged nothing, so all five came from comparing forms against each other. The main problem is that the record of how this patient left the study doesn't agree with itself. The only adverse event (AE) recorded is a fatal \"completed suicide\" on 2014-10-31. But the Week 24 visit, last dose and study end are all dated the next day. The discontinuation reason given is a different adverse event, \"severe dizziness\", which isn't on the AE form.\n\n**What I checked:** the patient summary, the existing queries (there were none), adverse events, disposition, liver tests (ALT, AST), platelets and thyroid tests, medications, medical history, vital signs, and the protocol's lab exclusion criteria.\n\n**Draft queries:**\n1. **Adverse Events, seriousness:** \"Completed suicide\" (2014-10-31) is marked fatal with death = Y, but serious = N. The query asks the site to review the seriousness and confirm whether a serious adverse event report was submitted.\n2. **Disposition, reason and date:** the form says the patient left on 2014-11-01 because of an adverse event, \"severe dizziness\". That is the day after the fatal event. The query asks the site to confirm the reason, term and date.\n3. **Adverse Events, missing event:** no dizziness event is recorded, even though the disposition form cites it. The query asks whether one should be added.\n4. **Visits / Exposure, dates:** the Week 24 visit, last dose and study end are all 2014-11-01, after the 2014-10-31 death. The query asks the site to check these dates and the date of death.\n5. **Eligibility, thyroid test:** screening TSH was 0.09 mU/L on 2014-05-01 and 0.12 mU/L on the 2014-05-03 retest, both below the 0.32\u20135.0 range. Exclusion criterion EXCL28 excludes out-of-range thyroid tests, yet the patient was dosed from 2014-05-11. The query asks how eligibility was assessed, or whether this should be logged as a protocol deviation.\n\n**Not queried:**\n- **Platelets:** high at screening (572 GI/L) and through the study, but platelets aren't named in the exclusion criteria I found.\n- **ALT and AST:** only slightly above the upper limit (up to 1.37\u00d7 for ALT), and back to normal by Week 20.\n- **Consent date:** missing, but the study notes say not to query it.\n\nI did not consider which treatment the patient received.",
+    "termination": "goal_reached"
+  },
+  "steps": 7,
+  "tool_calls": [
+    "patient_summary",
+    "prior_queries",
+    "adverse_events",
+    "disposition",
+    "rule_hits",
+    "lab_trend",
+    "lab_trend",
+    "lab_trend",
+    "vital_signs",
+    "medications",
+    "medical_history",
+    "protocol_section",
+    "lab_trend",
+    "vital_signs",
+    "vital_signs",
+    "propose_query",
+    "propose_query",
+    "propose_query",
+    "propose_query",
+    "propose_query"
+  ],
+  "usage": {
+    "input_tokens": 76246,
+    "output_tokens": 4028,
+    "cached_input_tokens": 14014
+  },
+  "cost_usd": 0.3883,
+  "drafts": [
+    {
+      "key": "drf-2b588201ec637ddb",
+      "run_id": "run_eb9f82a5216d4db2",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-704-1445",
+      "form": "Adverse Events",
+      "category": "other",
+      "issue": "AE 'COMPLETED SUICIDE' (2014-10-31) is recorded with outcome FATAL and death = Y, yet serious = N.",
+      "query_text": "The adverse event 'COMPLETED SUICIDE' (start/end 2014-10-31) is recorded with outcome FATAL and the 'results in death' criterion marked Y, but the seriousness field is marked N. Please review the seriousness assessment for this event and correct the record if needed. Please also confirm whether an SAE report was submitted for this event.",
+      "evidence": [
+        "AE:01-704-1445:1"
+      ],
+      "created_at": "2026-10-28T10:21:19.534108+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-ce8b19518504d6d6",
+      "run_id": "run_eb9f82a5216d4db2",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-704-1445",
+      "form": "Disposition",
+      "category": "disposition",
+      "issue": "Disposition records discontinuation for ADVERSE EVENT 'SEVERE DIZZINESS' on 2014-11-01, but the AE form records a fatal event on 2014-10-31.",
+      "query_text": "The Disposition form records study discontinuation on 2014-11-01 (Week 24) with reason ADVERSE EVENT, reported term 'SEVERE DIZZINESS'. The Adverse Events form records 'COMPLETED SUICIDE' with outcome FATAL on 2014-10-31, the day before. Please review the disposition reason, reported term and date, and confirm which event led to the patient leaving the study. Please correct the form if needed.",
+      "evidence": [
+        "DS:01-704-1445:1",
+        "AE:01-704-1445:1",
+        "SV:01-704-1445:12"
+      ],
+      "created_at": "2026-10-28T10:21:19.534855+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-7a56f57fe3fa25f4",
+      "run_id": "run_eb9f82a5216d4db2",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-704-1445",
+      "form": "Adverse Events",
+      "category": "missing_event",
+      "issue": "Disposition cites 'SEVERE DIZZINESS' as the adverse event leading to discontinuation, but no dizziness AE is recorded.",
+      "query_text": "The Disposition form (2014-11-01) gives 'SEVERE DIZZINESS' as the adverse event that led to discontinuation. However, the only adverse event recorded for this patient is 'COMPLETED SUICIDE' (2014-10-31). Did the patient have an episode of dizziness during the study? If so, please add it to the Adverse Events form with its onset date, severity, seriousness, relationship and outcome. If not, please clarify.",
+      "evidence": [
+        "DS:01-704-1445:1",
+        "AE:01-704-1445:1"
+      ],
+      "created_at": "2026-10-28T10:21:19.535205+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-a68181483d195fda",
+      "run_id": "run_eb9f82a5216d4db2",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-704-1445",
+      "form": "Study Visits / Exposure",
+      "category": "date_inconsistency",
+      "issue": "The Week 24 visit, the last dose date and the study end date are all 2014-11-01, which is after the fatal AE dated 2014-10-31.",
+      "query_text": "The Week 24 visit is dated 2014-11-01, and the last study drug dose and study end are also recorded as 2014-11-01. The Adverse Events form records a fatal event, 'COMPLETED SUICIDE', on 2014-10-31. Please check the date of the Week 24 visit, the last dose date and the date of death, and correct whichever dates are wrong.",
+      "evidence": [
+        "SV:01-704-1445:12",
+        "AE:01-704-1445:1",
+        "DS:01-704-1445:1"
+      ],
+      "created_at": "2026-10-28T10:21:19.535451+00:00",
+      "status": "pending_review"
+    },
+    {
+      "key": "drf-22dd64eb718f5aab",
+      "run_id": "run_eb9f82a5216d4db2",
+      "snapshot_id": "snap-20261027T165924Z-01031a5b-planted-v1",
+      "usubjid": "01-704-1445",
+      "form": "Eligibility",
+      "category": "eligibility",
+      "issue": "TSH at screening was below the reference range on two occasions (0.09 and 0.12 mU/L, range 0.32\u20135.0), yet the patient was dosed; exclusion criterion EXCL28 excludes thyroid function tests outside the reference range.",
+      "query_text": "Screening TSH was 0.09 mU/L on 2014-05-01 (Screening 1) and 0.12 mU/L on the retest of 2014-05-03 (Unscheduled 1.1). The reference range is 0.32\u20135.0 mU/L. Exclusion criterion EXCL28 excludes patients with central laboratory thyroid function tests outside the reference range. The patient was randomised and first dosed on 2014-05-11. Please confirm how eligibility was assessed against EXCL28, for example whether further thyroid tests were done or a waiver was granted, and document this. If this was a protocol deviation, please record it.",
+      "evidence": [
+        "LB:01-704-1445:33",
+        "LB:01-704-1445:49",
+        "TI:EXCL28",
+        "SV:01-704-1445:3"
+      ],
+      "created_at": "2026-10-28T10:21:19.535712+00:00",
+      "status": "pending_review"
+    }
+  ]
+}
