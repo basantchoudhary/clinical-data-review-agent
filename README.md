@@ -15,6 +15,7 @@ Agent Master List id: **AG-102**.
 
 0. [Overview: business benefit, users, why agentic, architecture and design](docs/OVERVIEW.html)
 0. [The plan: goals, phases, owners](docs/PLAN.html)
+0. [How the agent part works: loop, tools, outputs, Databricks AI, and a step-by-step simulation of two real runs](docs/AGENT-HARNESS.html)
 1. [Lesson 1: how trial data gets clean, and where an agent fits](docs/learn/01-trial-data-and-agents.html)
 2. [Architecture decisions](docs/DECISIONS.md): D1–D3 decided, D4–D8 open
 3. Lesson 3: the frameworks that check the architecture (AHC, AAC, AgentTwin)
